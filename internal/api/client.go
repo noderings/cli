@@ -27,15 +27,20 @@ type TokenRefreshFunc func(ctx context.Context) (string, error)
 // refreshWaitTimeout bounds how long a request waits for another goroutine's token refresh.
 const refreshWaitTimeout = 30 * time.Second
 
+// OrganizationIDHeader is the gateway tenant header. OAuth sessions bind to the
+// user's home org (often a client org); provider APIs require this header.
+const OrganizationIDHeader = "X-Organization-ID"
+
 // Client is the API client wrapper for the platform API
 // It wraps the generated oapi-codegen client with token authentication, retry logic, and error handling
 type Client struct {
-	generated    *generated.Client
-	config       *Config
-	tokenMu      sync.RWMutex // guards token; request editors read it per request
-	token        string
-	refreshFunc  TokenRefreshFunc
-	refreshMutex chan struct{} // Mutex to prevent concurrent refresh attempts
+	generated      *generated.Client
+	config         *Config
+	tokenMu        sync.RWMutex // guards token and organizationID; request editors read them per request
+	token          string
+	organizationID string
+	refreshFunc    TokenRefreshFunc
+	refreshMutex   chan struct{} // Mutex to prevent concurrent refresh attempts
 }
 
 // Config holds API client configuration
@@ -99,10 +104,27 @@ func (c *Client) SetToken(token string) {
 				if current := c.GetToken(); current != "" {
 					req.Header.Set("Authorization", "Bearer "+current)
 				}
+				if orgID := c.GetOrganizationID(); orgID != "" {
+					req.Header.Set(OrganizationIDHeader, orgID)
+				}
 				return nil
 			},
 		}
 	}
+}
+
+// SetOrganizationID sets the tenant sent as X-Organization-ID on every request.
+func (c *Client) SetOrganizationID(id string) {
+	c.tokenMu.Lock()
+	c.organizationID = strings.TrimSpace(id)
+	c.tokenMu.Unlock()
+}
+
+// GetOrganizationID returns the tenant UUID sent as X-Organization-ID, if any.
+func (c *Client) GetOrganizationID() string {
+	c.tokenMu.RLock()
+	defer c.tokenMu.RUnlock()
+	return c.organizationID
 }
 
 // SetTokenRefreshFunc sets the function to call when token needs to be refreshed

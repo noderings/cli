@@ -175,6 +175,13 @@ func getAuthenticatedAPIClient(cmd *cobra.Command, opts ...apiClientOption) (*ap
 	// Set authentication token
 	apiClient.SetToken(tokenInfo.Token)
 
+	if orgID := organizationIDFromCmd(cmd); orgID != "" {
+		if !uuidPattern.MatchString(orgID) {
+			return nil, UsageErrorf("--organization-id must be a UUID")
+		}
+		apiClient.SetOrganizationID(orgID)
+	}
+
 	// Set up automatic token refresh on 401 (only for OAuth tokens)
 	if tokenInfo.IsOAuthToken {
 		apiClient.SetTokenRefreshFunc(func(ctx context.Context) (string, error) {

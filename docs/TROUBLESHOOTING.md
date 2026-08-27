@@ -31,6 +31,16 @@ Login succeeded; the provider organization is not marketplace-approved yet. Iden
 - Use a dedicated Ubuntu 22.04+ VM with free ports including `6443`.
 - Use `--skip-prechecks` only when you understand the risk.
 
+**`You are not allowed to perform this action.` on register**
+
+OAuth sessions bind to the user's home organization, which may be a client org. Pass the provider org UUID:
+
+```bash
+nr cluster register --organization-id <provider-org-uuid> ...
+```
+
+The UI **Install with NR CLI** command includes this flag. Also accepted: `NR_ORGANIZATION_ID`.
+
 **Resume after failure**
 
 ```bash

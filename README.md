@@ -52,10 +52,13 @@ nr cluster register \
   --name edge-ams-01 \
   --agent-ip 203.0.113.10 \
   --gateway-region AMS01 \
-  --hypervisor-driver proxmox
+  --hypervisor-driver proxmox \
+  --organization-id <provider-org-uuid>
 ```
 
 Supported `--hypervisor-driver` values: `proxmox` (default), `virtfusion`, `solusvm`.
+
+`--organization-id` is the provider organization UUID. The UI copies it into the command. OAuth login otherwise uses your default (often client) org, and listing agents is denied. You can also `export NR_ORGANIZATION_ID=...`.
 
 The CLI prompts for hypervisor credentials unless you pass an instances file:
 

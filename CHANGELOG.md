@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-27
+
+### Added
+
+- `--organization-id` / `NR_ORGANIZATION_ID` sends `X-Organization-ID` so OAuth logins hit the provider tenant, not the default client org. `nr cluster register` lists provider orgs and selects when the flag is omitted.
+
+## [1.0.0]
+
 ### Added
 
 - `nr` CLI for provider authentication, agents, service accounts, and cluster registration

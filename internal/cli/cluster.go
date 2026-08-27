@@ -85,6 +85,11 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	yes, _ := cmd.Flags().GetBool("yes")
+	if err := ensureProviderOrganization(ctx, apiClient, yes); err != nil {
+		return err
+	}
+
 	// Get config directory
 	configDir, _ := cmd.Flags().GetString("config-dir")
 	if configDir == "" {
@@ -106,7 +111,6 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	description, _ := cmd.Flags().GetString("description")
 	resume, _ := cmd.Flags().GetBool("resume")
 	force, _ := cmd.Flags().GetBool("force")
-	yes, _ := cmd.Flags().GetBool("yes")
 	skipPrechecks, _ := cmd.Flags().GetBool("skip-prechecks")
 	dryRun, _ := cmd.Flags().GetBool("dry-run")
 	offline, _ := cmd.Flags().GetBool("offline")
