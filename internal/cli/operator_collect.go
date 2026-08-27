@@ -7,8 +7,8 @@ import (
 	"github.com/noderings/cli/internal/install"
 )
 
-// collectOperatorInstallInputs gathers Proxmox instances + optional Mimir bearer token.
-// MIMIR_BEARER_TOKEN may be set via env; register flow prefers API-issued tokens.
+// collectOperatorInstallInputs gathers Proxmox instances. Mimir tokens are issued via API
+// during register (or taken from MIMIR_BEARER_TOKEN if already set).
 func collectOperatorInstallInputs(
 	cfg *install.ProxmoxOperatorConfig,
 	instancesFile string,
@@ -20,15 +20,6 @@ func collectOperatorInstallInputs(
 ) error {
 	if cfg == nil {
 		return fmt.Errorf("operator config is required")
-	}
-
-	// Token is normally issued by the API during register; allow env/prompt override.
-	if cfg.MimirBearerToken == "" && !nonInteractive {
-		tok, err := promptSecret("Mimir bearer token (empty = issue via API)", true)
-		if err != nil {
-			return err
-		}
-		cfg.MimirBearerToken = strings.TrimSpace(tok)
 	}
 
 	var instances []install.ProxmoxInstance
@@ -66,6 +57,7 @@ func collectOperatorInstallInputs(
 			if err != nil {
 				return err
 			}
+			url = install.NormalizeHypervisorAPIURL(url)
 			user, err := promptString("Proxmox username", "kopfoperator@pve")
 			if err != nil {
 				return err
@@ -107,7 +99,8 @@ func collectOperatorInstallInputs(
 	return nil
 }
 
-// collectVirtFusionOperatorInstallInputs gathers VirtFusion instances + optional Mimir bearer token.
+// collectVirtFusionOperatorInstallInputs gathers VirtFusion instances. Mimir tokens are
+// issued via API during register (or taken from MIMIR_BEARER_TOKEN if already set).
 func collectVirtFusionOperatorInstallInputs(
 	cfg *install.VirtFusionOperatorConfig,
 	instancesFile string,
@@ -119,14 +112,6 @@ func collectVirtFusionOperatorInstallInputs(
 ) error {
 	if cfg == nil {
 		return fmt.Errorf("operator config is required")
-	}
-
-	if cfg.MimirBearerToken == "" && !nonInteractive {
-		tok, err := promptSecret("Mimir bearer token (empty = issue via API)", true)
-		if err != nil {
-			return err
-		}
-		cfg.MimirBearerToken = strings.TrimSpace(tok)
 	}
 
 	var instances []install.VirtFusionInstance
@@ -164,7 +149,8 @@ func collectVirtFusionOperatorInstallInputs(
 			if err != nil {
 				return err
 			}
-			token, err := promptSecret("VirtFusion API token", false)
+			url = install.NormalizeHypervisorAPIURL(url)
+			token, err := promptString("VirtFusion API token", "")
 			if err != nil {
 				return err
 			}
@@ -195,7 +181,8 @@ func collectVirtFusionOperatorInstallInputs(
 	return nil
 }
 
-// collectSolusVMOperatorInstallInputs gathers SolusVM 2 instances + optional Mimir bearer token.
+// collectSolusVMOperatorInstallInputs gathers SolusVM 2 instances. Mimir tokens are
+// issued via API during register (or taken from MIMIR_BEARER_TOKEN if already set).
 func collectSolusVMOperatorInstallInputs(
 	cfg *install.SolusVMOperatorConfig,
 	instancesFile string,
@@ -207,14 +194,6 @@ func collectSolusVMOperatorInstallInputs(
 ) error {
 	if cfg == nil {
 		return fmt.Errorf("operator config is required")
-	}
-
-	if cfg.MimirBearerToken == "" && !nonInteractive {
-		tok, err := promptSecret("Mimir bearer token (empty = issue via API)", true)
-		if err != nil {
-			return err
-		}
-		cfg.MimirBearerToken = strings.TrimSpace(tok)
 	}
 
 	var instances []install.SolusVMInstance
@@ -252,6 +231,7 @@ func collectSolusVMOperatorInstallInputs(
 			if err != nil {
 				return err
 			}
+			url = install.NormalizeHypervisorAPIURL(url)
 			token, err := promptSecret("SolusVM API token", false)
 			if err != nil {
 				return err

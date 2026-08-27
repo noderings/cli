@@ -84,7 +84,7 @@ func normalizeVirtFusionInstances(in []VirtFusionInstance) ([]VirtFusionInstance
 	seen := map[string]struct{}{}
 	for i, inst := range in {
 		inst.ID = strings.TrimSpace(inst.ID)
-		inst.URL = strings.TrimSpace(inst.URL)
+		inst.URL = NormalizeHypervisorAPIURL(inst.URL)
 		inst.Token = strings.TrimSpace(inst.Token)
 		if inst.ID == "" {
 			inst.ID = fmt.Sprintf("vf-%d", i+1)
@@ -104,7 +104,7 @@ func normalizeVirtFusionInstances(in []VirtFusionInstance) ([]VirtFusionInstance
 // VirtFusionInstanceFromEnv builds a single instance from VIRTFUSION_* env vars.
 // Returns nil, nil when none of the required vars are set.
 func VirtFusionInstanceFromEnv() (*VirtFusionInstance, error) {
-	apiURL := strings.TrimSpace(os.Getenv("VIRTFUSION_URL"))
+	apiURL := NormalizeHypervisorAPIURL(os.Getenv("VIRTFUSION_URL"))
 	token := strings.TrimSpace(os.Getenv("VIRTFUSION_TOKEN"))
 	if apiURL == "" && token == "" {
 		return nil, nil

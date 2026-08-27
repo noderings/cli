@@ -23,7 +23,7 @@ func TestLoadVirtFusionInstancesFileWrapped(t *testing.T) {
 	content := `
 instances:
   - id: vf-1
-    url: https://cp1.example.com
+    url: https://cp1.example.com/
     token: token1
   - id: vf-2
     url: https://cp2.example.com
@@ -41,6 +41,9 @@ instances:
 	}
 	if got[1].ID != "vf-2" || got[1].Token != "token2" {
 		t.Fatalf("unexpected second instance: %+v", got[1])
+	}
+	if got[0].URL != "https://cp1.example.com" {
+		t.Fatalf("trailing slash should be stripped, got %q", got[0].URL)
 	}
 }
 
@@ -110,7 +113,7 @@ func TestVirtFusionInstanceFromEnv(t *testing.T) {
 		t.Fatalf("expected nil,nil got %v %v", inst, err)
 	}
 
-	t.Setenv("VIRTFUSION_URL", "https://cp.example.com")
+	t.Setenv("VIRTFUSION_URL", "https://cp.example.com/")
 	t.Setenv("VIRTFUSION_TOKEN", "tok")
 	inst, err = VirtFusionInstanceFromEnv()
 	if err != nil {
@@ -118,6 +121,9 @@ func TestVirtFusionInstanceFromEnv(t *testing.T) {
 	}
 	if inst == nil || inst.ID != "vf-1" {
 		t.Fatalf("got %+v", inst)
+	}
+	if inst.URL != "https://cp.example.com" {
+		t.Fatalf("trailing slash should be stripped, got %q", inst.URL)
 	}
 }
 

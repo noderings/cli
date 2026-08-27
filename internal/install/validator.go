@@ -31,8 +31,10 @@ type SystemCheckResult struct {
 	Message string
 }
 
-// ValidateSystem checks system requirements
-func (v *SystemValidator) ValidateSystem(ctx context.Context) ([]SystemCheckResult, error) {
+// ValidateSystem checks system requirements.
+// agentIP is --agent-ip; it must be assigned to a local interface because k3s
+// is started with --node-ip from that value.
+func (v *SystemValidator) ValidateSystem(ctx context.Context, agentIP string) ([]SystemCheckResult, error) {
 	var results []SystemCheckResult
 
 	// Check OS (Ubuntu recommended)
@@ -50,6 +52,8 @@ func (v *SystemValidator) ValidateSystem(ctx context.Context) ([]SystemCheckResu
 	// Check DNS resolution
 	dnsCheck := v.checkDNS(ctx)
 	results = append(results, dnsCheck)
+
+	results = append(results, v.checkAgentIP(agentIP))
 
 	// Check required ports
 	portsCheck := v.checkPorts()

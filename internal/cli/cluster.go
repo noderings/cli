@@ -49,7 +49,7 @@ func init() {
 	// cluster register flags
 	clusterRegisterCmd.Flags().String("name", "", "Agent/cluster name (required unless --agent-id, must be unique in organization)")
 	clusterRegisterCmd.Flags().String("agent-id", "", "Existing agent UUID (from UI install command; skips CreateAgent)")
-	clusterRegisterCmd.Flags().String("agent-ip", "", "Agent public IP address (required, must be valid public IP)")
+	clusterRegisterCmd.Flags().String("agent-ip", "", "IPv4 address assigned to a local interface on this VM (required; used as k3s --node-ip)")
 	clusterRegisterCmd.Flags().String("gateway-region", "", "Gateway region (required: AMS01)")
 	clusterRegisterCmd.Flags().String("description", "", "Optional description for the agent")
 	clusterRegisterCmd.Flags().Bool("resume", false, "Resume a failed installation from last checkpoint")
@@ -297,7 +297,7 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		// Run system checks
 		log.Info("Running pre-flight system checks...")
 		systemValidator := install.NewSystemValidator(log)
-		systemResults, err := systemValidator.ValidateSystem(ctx)
+		systemResults, err := systemValidator.ValidateSystem(ctx, agentIP)
 		if err != nil {
 			return fmt.Errorf("system validation: %w", err)
 		}

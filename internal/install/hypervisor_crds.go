@@ -19,8 +19,14 @@ type hypervisorCRDChart struct {
 	version string
 }
 
+func crdChartVersion(def string) string {
+	if v := strings.TrimSpace(os.Getenv("HYPERVISOR_OPERATOR_CRDS_CHART_VERSION")); v != "" {
+		return v
+	}
+	return def
+}
+
 func hypervisorCRDCharts() []hypervisorCRDChart {
-	ver := getenvDefault("HYPERVISOR_OPERATOR_CRDS_CHART_VERSION", config.DefaultProxmoxOperatorChartVersion)
 	return []hypervisorCRDChart{
 		{
 			release: "proxmox-operator-crds",
@@ -30,7 +36,7 @@ func hypervisorCRDCharts() []hypervisorCRDChart {
 				filepath.Join("..", "..", "operator", "charts", "proxmox-operator-crds"),
 			},
 			oci:     config.DefaultProxmoxOperatorCRDsChartOCI,
-			version: ver,
+			version: crdChartVersion(config.DefaultProxmoxOperatorChartVersion),
 		},
 		{
 			release: "virtfusion-operator-crds",
@@ -40,7 +46,7 @@ func hypervisorCRDCharts() []hypervisorCRDChart {
 				filepath.Join("..", "..", "operator", "charts", "virtfusion-operator-crds"),
 			},
 			oci:     config.DefaultVirtFusionOperatorCRDsChartOCI,
-			version: ver,
+			version: crdChartVersion(config.DefaultVirtFusionOperatorChartVersion),
 		},
 		{
 			release: "solusvm-operator-crds",
@@ -50,7 +56,7 @@ func hypervisorCRDCharts() []hypervisorCRDChart {
 				filepath.Join("..", "..", "operator", "charts", "solusvm-operator-crds"),
 			},
 			oci:     config.DefaultSolusVMOperatorCRDsChartOCI,
-			version: ver,
+			version: crdChartVersion(config.DefaultSolusVMOperatorChartVersion),
 		},
 	}
 }

@@ -58,6 +58,8 @@ nr cluster register \
 
 Supported `--hypervisor-driver` values: `proxmox` (default), `virtfusion`, `solusvm`.
 
+`--agent-ip` must be an address assigned to a local interface on the VM (`ip -4 addr`). k3s uses it as `--node-ip`; a placeholder such as `1.1.1.1` fails preflight.
+
 `--organization-id` is the provider organization UUID. The UI copies it into the command. OAuth login otherwise uses your default (often client) org, and listing agents is denied. You can also `export NR_ORGANIZATION_ID=...`.
 
 The CLI prompts for hypervisor credentials unless you pass an instances file:

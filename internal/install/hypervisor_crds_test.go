@@ -81,4 +81,39 @@ func TestResolveCRDChartFallsBackToDefaultOCI(t *testing.T) {
 	if ver != config.DefaultProxmoxOperatorChartVersion {
 		t.Fatalf("version=%q", ver)
 	}
+
+	vf := hypervisorCRDCharts()[1]
+	got, ver = resolveCRDChart(vf)
+	if got != config.DefaultVirtFusionOperatorCRDsChartOCI {
+		t.Fatalf("virtfusion oci=%q", got)
+	}
+	if ver != config.DefaultVirtFusionOperatorChartVersion {
+		t.Fatalf("virtfusion version=%q", ver)
+	}
+
+	svm := hypervisorCRDCharts()[2]
+	got, ver = resolveCRDChart(svm)
+	if got != config.DefaultSolusVMOperatorCRDsChartOCI {
+		t.Fatalf("solusvm oci=%q", got)
+	}
+	if ver != config.DefaultSolusVMOperatorChartVersion {
+		t.Fatalf("solusvm version=%q", ver)
+	}
+}
+
+func TestResolveCRDChartSharedVersionOverride(t *testing.T) {
+	t.Setenv("PROXMOX_OPERATOR_CRDS_CHART", "")
+	t.Setenv("VIRTFUSION_OPERATOR_CRDS_CHART", "")
+	t.Setenv("SOLUSVM_OPERATOR_CRDS_CHART", "")
+	t.Setenv("PROXMOX_OPERATOR_CHART", "")
+	t.Setenv("VIRTFUSION_OPERATOR_CHART", "")
+	t.Setenv("SOLUSVM_OPERATOR_CHART", "")
+	t.Setenv("HYPERVISOR_OPERATOR_CRDS_CHART_VERSION", "9.9.9")
+
+	for i, c := range hypervisorCRDCharts() {
+		_, ver := resolveCRDChart(c)
+		if ver != "9.9.9" {
+			t.Fatalf("chart[%d] %s version=%q want 9.9.9", i, c.release, ver)
+		}
+	}
 }

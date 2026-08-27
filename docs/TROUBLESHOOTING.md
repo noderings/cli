@@ -31,6 +31,10 @@ Login succeeded; the provider organization is not marketplace-approved yet. Iden
 - Use a dedicated Ubuntu 22.04+ VM with free ports including `6443`.
 - Use `--skip-prechecks` only when you understand the risk.
 
+**`--agent-ip` is not assigned to any local interface**
+
+`--agent-ip` is passed to k3s as `--node-ip`. It must exist on this VM (`ip -4 addr`), not a docs placeholder (`1.1.1.1`) and not a NAT address that is only visible upstream. Use the address on `eth0` / `ens*` (for example `192.168.1.153`).
+
 **`You are not allowed to perform this action.` on register**
 
 OAuth sessions bind to the user's home organization, which may be a client org. Pass the provider org UUID:

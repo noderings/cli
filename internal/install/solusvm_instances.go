@@ -92,7 +92,7 @@ func normalizeSolusVMInstances(in []SolusVMInstance) ([]SolusVMInstance, error) 
 	seen := map[string]struct{}{}
 	for i, inst := range in {
 		inst.ID = strings.TrimSpace(inst.ID)
-		inst.URL = strings.TrimSpace(inst.URL)
+		inst.URL = NormalizeHypervisorAPIURL(inst.URL)
 		inst.Token = strings.TrimSpace(inst.Token)
 		if inst.ID == "" {
 			inst.ID = fmt.Sprintf("svm-%d", i+1)
@@ -112,7 +112,7 @@ func normalizeSolusVMInstances(in []SolusVMInstance) ([]SolusVMInstance, error) 
 // SolusVMInstanceFromEnv builds a single instance from SOLUSVM_* env vars.
 // Returns nil, nil when none of the required vars are set.
 func SolusVMInstanceFromEnv() (*SolusVMInstance, error) {
-	apiURL := strings.TrimSpace(os.Getenv("SOLUSVM_URL"))
+	apiURL := NormalizeHypervisorAPIURL(os.Getenv("SOLUSVM_URL"))
 	token := strings.TrimSpace(os.Getenv("SOLUSVM_TOKEN"))
 	if apiURL == "" && token == "" {
 		return nil, nil

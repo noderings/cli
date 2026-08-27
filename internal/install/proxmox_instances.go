@@ -93,7 +93,7 @@ func normalizeInstances(in []ProxmoxInstance) ([]ProxmoxInstance, error) {
 	seen := map[string]struct{}{}
 	for i, inst := range in {
 		inst.ID = strings.TrimSpace(inst.ID)
-		inst.URL = strings.TrimSpace(inst.URL)
+		inst.URL = NormalizeHypervisorAPIURL(inst.URL)
 		inst.Username = strings.TrimSpace(inst.Username)
 		inst.TokenID = strings.TrimSpace(inst.TokenID)
 		inst.TokenSecret = strings.TrimSpace(inst.TokenSecret)
@@ -115,7 +115,7 @@ func normalizeInstances(in []ProxmoxInstance) ([]ProxmoxInstance, error) {
 // ProxmoxInstanceFromEnv builds a single instance from PROXMOX_* env vars (test-k3d compat).
 // Returns nil, nil when none of the required vars are set.
 func ProxmoxInstanceFromEnv() (*ProxmoxInstance, error) {
-	url := strings.TrimSpace(os.Getenv("PROXMOX_URL"))
+	url := NormalizeHypervisorAPIURL(os.Getenv("PROXMOX_URL"))
 	user := strings.TrimSpace(os.Getenv("PROXMOX_USERNAME"))
 	tokenID := strings.TrimSpace(os.Getenv("PROXMOX_TOKEN_ID"))
 	tokenSecret := strings.TrimSpace(os.Getenv("PROXMOX_TOKEN_SECRET"))
