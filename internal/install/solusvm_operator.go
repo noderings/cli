@@ -181,6 +181,7 @@ func (p *SolusVMOperatorInstaller) Install(ctx context.Context) error {
 		"--set-string", fmt.Sprintf("%s=%s", helmVNCGatewayNamespace, p.config.VNCGatewayNamespace),
 		"--set", helmVNCAllowRemoteClients,
 		"--set", helmDisableCRDSubchart,
+		"--set-string", fmt.Sprintf("image.registry=%s", getenvDefault("OPERATOR_IMAGE_REGISTRY", config.DefaultHarborRegistry)),
 	}
 	if requireMimirToken {
 		args = append(args,

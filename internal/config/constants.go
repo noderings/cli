@@ -80,9 +80,13 @@ const (
 	// DefaultVNCGatewayImageTagProxmox is the stock Harbor tag. Proxmox readiness
 	// and /v1/vnc/ws need this digest — do not retag a local-rfb build over it.
 	DefaultVNCGatewayImageTagProxmox = "main"
+	// DefaultHarborRegistry is the container registry host for operator images
+	// and charts. harbor.nrings.io is retired; do not use it.
+	DefaultHarborRegistry = "harbor.noderings.com"
 	// DefaultVNCGatewayImageTagRFB is the local-rfb / current-gateway tag used by
 	// VirtFusion and SolusVM (ready without Proxmox instances). Harbor publishes
-	// :main only; the CLI loads a local build as :rfb onto the agent.
+	// both :main (Proxmox) and :rfb (VF/SVM). The CLI still loads a local build
+	// as :rfb onto the agent when Docker/source is available.
 	DefaultVNCGatewayImageTagRFB = "rfb"
 	// LocalRFBVNCGatewayImage is the docker tag for a locally built RFB gateway.
 	LocalRFBVNCGatewayImage = "vnc-gateway:local-rfb"

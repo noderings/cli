@@ -2,6 +2,12 @@ package config
 
 import "testing"
 
+func TestDefaultHarborRegistryIsNoderings(t *testing.T) {
+	if DefaultHarborRegistry != "harbor.noderings.com" {
+		t.Fatalf("DefaultHarborRegistry=%s want harbor.noderings.com (nrings.io is retired)", DefaultHarborRegistry)
+	}
+}
+
 func TestResolveVNCGatewayImageTagDefaults(t *testing.T) {
 	t.Setenv(EnvVNCGatewayImageTag, "")
 	t.Setenv(EnvProxmoxVNCGatewayImageTag, "")
