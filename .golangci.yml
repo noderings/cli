@@ -1,0 +1,45 @@
+version: "2"
+
+run:
+  tests: true
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - misspell
+    - gosec
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/noderings/cli
+    gosec:
+      excludes:
+        - G204 # subprocess with variable is expected for install tooling
+        - G304 # file path from config is intentional
+    misspell:
+      locale: US
+  exclusions:
+    paths:
+      - internal/api/generated
+    rules:
+      - path: _test\.go
+        linters:
+          - gosec
+          - errcheck
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/noderings/cli
+  exclusions:
+    paths:
+      - internal/api/generated

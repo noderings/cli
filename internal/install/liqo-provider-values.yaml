@@ -1,0 +1,94 @@
+# Shared Liqo Helm values overlay for provider-cluster installs.
+# Applied via: liqoctl install … --values <this-file>
+#
+# - gatewayMasqueradeBypass: required with Calico (and helpful on k3s/Flannel nested VMs)
+# - externalCIDR 10.72.0.0/16: must not collide with the control-plane cluster CIDR (default 10.70.0.0/16)
+# - customResources: AllowList for Proxmox and VirtFusion CRDs (annotate instances with liqo.io/allow-reflection: "true")
+
+networking:
+  fabric:
+    config:
+      gatewayMasqueradeBypass: true
+
+ipam:
+  # Keep ExternalCIDR distinct from the control-plane cluster so in-band proxy remapping works.
+  externalCIDR: "10.72.0.0/16"
+
+offloading:
+  reflection:
+    customResources:
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: proxmoxnodes
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: proxmoxvms
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: firewallrulesets
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: vmbackups
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: vmsnapshots
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: vncrequests
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusioncontrols
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusionnodes
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusionvms
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusionvncrequests
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmcontrols
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmnodes
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmvms
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmvncrequests
+        workers: 2
+        type: AllowList
+    skip:
+      annotations:
+        - virtfusion-operator.kopf.dev/last-handled-configuration
+        - solusvm-operator.kopf.dev/last-handled-configuration
+        - proxmox-operator.kopf.dev/last-handled-configuration

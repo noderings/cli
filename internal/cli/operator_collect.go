@@ -1,0 +1,284 @@
+package cli
+
+import (
+	"fmt"
+	"strings"
+
+	"github.com/noderings/cli/internal/install"
+)
+
+// collectOperatorInstallInputs gathers Proxmox instances + optional Mimir bearer token.
+// MIMIR_BEARER_TOKEN may be set via env; register flow prefers API-issued tokens.
+func collectOperatorInstallInputs(
+	cfg *install.ProxmoxOperatorConfig,
+	instancesFile string,
+	nonInteractive bool,
+	log interface {
+		Infof(format string, args ...interface{})
+		Info(args ...interface{})
+	},
+) error {
+	if cfg == nil {
+		return fmt.Errorf("operator config is required")
+	}
+
+	// Token is normally issued by the API during register; allow env/prompt override.
+	if cfg.MimirBearerToken == "" && !nonInteractive {
+		tok, err := promptSecret("Mimir bearer token (empty = issue via API)", true)
+		if err != nil {
+			return err
+		}
+		cfg.MimirBearerToken = strings.TrimSpace(tok)
+	}
+
+	var instances []install.ProxmoxInstance
+	switch {
+	case strings.TrimSpace(instancesFile) != "":
+		loaded, err := install.LoadProxmoxInstancesFile(instancesFile)
+		if err != nil {
+			return err
+		}
+		instances = loaded
+		log.Infof("Loaded %d Proxmox instance(s) from %s", len(instances), instancesFile)
+	default:
+		fromEnv, err := install.ProxmoxInstanceFromEnv()
+		if err != nil {
+			return err
+		}
+		if fromEnv != nil {
+			instances = []install.ProxmoxInstance{*fromEnv}
+			log.Info("Using Proxmox credentials from PROXMOX_* environment variables")
+		}
+	}
+
+	if len(instances) == 0 {
+		if nonInteractive {
+			return fmt.Errorf("proxmox credentials required: set PROXMOX_* env, --proxmox-instances-file, or run interactively (without --yes)")
+		}
+		log.Info("Configure Proxmox API access for the operator (supports multiple instances)")
+		for i := 0; ; i++ {
+			defaultID := fmt.Sprintf("proxmox-%d", i+1)
+			id, err := promptString("Proxmox instance ID", defaultID)
+			if err != nil {
+				return err
+			}
+			url, err := promptString("Proxmox URL (e.g. https://pve.example:8006)", "")
+			if err != nil {
+				return err
+			}
+			user, err := promptString("Proxmox username", "kopfoperator@pve")
+			if err != nil {
+				return err
+			}
+			tokenID, err := promptString("Proxmox token ID", "")
+			if err != nil {
+				return err
+			}
+			tokenSecret, err := promptSecret("Proxmox token secret", false)
+			if err != nil {
+				return err
+			}
+			inst := install.ProxmoxInstance{
+				ID:          id,
+				URL:         url,
+				Username:    user,
+				TokenID:     tokenID,
+				TokenSecret: tokenSecret,
+			}
+			if err := inst.Validate(); err != nil {
+				return err
+			}
+			instances = append(instances, inst)
+
+			more, err := confirmYesNo("Add another Proxmox instance?", "set --proxmox-instances-file for non-interactive install")
+			if err != nil {
+				return err
+			}
+			if !more {
+				break
+			}
+		}
+	}
+
+	if len(instances) == 0 {
+		return fmt.Errorf("at least one Proxmox instance is required")
+	}
+	cfg.Instances = instances
+	return nil
+}
+
+// collectVirtFusionOperatorInstallInputs gathers VirtFusion instances + optional Mimir bearer token.
+func collectVirtFusionOperatorInstallInputs(
+	cfg *install.VirtFusionOperatorConfig,
+	instancesFile string,
+	nonInteractive bool,
+	log interface {
+		Infof(format string, args ...interface{})
+		Info(args ...interface{})
+	},
+) error {
+	if cfg == nil {
+		return fmt.Errorf("operator config is required")
+	}
+
+	if cfg.MimirBearerToken == "" && !nonInteractive {
+		tok, err := promptSecret("Mimir bearer token (empty = issue via API)", true)
+		if err != nil {
+			return err
+		}
+		cfg.MimirBearerToken = strings.TrimSpace(tok)
+	}
+
+	var instances []install.VirtFusionInstance
+	switch {
+	case strings.TrimSpace(instancesFile) != "":
+		loaded, err := install.LoadVirtFusionInstancesFile(instancesFile)
+		if err != nil {
+			return err
+		}
+		instances = loaded
+		log.Infof("Loaded %d VirtFusion instance(s) from %s", len(instances), instancesFile)
+	default:
+		fromEnv, err := install.VirtFusionInstanceFromEnv()
+		if err != nil {
+			return err
+		}
+		if fromEnv != nil {
+			instances = []install.VirtFusionInstance{*fromEnv}
+			log.Info("Using VirtFusion credentials from VIRTFUSION_* environment variables")
+		}
+	}
+
+	if len(instances) == 0 {
+		if nonInteractive {
+			return fmt.Errorf("virtfusion credentials required: set VIRTFUSION_URL and VIRTFUSION_TOKEN, --virtfusion-instances-file, or run interactively (without --yes)")
+		}
+		log.Info("Configure VirtFusion API access for the operator (supports multiple instances)")
+		for i := 0; ; i++ {
+			defaultID := fmt.Sprintf("vf-%d", i+1)
+			id, err := promptString("VirtFusion instance ID", defaultID)
+			if err != nil {
+				return err
+			}
+			url, err := promptString("VirtFusion URL (e.g. https://cp.example.com)", "")
+			if err != nil {
+				return err
+			}
+			token, err := promptSecret("VirtFusion API token", false)
+			if err != nil {
+				return err
+			}
+			inst := install.VirtFusionInstance{
+				ID:    id,
+				URL:   url,
+				Token: token,
+			}
+			if err := inst.Validate(); err != nil {
+				return err
+			}
+			instances = append(instances, inst)
+
+			more, err := confirmYesNo("Add another VirtFusion instance?", "set --virtfusion-instances-file for non-interactive install")
+			if err != nil {
+				return err
+			}
+			if !more {
+				break
+			}
+		}
+	}
+
+	if len(instances) == 0 {
+		return fmt.Errorf("at least one VirtFusion instance is required")
+	}
+	cfg.Instances = instances
+	return nil
+}
+
+// collectSolusVMOperatorInstallInputs gathers SolusVM 2 instances + optional Mimir bearer token.
+func collectSolusVMOperatorInstallInputs(
+	cfg *install.SolusVMOperatorConfig,
+	instancesFile string,
+	nonInteractive bool,
+	log interface {
+		Infof(format string, args ...interface{})
+		Info(args ...interface{})
+	},
+) error {
+	if cfg == nil {
+		return fmt.Errorf("operator config is required")
+	}
+
+	if cfg.MimirBearerToken == "" && !nonInteractive {
+		tok, err := promptSecret("Mimir bearer token (empty = issue via API)", true)
+		if err != nil {
+			return err
+		}
+		cfg.MimirBearerToken = strings.TrimSpace(tok)
+	}
+
+	var instances []install.SolusVMInstance
+	switch {
+	case strings.TrimSpace(instancesFile) != "":
+		loaded, err := install.LoadSolusVMInstancesFile(instancesFile)
+		if err != nil {
+			return err
+		}
+		instances = loaded
+		log.Infof("Loaded %d SolusVM instance(s) from %s", len(instances), instancesFile)
+	default:
+		fromEnv, err := install.SolusVMInstanceFromEnv()
+		if err != nil {
+			return err
+		}
+		if fromEnv != nil {
+			instances = []install.SolusVMInstance{*fromEnv}
+			log.Info("Using SolusVM credentials from SOLUSVM_* environment variables")
+		}
+	}
+
+	if len(instances) == 0 {
+		if nonInteractive {
+			return fmt.Errorf("solusvm credentials required: set SOLUSVM_URL and SOLUSVM_TOKEN, --solusvm-instances-file, or run interactively (without --yes)")
+		}
+		log.Info("Configure SolusVM 2 API access for the operator (supports multiple instances)")
+		for i := 0; ; i++ {
+			defaultID := fmt.Sprintf("svm-%d", i+1)
+			id, err := promptString("SolusVM instance ID", defaultID)
+			if err != nil {
+				return err
+			}
+			url, err := promptString("SolusVM 2 management node URL (e.g. https://mn.example.com)", "")
+			if err != nil {
+				return err
+			}
+			token, err := promptSecret("SolusVM API token", false)
+			if err != nil {
+				return err
+			}
+			inst := install.SolusVMInstance{
+				ID:    id,
+				URL:   url,
+				Token: token,
+			}
+			if err := inst.Validate(); err != nil {
+				return err
+			}
+			instances = append(instances, inst)
+
+			more, err := confirmYesNo("Add another SolusVM instance?", "set --solusvm-instances-file for non-interactive install")
+			if err != nil {
+				return err
+			}
+			if !more {
+				break
+			}
+		}
+	}
+
+	if len(instances) == 0 {
+		return fmt.Errorf("at least one SolusVM instance is required")
+	}
+	cfg.Instances = instances
+	return nil
+}

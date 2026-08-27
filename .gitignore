@@ -1,0 +1,53 @@
+# Binaries
+/build/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/nr
+/nr-cli
+/nr-linux
+/nr_linux_amd64
+/nr_linux_arm64
+/nr_darwin
+/nr.exe
+/build/nr
+/build/nr_*
+/build/*.exe
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.html
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config (user-specific)
+~/.nr/
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
