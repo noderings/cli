@@ -69,7 +69,7 @@ func init() {
 	clusterRegisterCmd.Flags().Bool("reinstall-operator", false, "Re-run hypervisor operator Helm install even if that phase already succeeded (use with --resume)")
 	clusterRegisterCmd.Flags().String("operator-chart", "", "Local path or OCI ref for the hypervisor operator chart (default: Harbor OCI or sibling checkout)")
 	clusterRegisterCmd.Flags().String("operator-chart-version", "", "Helm chart version when using OCI (default: "+config.DefaultProxmoxOperatorChartVersion+")")
-	clusterRegisterCmd.Flags().String("hypervisor-driver", config.HypervisorDriverProxmox, "Hypervisor driver: proxmox (default), virtfusion, or solusvm")
+	clusterRegisterCmd.Flags().String("hypervisor-driver", "", "Optional. Uses the organization hypervisor driver when omitted. Must match the organization if set.")
 	clusterRegisterCmd.Flags().String("proxmox-instances-file", "", "YAML file with proxmox.instances list (or PROXMOX_INSTANCES_FILE)")
 	clusterRegisterCmd.Flags().String("virtfusion-instances-file", "", "YAML file with virtfusion.instances list (or VIRTFUSION_INSTANCES_FILE)")
 	clusterRegisterCmd.Flags().String("solusvm-instances-file", "", "YAML file with solusvm.instances list (or SOLUSVM_INSTANCES_FILE)")
@@ -86,9 +86,6 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	}
 
 	yes, _ := cmd.Flags().GetBool("yes")
-	if err := ensureProviderOrganization(ctx, apiClient, yes); err != nil {
-		return err
-	}
 
 	// Get config directory
 	configDir, _ := cmd.Flags().GetString("config-dir")
@@ -137,7 +134,12 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	hypervisorDriver, err := parseHypervisorDriver(hypervisorDriverRaw)
+	orgDriver := fetchOrganizationHypervisorDriver(ctx, apiClient)
+	hypervisorDriver, err := resolveHypervisorDriver(
+		hypervisorDriverRaw,
+		cmd.Flags().Changed("hypervisor-driver"),
+		orgDriver,
+	)
 	if err != nil {
 		return err
 	}
@@ -340,7 +342,7 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	} else {
 		log.Info("Resolving agent in backend...")
 		var createErr error
-		agentID, reused, createErr = createOrResolveAgent(ctx, apiClient, name, agentIP, gatewayRegion, description, force, yes, log)
+		agentID, reused, createErr = createOrResolveAgent(ctx, apiClient, name, agentIP, gatewayRegion, description, registerOpts.hypervisorDriver, force, yes, log)
 		if createErr != nil {
 			return fmt.Errorf("resolve agent: %w", createErr)
 		}
@@ -694,16 +696,17 @@ func buildRemoteNamespaceName(agentID, localNamespace string) (string, error) {
 }
 
 // createAgent creates a new agent via the API. Prefer createOrResolveAgent for register.
-func createAgent(ctx context.Context, apiClient *api.Client, name, agentIP, gatewayRegion, description string) (string, bool, error) {
+func createAgent(ctx context.Context, apiClient *api.Client, name, agentIP, gatewayRegion, description, hypervisorDriver string) (string, bool, error) {
 	region, err := parseAgentGatewayRegion(gatewayRegion)
 	if err != nil {
 		return "", false, err
 	}
 
 	reqBody := generated.AgentServiceCreateAgentJSONRequestBody{
-		Name:          &name,
-		AgentPublicIp: &agentIP,
-		GatewayRegion: &region,
+		Name:             &name,
+		AgentPublicIp:    &agentIP,
+		GatewayRegion:    &region,
+		HypervisorDriver: hypervisorDriverToAPI(hypervisorDriver),
 	}
 	if description != "" {
 		reqBody.Description = &description

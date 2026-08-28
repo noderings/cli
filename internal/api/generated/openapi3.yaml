@@ -10512,6 +10512,8 @@ components:
           type: string
         gatewayRegion:
           $ref: "#/components/schemas/v1AgentGatewayRegion"
+        hypervisorDriver:
+          $ref: "#/components/schemas/v1PlatformDriver"
     v1CreateClientReviewRequest:
       type: object
       properties:

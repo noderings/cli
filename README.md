@@ -51,16 +51,14 @@ Run this on the Ubuntu VM that will host the agent:
 nr cluster register \
   --name edge-ams-01 \
   --agent-ip 203.0.113.10 \
-  --gateway-region AMS01 \
-  --hypervisor-driver proxmox \
-  --organization-id <provider-org-uuid>
+  --gateway-region AMS01
 ```
 
-Supported `--hypervisor-driver` values: `proxmox` (default), `virtfusion`, `solusvm`.
+The CLI uses the organization hypervisor driver (`proxmox`, `virtfusion`, or `solusvm`). Pass `--hypervisor-driver` only to confirm it; a mismatch is rejected.
 
 `--agent-ip` must be an address assigned to a local interface on the VM (`ip -4 addr`). k3s uses it as `--node-ip`; a placeholder such as `1.1.1.1` fails preflight.
 
-`--organization-id` is the provider organization UUID. The UI copies it into the command. OAuth login otherwise uses your default (often client) org, and listing agents is denied. You can also `export NR_ORGANIZATION_ID=...`.
+OAuth login binds to your home organization, which is often a client org. The CLI lists your organizations and uses the provider organization automatically (a user has one).
 
 The CLI prompts for hypervisor credentials unless you pass an instances file:
 

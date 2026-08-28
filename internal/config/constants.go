@@ -132,7 +132,7 @@ const (
 	// DefaultVirtFusionOperatorCRDsChartOCI is CRDs-only (install alongside Proxmox CRDs on every provider).
 	DefaultVirtFusionOperatorCRDsChartOCI = "oci://harbor.noderings.com/noderings/virtfusion-operator-crds"
 	// DefaultVirtFusionOperatorChartVersion is the VirtFusion chart version (no leading v).
-	DefaultVirtFusionOperatorChartVersion = "0.1.2"
+	DefaultVirtFusionOperatorChartVersion = "0.1.3"
 	// DefaultVirtFusionOperatorHelmNamespace is the runtime namespace for the VirtFusion operator chart.
 	DefaultVirtFusionOperatorHelmNamespace = "virtfusion-system"
 	// VirtFusionCRDAPIGroup is the API group registered by virtfusion-operator CRDs.
@@ -143,7 +143,7 @@ const (
 	// DefaultSolusVMOperatorCRDsChartOCI is CRDs-only (install alongside other hypervisor CRDs on every provider).
 	DefaultSolusVMOperatorCRDsChartOCI = "oci://harbor.noderings.com/noderings/solusvm-operator-crds"
 	// DefaultSolusVMOperatorChartVersion is the SolusVM chart version (no leading v).
-	DefaultSolusVMOperatorChartVersion = "0.1.2"
+	DefaultSolusVMOperatorChartVersion = "0.1.3"
 	// DefaultSolusVMOperatorHelmNamespace is the runtime namespace for the SolusVM operator chart.
 	DefaultSolusVMOperatorHelmNamespace = "solusvm-system"
 	// SolusVMCRDAPIGroup is the API group registered by solusvm-operator CRDs.

@@ -19,7 +19,7 @@ import (
 func createOrResolveAgent(
 	ctx context.Context,
 	apiClient *api.Client,
-	name, agentIP, gatewayRegion, description string,
+	name, agentIP, gatewayRegion, description, hypervisorDriver string,
 	force, yes bool,
 	log *logger.Logger,
 ) (agentID string, reused bool, err error) {
@@ -31,7 +31,7 @@ func createOrResolveAgent(
 		return reuseExistingAgent(existing, name, force, yes, log)
 	}
 
-	agentID, reused, err = createAgent(ctx, apiClient, name, agentIP, gatewayRegion, description)
+	agentID, reused, err = createAgent(ctx, apiClient, name, agentIP, gatewayRegion, description, hypervisorDriver)
 	if err == nil {
 		return agentID, reused, nil
 	}

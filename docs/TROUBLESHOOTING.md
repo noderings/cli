@@ -37,13 +37,7 @@ Login succeeded; the provider organization is not marketplace-approved yet. Iden
 
 **`You are not allowed to perform this action.` on register**
 
-OAuth sessions bind to the user's home organization, which may be a client org. Pass the provider org UUID:
-
-```bash
-nr cluster register --organization-id <provider-org-uuid> ...
-```
-
-The UI **Install with NR CLI** command includes this flag. Also accepted: `NR_ORGANIZATION_ID`.
+OAuth sessions bind to the user's home organization, which may be a client org. The CLI lists organizations and uses the provider organization automatically (a user has one). Confirm `nr auth status` and that the account has an approved provider organization.
 
 **Resume after failure**
 

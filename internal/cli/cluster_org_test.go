@@ -5,31 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spf13/cobra"
-
 	generated "github.com/noderings/cli/internal/api/generated"
 )
-
-func TestOrganizationIDFromCmdFlagBeatsEnv(t *testing.T) {
-	t.Setenv("NR_ORGANIZATION_ID", "from-env")
-	cmd := &cobra.Command{Use: "register"}
-	cmd.Flags().String("organization-id", "", "")
-	if err := cmd.Flags().Set("organization-id", "from-flag"); err != nil {
-		t.Fatal(err)
-	}
-	if got := organizationIDFromCmd(cmd); got != "from-flag" {
-		t.Fatalf("got %q", got)
-	}
-}
-
-func TestOrganizationIDFromCmdEnv(t *testing.T) {
-	t.Setenv("NR_ORGANIZATION_ID", " from-env ")
-	cmd := &cobra.Command{Use: "register"}
-	cmd.Flags().String("organization-id", "", "")
-	if got := organizationIDFromCmd(cmd); got != "from-env" {
-		t.Fatalf("got %q", got)
-	}
-}
 
 func TestProviderOrgsFromListJSONIgnoresClientOrgs(t *testing.T) {
 	t.Parallel()
@@ -56,9 +33,9 @@ func TestProviderOrgsFromListJSONIgnoresClientOrgs(t *testing.T) {
 	}
 }
 
-func TestChooseProviderOrganizationSingleNonInteractive(t *testing.T) {
+func TestUniqueProviderOrganizationSingle(t *testing.T) {
 	t.Parallel()
-	id, err := chooseProviderOrganization([]providerOrg{{id: "abc", name: "One"}}, true)
+	id, err := uniqueProviderOrganization([]providerOrg{{id: "abc", name: "One"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -67,21 +44,44 @@ func TestChooseProviderOrganizationSingleNonInteractive(t *testing.T) {
 	}
 }
 
-func TestChooseProviderOrganizationEmpty(t *testing.T) {
+func TestUniqueProviderOrganizationEmpty(t *testing.T) {
 	t.Parallel()
-	_, err := chooseProviderOrganization(nil, true)
+	_, err := uniqueProviderOrganization(nil)
 	if err == nil || !strings.Contains(err.Error(), "no provider organization") {
 		t.Fatalf("err=%v", err)
 	}
 }
 
-func TestChooseProviderOrganizationMultipleNeedsFlagWhenNotTTY(t *testing.T) {
+func TestUniqueProviderOrganizationMultiple(t *testing.T) {
 	t.Parallel()
-	_, err := chooseProviderOrganization([]providerOrg{
+	_, err := uniqueProviderOrganization([]providerOrg{
 		{id: "a", name: "A"},
 		{id: "b", name: "B"},
-	}, false)
-	if err == nil || !strings.Contains(err.Error(), "--organization-id") {
+	})
+	if err == nil || !strings.Contains(err.Error(), "only have one") {
 		t.Fatalf("err=%v", err)
+	}
+}
+
+func TestCanonicalAPIPlatformDriver(t *testing.T) {
+	t.Parallel()
+	vf := generated.PLATFORMDRIVERVIRTFUSION
+	svm := generated.PLATFORMDRIVERSOLUSVM
+	pve := generated.PLATFORMDRIVERPROXMOX
+	unspec := generated.PLATFORMDRIVERUNSPECIFIED
+	if got := canonicalAPIPlatformDriver(&vf); got != "virtfusion" {
+		t.Fatalf("vf got %q", got)
+	}
+	if got := canonicalAPIPlatformDriver(&svm); got != "solusvm" {
+		t.Fatalf("svm got %q", got)
+	}
+	if got := canonicalAPIPlatformDriver(&pve); got != "proxmox" {
+		t.Fatalf("pve got %q", got)
+	}
+	if got := canonicalAPIPlatformDriver(&unspec); got != "" {
+		t.Fatalf("unspec got %q", got)
+	}
+	if got := canonicalAPIPlatformDriver(nil); got != "" {
+		t.Fatalf("nil got %q", got)
 	}
 }

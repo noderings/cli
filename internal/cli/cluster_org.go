@@ -7,13 +7,11 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
-
-	"github.com/spf13/cobra"
 
 	"github.com/noderings/cli/internal/api"
 	generated "github.com/noderings/cli/internal/api/generated"
+	"github.com/noderings/cli/internal/config"
 )
 
 type providerOrg struct {
@@ -21,25 +19,10 @@ type providerOrg struct {
 	name string
 }
 
-func organizationIDFromCmd(cmd *cobra.Command) string {
-	if cmd != nil {
-		if f := cmd.Flag("organization-id"); f != nil {
-			if v := strings.TrimSpace(f.Value.String()); v != "" {
-				return v
-			}
-		}
-	}
-	for _, key := range []string{"NR_ORGANIZATION_ID", "NODERINGS_ORGANIZATION_ID"} {
-		if v := strings.TrimSpace(os.Getenv(key)); v != "" {
-			return v
-		}
-	}
-	return ""
-}
-
-// ensureProviderOrganization sets X-Organization-ID so provider APIs (ListAgents,
-// CreateAgent) run against the provider tenant instead of the OAuth home org.
-func ensureProviderOrganization(ctx context.Context, client *api.Client, yes bool) error {
+// ensureProviderOrganization lists organizations and sets X-Organization-ID to
+// the account's provider tenant. OAuth otherwise binds to the home (often
+// client) org, which cannot create or list agents. A user has one provider org.
+func ensureProviderOrganization(ctx context.Context, client *api.Client) error {
 	if client == nil {
 		return nil
 	}
@@ -49,9 +32,9 @@ func ensureProviderOrganization(ctx context.Context, client *api.Client, yes boo
 
 	orgs, err := listProviderOrganizations(ctx, client)
 	if err != nil {
-		return fmt.Errorf("list organizations: %w\nPass --organization-id from the UI install command", err)
+		return fmt.Errorf("list organizations: %w", err)
 	}
-	id, err := chooseProviderOrganization(orgs, yes)
+	id, err := uniqueProviderOrganization(orgs)
 	if err != nil {
 		return err
 	}
@@ -80,6 +63,49 @@ func listProviderOrganizations(ctx context.Context, client *api.Client) ([]provi
 	return providerOrgsFromListJSON(body), nil
 }
 
+// fetchOrganizationHypervisorDriver returns the canonical org driver, or empty
+// if the organization has not chosen one.
+func fetchOrganizationHypervisorDriver(ctx context.Context, client *api.Client) string {
+	if client == nil {
+		return ""
+	}
+	resp, err := client.DoWithAutoRefresh(ctx, 3, func() (*http.Response, error) {
+		return client.GetGeneratedClient().OrganizationServiceGetOrganization(ctx)
+	})
+	if err != nil {
+		return ""
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode >= 400 {
+		return ""
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return ""
+	}
+	var parsed generated.V1GetOrganizationResponse
+	if err := json.Unmarshal(body, &parsed); err != nil || parsed.Organization == nil {
+		return ""
+	}
+	return canonicalAPIPlatformDriver(parsed.Organization.HypervisorDriver)
+}
+
+func canonicalAPIPlatformDriver(d *generated.V1PlatformDriver) string {
+	if d == nil {
+		return ""
+	}
+	switch *d {
+	case generated.PLATFORMDRIVERVIRTFUSION:
+		return config.HypervisorDriverVirtFusion
+	case generated.PLATFORMDRIVERSOLUSVM:
+		return config.HypervisorDriverSolusVM
+	case generated.PLATFORMDRIVERPROXMOX:
+		return config.HypervisorDriverProxmox
+	default:
+		return ""
+	}
+}
+
 func providerOrgsFromListJSON(body []byte) []providerOrg {
 	var list generated.V1ListOrganizationsResponse
 	if err := json.Unmarshal(body, &list); err != nil || list.Organizations == nil {
@@ -106,30 +132,14 @@ func providerOrgsFromListJSON(body []byte) []providerOrg {
 	return out
 }
 
-func chooseProviderOrganization(orgs []providerOrg, yes bool) (string, error) {
+func uniqueProviderOrganization(orgs []providerOrg) (string, error) {
 	if len(orgs) == 0 {
-		return "", fmt.Errorf("no provider organization found for this account. Pass --organization-id from the UI install command")
+		return "", fmt.Errorf("no provider organization found for this account")
 	}
-	if len(orgs) == 1 && (yes || !isStdinTerminal()) {
-		return orgs[0].id, nil
+	if len(orgs) > 1 {
+		return "", fmt.Errorf("this account has %d provider organizations; a user can only have one", len(orgs))
 	}
-	if !isStdinTerminal() {
-		return "", fmt.Errorf("pass --organization-id <uuid> (provider organization). The UI install command includes this flag")
-	}
-
-	fmt.Fprintln(os.Stderr, "Provider organizations:")
-	for i, org := range orgs {
-		fmt.Fprintf(os.Stderr, "  %d) %s (%s)\n", i+1, org.name, org.id)
-	}
-	raw, err := promptString("Select a provider organization", "1")
-	if err != nil {
-		return "", err
-	}
-	n, err := strconv.Atoi(strings.TrimSpace(raw))
-	if err != nil || n < 1 || n > len(orgs) {
-		return "", fmt.Errorf("invalid selection %q (enter 1-%d)", raw, len(orgs))
-	}
-	return orgs[n-1].id, nil
+	return orgs[0].id, nil
 }
 
 func orgNameByID(orgs []providerOrg, id string) string {

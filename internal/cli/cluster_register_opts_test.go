@@ -152,12 +152,39 @@ func TestParseHypervisorDriver(t *testing.T) {
 	if err != nil || got != config.HypervisorDriverVirtFusion {
 		t.Fatalf("virtfusion got %q err=%v", got, err)
 	}
+	got, err = parseHypervisorDriver("PLATFORM_DRIVER_SOLUSVM")
+	if err != nil || got != config.HypervisorDriverSolusVM {
+		t.Fatalf("proto solusvm got %q err=%v", got, err)
+	}
 	got, err = parseHypervisorDriver("solusvm")
 	if err != nil || got != config.HypervisorDriverSolusVM {
 		t.Fatalf("solusvm got %q err=%v", got, err)
 	}
 	if _, err := parseHypervisorDriver("xen"); err == nil {
 		t.Fatal("expected error for unknown driver")
+	}
+}
+
+func TestResolveHypervisorDriver(t *testing.T) {
+	t.Parallel()
+
+	if _, err := resolveHypervisorDriver("", false, ""); err == nil {
+		t.Fatal("expected error when org has no driver")
+	}
+	got, err := resolveHypervisorDriver("", false, config.HypervisorDriverVirtFusion)
+	if err != nil || got != config.HypervisorDriverVirtFusion {
+		t.Fatalf("inherit org got %q err=%v", got, err)
+	}
+	got, err = resolveHypervisorDriver("solusvm", true, config.HypervisorDriverSolusVM)
+	if err != nil || got != config.HypervisorDriverSolusVM {
+		t.Fatalf("matching flag got %q err=%v", got, err)
+	}
+	if _, err := resolveHypervisorDriver("solusvm", true, config.HypervisorDriverVirtFusion); err == nil {
+		t.Fatal("expected mismatch error")
+	}
+	got, err = resolveHypervisorDriver("virtfusion", true, "")
+	if err != nil || got != config.HypervisorDriverVirtFusion {
+		t.Fatalf("explicit flag with empty org got %q err=%v", got, err)
 	}
 }
 

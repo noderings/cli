@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	generated "github.com/noderings/cli/internal/api/generated"
 	"github.com/noderings/cli/internal/config"
 	"github.com/noderings/cli/internal/install"
 	"github.com/noderings/cli/internal/logger"
@@ -166,6 +167,7 @@ func collectOffloadNamespaces(opts clusterRegisterOpts) []string {
 
 func parseHypervisorDriver(raw string) (string, error) {
 	d := strings.ToLower(strings.TrimSpace(raw))
+	d = strings.TrimPrefix(d, "platform_driver_")
 	switch d {
 	case "", config.HypervisorDriverProxmox:
 		return config.HypervisorDriverProxmox, nil
@@ -176,6 +178,47 @@ func parseHypervisorDriver(raw string) (string, error) {
 	default:
 		return "", UsageErrorf("unsupported --hypervisor-driver %q (want proxmox, virtfusion, or solusvm)", raw)
 	}
+}
+
+// resolveHypervisorDriver uses an explicit flag, then the org driver.
+// There is no proxmox default: an empty org with no flag is an error.
+func resolveHypervisorDriver(flagRaw string, flagChanged bool, orgDriver string) (string, error) {
+	org := strings.TrimSpace(orgDriver)
+	if flagChanged {
+		parsed, err := parseHypervisorDriver(flagRaw)
+		if err != nil {
+			return "", err
+		}
+		if org != "" {
+			existing, err := parseHypervisorDriver(org)
+			if err != nil {
+				return "", err
+			}
+			if parsed != existing {
+				return "", UsageErrorf("organization hypervisor driver is %s; --hypervisor-driver %s does not match", existing, parsed)
+			}
+		}
+		return parsed, nil
+	}
+	if org != "" {
+		return parseHypervisorDriver(org)
+	}
+	return "", UsageErrorf("this organization has no hypervisor driver")
+}
+
+func hypervisorDriverToAPI(driver string) *generated.V1PlatformDriver {
+	var d generated.V1PlatformDriver
+	switch strings.ToLower(strings.TrimSpace(driver)) {
+	case config.HypervisorDriverVirtFusion:
+		d = generated.PLATFORMDRIVERVIRTFUSION
+	case config.HypervisorDriverSolusVM:
+		d = generated.PLATFORMDRIVERSOLUSVM
+	case config.HypervisorDriverProxmox:
+		d = generated.PLATFORMDRIVERPROXMOX
+	default:
+		return nil
+	}
+	return &d
 }
 
 func validateRegisterHypervisorOpts(opts clusterRegisterOpts) error {

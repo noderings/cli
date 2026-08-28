@@ -1318,15 +1318,15 @@ func (e V1PlanType) Valid() bool {
 // Defines values for V1PlatformDriver.
 const (
 	PLATFORMDRIVERPROXMOX     V1PlatformDriver = "PLATFORM_DRIVER_PROXMOX"
+	PLATFORMDRIVERSOLUSVM     V1PlatformDriver = "PLATFORM_DRIVER_SOLUSVM"
 	PLATFORMDRIVERUNSPECIFIED V1PlatformDriver = "PLATFORM_DRIVER_UNSPECIFIED"
+	PLATFORMDRIVERVIRTFUSION  V1PlatformDriver = "PLATFORM_DRIVER_VIRTFUSION"
 )
 
 // Valid indicates whether the value is a known member of the V1PlatformDriver enum.
 func (e V1PlatformDriver) Valid() bool {
 	switch e {
-	case PLATFORMDRIVERPROXMOX:
-		return true
-	case PLATFORMDRIVERUNSPECIFIED:
+	case PLATFORMDRIVERPROXMOX, PLATFORMDRIVERSOLUSVM, PLATFORMDRIVERUNSPECIFIED, PLATFORMDRIVERVIRTFUSION:
 		return true
 	default:
 		return false
@@ -4189,10 +4189,11 @@ type V1CreateAddonRequest struct {
 
 // V1CreateAgentRequest defines model for v1CreateAgentRequest.
 type V1CreateAgentRequest struct {
-	AgentPublicIp *string               `json:"agentPublicIp,omitempty"`
-	Description   *string               `json:"description,omitempty"`
-	GatewayRegion *V1AgentGatewayRegion `json:"gatewayRegion,omitempty"`
-	Name          *string               `json:"name,omitempty"`
+	AgentPublicIp    *string               `json:"agentPublicIp,omitempty"`
+	Description      *string               `json:"description,omitempty"`
+	GatewayRegion    *V1AgentGatewayRegion `json:"gatewayRegion,omitempty"`
+	HypervisorDriver *V1PlatformDriver     `json:"hypervisorDriver,omitempty"`
+	Name             *string               `json:"name,omitempty"`
 }
 
 // V1CreateClientReviewRequest defines model for v1CreateClientReviewRequest.
@@ -6619,6 +6620,9 @@ type V1Organization struct {
 	OrganizationRoles *[]string `json:"organizationRoles,omitempty"`
 	Owner             *string   `json:"owner,omitempty"`
 	ProviderLogoUrl   *string   `json:"providerLogoUrl,omitempty"`
+
+	// HypervisorDriver Hypervisor driver for this provider org. Set when the first agent is registered and immutable after that.
+	HypervisorDriver *V1PlatformDriver `json:"hypervisorDriver,omitempty"`
 
 	// ProviderWebsiteUrl Public storefront / company website (http or https). Provider organizations only.
 	ProviderWebsiteUrl *string             `json:"providerWebsiteUrl,omitempty"`

@@ -72,6 +72,7 @@ func init() {
 	agentCreateCmd.Flags().String("agent-ip", "", "Agent public IP address (required, must be valid public IP)")
 	agentCreateCmd.Flags().String("gateway-region", "", "Gateway region (required)")
 	agentCreateCmd.Flags().String("description", "", "Optional description for the agent")
+	agentCreateCmd.Flags().String("hypervisor-driver", "", "Optional. Uses the organization hypervisor driver when omitted. Must match the organization if set.")
 	agentCreateCmd.Flags().String("output", config.OutputFormatText, "Output format: text|json")
 
 	// agent list flags
@@ -99,14 +100,26 @@ func init() {
 const defaultAPITimeout = 20 * time.Second
 
 // apiClientOption customizes the client built by getAuthenticatedAPIClient.
-type apiClientOption func(*api.Config)
+type apiClientOption func(*api.Config, *apiClientExtras)
+
+type apiClientExtras struct {
+	skipProviderOrg bool
+}
 
 // withAPITimeout raises the HTTP client timeout for endpoints that block on slow server-side
 // work. http.Client.Timeout is a hard wall-clock cap that preempts the request context, so
 // widening only the context is not enough: the client aborts mid-flight while the server keeps
 // going, leaving the caller unable to tell a timeout from a failure.
 func withAPITimeout(timeout time.Duration) apiClientOption {
-	return func(cfg *api.Config) { cfg.Timeout = timeout }
+	return func(cfg *api.Config, _ *apiClientExtras) { cfg.Timeout = timeout }
+}
+
+// withoutProviderOrganization skips listing orgs to set X-Organization-ID.
+// Use for auth status: ListOrganizations must work before a provider org exists.
+func withoutProviderOrganization() apiClientOption {
+	return func(_ *api.Config, extra *apiClientExtras) {
+		extra.skipProviderOrg = true
+	}
 }
 
 // getAuthenticatedAPIClient creates an authenticated API client
@@ -160,8 +173,9 @@ func getAuthenticatedAPIClient(cmd *cobra.Command, opts ...apiClientOption) (*ap
 		TLSInsecure: tlsInsecure,
 		CACertPath:  cfg.API.CACertPath,
 	}
+	extra := &apiClientExtras{}
 	for _, opt := range opts {
-		opt(apiCfg)
+		opt(apiCfg, extra)
 	}
 	apiClient, err := api.NewClient(apiCfg)
 	if err != nil {
@@ -174,13 +188,6 @@ func getAuthenticatedAPIClient(cmd *cobra.Command, opts ...apiClientOption) (*ap
 
 	// Set authentication token
 	apiClient.SetToken(tokenInfo.Token)
-
-	if orgID := organizationIDFromCmd(cmd); orgID != "" {
-		if !uuidPattern.MatchString(orgID) {
-			return nil, UsageErrorf("--organization-id must be a UUID")
-		}
-		apiClient.SetOrganizationID(orgID)
-	}
 
 	// Set up automatic token refresh on 401 (only for OAuth tokens)
 	if tokenInfo.IsOAuthToken {
@@ -229,6 +236,15 @@ func getAuthenticatedAPIClient(cmd *cobra.Command, opts ...apiClientOption) (*ap
 	}
 	// Service account tokens (from env vars or config) don't support refresh
 	// They are long-lived JWT tokens that must be regenerated if expired
+
+	// OAuth binds to the home (often client) org. List organizations and send
+	// X-Organization-ID for the unique provider tenant. Service account JWTs are
+	// already org-scoped; ListOrganizations is user-only.
+	if !extra.skipProviderOrg && tokenInfo.IsOAuthToken {
+		if err := ensureProviderOrganization(context.Background(), apiClient); err != nil {
+			return nil, err
+		}
+	}
 
 	return apiClient, nil
 }
@@ -280,6 +296,7 @@ func runAgentCreate(cmd *cobra.Command, args []string) error {
 	agentIP, _ := cmd.Flags().GetString("agent-ip")
 	gatewayRegion, _ := cmd.Flags().GetString("gateway-region")
 	description, _ := cmd.Flags().GetString("description")
+	hypervisorDriverRaw, _ := cmd.Flags().GetString("hypervisor-driver")
 
 	// Validate required fields
 	if name == "" {
@@ -301,11 +318,22 @@ func runAgentCreate(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	orgDriver := fetchOrganizationHypervisorDriver(ctx, apiClient)
+	hypervisorDriver, err := resolveHypervisorDriver(
+		hypervisorDriverRaw,
+		cmd.Flags().Changed("hypervisor-driver"),
+		orgDriver,
+	)
+	if err != nil {
+		return err
+	}
+
 	// Create request body
 	reqBody := generated.AgentServiceCreateAgentJSONRequestBody{
-		Name:          &name,
-		AgentPublicIp: &agentIP,
-		GatewayRegion: &region,
+		Name:             &name,
+		AgentPublicIp:    &agentIP,
+		GatewayRegion:    &region,
+		HypervisorDriver: hypervisorDriverToAPI(hypervisorDriver),
 	}
 	if description != "" {
 		reqBody.Description = &description
