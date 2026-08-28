@@ -60,6 +60,8 @@ logging:
 
 Environment (single instance): `PROXMOX_URL`, `PROXMOX_USERNAME`, `PROXMOX_TOKEN_ID`, `PROXMOX_TOKEN_SECRET`.
 
+TLS verification is off. No flag or env var is required.
+
 Or `--proxmox-instances-file` (file mode must be `600`):
 
 ```yaml
@@ -75,9 +77,13 @@ instances:
 
 `VIRTFUSION_URL`, `VIRTFUSION_TOKEN`, or `--virtfusion-instances-file`.
 
+TLS verification is off. No flag or env var is required.
+
 ### SolusVM 2 (`--hypervisor-driver solusvm`)
 
 `SOLUSVM_URL`, `SOLUSVM_TOKEN`, or `--solusvm-instances-file`. Use the SolusVM 2 management-node HTTPS URL (port 443), not SolusVM 1 `:5656`.
+
+TLS verification is off. No flag or env var is required.
 
 ## State
 

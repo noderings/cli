@@ -49,7 +49,7 @@ func collectOperatorInstallInputs(
 		log.Info("Configure Proxmox API access for the operator (supports multiple instances)")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("proxmox-%d", i+1)
-			id, err := promptString("Proxmox instance ID", defaultID)
+			id, err := promptString("Proxmox instance ID (local to this agent, not the platform name)", defaultID)
 			if err != nil {
 				return err
 			}
@@ -141,7 +141,7 @@ func collectVirtFusionOperatorInstallInputs(
 		log.Info("Configure VirtFusion API access for the operator (supports multiple instances)")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("vf-%d", i+1)
-			id, err := promptString("VirtFusion instance ID", defaultID)
+			id, err := promptString("VirtFusion instance ID (local to this agent, not the platform name)", defaultID)
 			if err != nil {
 				return err
 			}
@@ -223,7 +223,7 @@ func collectSolusVMOperatorInstallInputs(
 		log.Info("Configure SolusVM 2 API access for the operator (supports multiple instances)")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("svm-%d", i+1)
-			id, err := promptString("SolusVM instance ID", defaultID)
+			id, err := promptString("SolusVM instance ID (local to this agent, not the platform name)", defaultID)
 			if err != nil {
 				return err
 			}

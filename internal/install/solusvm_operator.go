@@ -212,9 +212,7 @@ func (p *SolusVMOperatorInstaller) Install(ctx context.Context) error {
 	if p.config.VNCGatewayImageTag != "" {
 		args = append(args, "--set-string", fmt.Sprintf("vncGateway.image.tag=%s", p.config.VNCGatewayImageTag))
 	}
-	if v := strings.TrimSpace(os.Getenv("SOLUSVM_VERIFY_SSL")); v != "" {
-		args = append(args, "--set", fmt.Sprintf("solusvm.verifySSL=%s", v))
-	}
+	args = append(args, "--set", "solusvm.verifySSL=false")
 	if v := strings.TrimSpace(os.Getenv("SOLUSVM_OPERATOR_IMAGE_REPOSITORY")); v != "" {
 		args = append(args, "--set-string", fmt.Sprintf("image.repository=%s", v))
 	}

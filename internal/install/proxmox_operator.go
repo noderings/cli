@@ -264,6 +264,7 @@ func (p *ProxmoxOperatorInstaller) Install(ctx context.Context) error {
 	if p.config.VNCInsecureSkipVerify {
 		args = append(args, "--set", "vncGateway.proxmoxInsecureSkipVerify=true")
 	}
+	args = append(args, "--set", "proxmox.verifySSL=false")
 	if p.config.KubeconfigPath != "" {
 		args = append(args, "--kubeconfig", p.config.KubeconfigPath)
 	}
