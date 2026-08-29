@@ -34,11 +34,13 @@ case "$os" in
     ;;
 esac
 
-api="https://api.github.com/repos/${REPO}/releases/latest"
-tag=$(curl -fsSL "$api" | sed -n 's/.*"tag_name": *"\([^"]*\)".*/\1/p' | head -n1)
-if [ -z "$tag" ]; then
-  echo "error: could not resolve the latest release from ${api}" >&2
-  echo "Make sure https://github.com/${REPO} is public and has a published release." >&2
+# Resolve latest tag via the HTML redirect, not api.github.com.
+# Unauthenticated REST is 60 req/hour per public IP; shared lab NAT often gets HTTP 403.
+latest_url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${REPO}/releases/latest")
+tag=$(basename "${latest_url}")
+if [ -z "$tag" ] || [ "$tag" = "latest" ]; then
+  echo "error: could not resolve the latest release from https://github.com/${REPO}/releases/latest" >&2
+  echo "Download a tarball from https://github.com/${REPO}/releases and install nr from it." >&2
   exit 1
 fi
 
