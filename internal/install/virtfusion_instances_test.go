@@ -25,9 +25,15 @@ instances:
   - id: vf-1
     url: https://cp1.example.com/
     token: token1
+    userApiToken: user-token-1
+    userId: 5
+    userName: noderings
   - id: vf-2
     url: https://cp2.example.com
     token: token2
+    userApiToken: user-token-2
+    userId: 6
+    userName: noderings-2
 `
 	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
 		t.Fatal(err)
@@ -45,6 +51,9 @@ instances:
 	if got[0].URL != "https://cp1.example.com" {
 		t.Fatalf("trailing slash should be stripped, got %q", got[0].URL)
 	}
+	if got[0].UserAPIToken != "user-token-1" || got[0].UserID != 5 || got[0].UserName != "noderings" {
+		t.Fatalf("unexpected first instance user fields: %+v", got[0])
+	}
 }
 
 func TestLoadVirtFusionInstancesFileList(t *testing.T) {
@@ -53,6 +62,9 @@ func TestLoadVirtFusionInstancesFileList(t *testing.T) {
 	content := `
 - url: https://cp.example.com
   token: tok
+  userApiToken: user-tok
+  userId: 5
+  userName: noderings
 `
 	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
 		t.Fatal(err)
@@ -74,7 +86,10 @@ func TestVirtFusionInstanceValidate(t *testing.T) {
 }
 
 func TestVirtFusionInstanceValidateRequiresHTTPS(t *testing.T) {
-	inst := VirtFusionInstance{ID: "x", URL: "http://cp.example.com", Token: "t"}
+	inst := VirtFusionInstance{
+		ID: "x", URL: "http://cp.example.com", Token: "t",
+		UserAPIToken: "u", UserID: 5, UserName: "noderings",
+	}
 	err := inst.Validate()
 	if err == nil || !strings.Contains(err.Error(), "https") {
 		t.Fatalf("expected https requirement, got %v", err)
@@ -88,7 +103,7 @@ func TestVirtFusionInstanceValidateRequiresHTTPS(t *testing.T) {
 
 func TestLoadVirtFusionInstancesFileRejectsWorldReadable(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "instances.yaml")
-	content := "instances:\n  - id: vf-1\n    url: https://cp.example.com\n    token: t\n"
+	content := "instances:\n  - id: vf-1\n    url: https://cp.example.com\n    token: t\n    userApiToken: u\n    userId: 5\n    userName: noderings\n"
 	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -107,6 +122,9 @@ func TestLoadVirtFusionInstancesFileRejectsWorldReadable(t *testing.T) {
 func TestVirtFusionInstanceFromEnv(t *testing.T) {
 	t.Setenv("VIRTFUSION_URL", "")
 	t.Setenv("VIRTFUSION_TOKEN", "")
+	t.Setenv("VIRTFUSION_USER_API_TOKEN", "")
+	t.Setenv("VIRTFUSION_USER_ID", "")
+	t.Setenv("VIRTFUSION_USER_NAME", "")
 	t.Setenv("VIRTFUSION_INSTANCE_ID", "")
 	inst, err := VirtFusionInstanceFromEnv()
 	if err != nil || inst != nil {
@@ -115,6 +133,9 @@ func TestVirtFusionInstanceFromEnv(t *testing.T) {
 
 	t.Setenv("VIRTFUSION_URL", "https://cp.example.com/")
 	t.Setenv("VIRTFUSION_TOKEN", "tok")
+	t.Setenv("VIRTFUSION_USER_API_TOKEN", "user-tok")
+	t.Setenv("VIRTFUSION_USER_ID", "5")
+	t.Setenv("VIRTFUSION_USER_NAME", "noderings")
 	inst, err = VirtFusionInstanceFromEnv()
 	if err != nil {
 		t.Fatal(err)
@@ -124,6 +145,9 @@ func TestVirtFusionInstanceFromEnv(t *testing.T) {
 	}
 	if inst.URL != "https://cp.example.com" {
 		t.Fatalf("trailing slash should be stripped, got %q", inst.URL)
+	}
+	if inst.UserAPIToken != "user-tok" || inst.UserID != 5 || inst.UserName != "noderings" {
+		t.Fatalf("user api fields: %+v", inst)
 	}
 }
 

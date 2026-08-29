@@ -75,7 +75,21 @@ instances:
 
 ### VirtFusion (`--hypervisor-driver virtfusion`)
 
-`VIRTFUSION_URL`, `VIRTFUSION_TOKEN`, or `--virtfusion-instances-file`.
+`VIRTFUSION_URL`, `VIRTFUSION_TOKEN`, `VIRTFUSION_USER_API_TOKEN`, `VIRTFUSION_USER_ID`, `VIRTFUSION_USER_NAME`, or `--virtfusion-instances-file`.
+
+YAML instances (mode `0600`):
+
+```yaml
+instances:
+  - id: vf-1
+    url: https://cp.example.com
+    token: "…"            # Global API token (Settings → Global API)
+    userApiToken: "…"     # User API token (log in as the client user → Account → API)
+    userId: 5             # numeric id of that client user
+    userName: noderings   # panel username of that client user
+```
+
+Create a **normal VirtFusion client user** (not an admin). Copy the numeric **user id**. Log in as that user and generate a User API token. VMs are created as that user so the operator can `POST /api/server/{uuid}/build` with `userData` (chosen password and client cloud-init).
 
 TLS verification is off. No flag or env var is required.
 

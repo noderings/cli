@@ -266,8 +266,11 @@ func (p *VirtFusionOperatorInstaller) Install(ctx context.Context) error {
 
 func (p *VirtFusionOperatorInstaller) createVirtFusionSecret(ctx context.Context, ns, name string, inst VirtFusionInstance) error {
 	return p.applySecret(ctx, ns, name, map[string]string{
-		"VIRTFUSION_URL":   inst.URL,
-		"VIRTFUSION_TOKEN": inst.Token,
+		"VIRTFUSION_URL":            inst.URL,
+		"VIRTFUSION_TOKEN":          inst.Token,
+		"VIRTFUSION_USER_API_TOKEN": inst.UserAPIToken,
+		"VIRTFUSION_USER_ID":        fmt.Sprintf("%d", inst.UserID),
+		"VIRTFUSION_USER_NAME":      inst.UserName,
 	})
 }
 

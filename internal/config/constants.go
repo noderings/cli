@@ -132,7 +132,7 @@ const (
 	// DefaultVirtFusionOperatorCRDsChartOCI is CRDs-only (install alongside Proxmox CRDs on every provider).
 	DefaultVirtFusionOperatorCRDsChartOCI = "oci://harbor.noderings.com/noderings/virtfusion-operator-crds"
 	// DefaultVirtFusionOperatorChartVersion is the VirtFusion chart version (no leading v).
-	DefaultVirtFusionOperatorChartVersion = "0.1.3"
+	DefaultVirtFusionOperatorChartVersion = "0.1.4"
 	// DefaultVirtFusionOperatorHelmNamespace is the runtime namespace for the VirtFusion operator chart.
 	DefaultVirtFusionOperatorHelmNamespace = "virtfusion-system"
 	// VirtFusionCRDAPIGroup is the API group registered by virtfusion-operator CRDs.

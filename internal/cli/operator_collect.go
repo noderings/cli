@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/noderings/cli/internal/install"
@@ -136,9 +137,10 @@ func collectVirtFusionOperatorInstallInputs(
 
 	if len(instances) == 0 {
 		if nonInteractive {
-			return fmt.Errorf("virtfusion credentials required: set VIRTFUSION_URL and VIRTFUSION_TOKEN, --virtfusion-instances-file, or run interactively (without --yes)")
+			return fmt.Errorf("virtfusion credentials required: set VIRTFUSION_URL, VIRTFUSION_TOKEN, VIRTFUSION_USER_API_TOKEN, VIRTFUSION_USER_ID, VIRTFUSION_USER_NAME, --virtfusion-instances-file, or run interactively (without --yes)")
 		}
 		log.Info("Configure VirtFusion API access for the operator (supports multiple instances)")
+		log.Info("Create a normal VirtFusion client user (not an admin). Copy the numeric user ID. Log in as that user and generate a User API token under Account → API.")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("vf-%d", i+1)
 			id, err := promptString("VirtFusion instance ID (local to this agent, not the platform name)", defaultID)
@@ -150,14 +152,33 @@ func collectVirtFusionOperatorInstallInputs(
 				return err
 			}
 			url = install.NormalizeHypervisorAPIURL(url)
-			token, err := promptString("VirtFusion API token", "")
+			token, err := promptSecret("VirtFusion Global API token", false)
+			if err != nil {
+				return err
+			}
+			userName, err := promptString("VirtFusion client username (the panel user you created for NodeRings)", "")
+			if err != nil {
+				return err
+			}
+			userIDStr, err := promptString("VirtFusion client user ID (numeric, from Users list)", "")
+			if err != nil {
+				return err
+			}
+			userID, err := strconv.Atoi(strings.TrimSpace(userIDStr))
+			if err != nil || userID < 1 {
+				return fmt.Errorf("VirtFusion client user ID must be a positive integer")
+			}
+			userAPIToken, err := promptSecret("VirtFusion User API token (Account → API while logged in as that user)", false)
 			if err != nil {
 				return err
 			}
 			inst := install.VirtFusionInstance{
-				ID:    id,
-				URL:   url,
-				Token: token,
+				ID:           id,
+				URL:          url,
+				Token:        token,
+				UserAPIToken: userAPIToken,
+				UserID:       userID,
+				UserName:     userName,
 			}
 			if err := inst.Validate(); err != nil {
 				return err
