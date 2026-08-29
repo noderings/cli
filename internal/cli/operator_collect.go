@@ -152,9 +152,13 @@ func collectVirtFusionOperatorInstallInputs(
 				return err
 			}
 			url = install.NormalizeHypervisorAPIURL(url)
-			token, err := promptSecret("VirtFusion Global API token", false)
+			// Echo on paste: VF tokens are long; hidden prompts look like the paste failed.
+			token, err := promptString("VirtFusion Global API token", "")
 			if err != nil {
 				return err
+			}
+			if strings.TrimSpace(token) == "" {
+				return fmt.Errorf("VirtFusion Global API token is required")
 			}
 			userName, err := promptString("VirtFusion client username (the panel user you created for NodeRings)", "")
 			if err != nil {
@@ -168,9 +172,12 @@ func collectVirtFusionOperatorInstallInputs(
 			if err != nil || userID < 1 {
 				return fmt.Errorf("VirtFusion client user ID must be a positive integer")
 			}
-			userAPIToken, err := promptSecret("VirtFusion User API token (Account → API while logged in as that user)", false)
+			userAPIToken, err := promptString("VirtFusion User API token (Account → API while logged in as that user)", "")
 			if err != nil {
 				return err
+			}
+			if strings.TrimSpace(userAPIToken) == "" {
+				return fmt.Errorf("VirtFusion User API token is required")
 			}
 			inst := install.VirtFusionInstance{
 				ID:           id,
