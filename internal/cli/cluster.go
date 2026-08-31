@@ -226,6 +226,7 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	if err := stateManager.Load(); err != nil {
 		return fmt.Errorf("load state: %w", err)
 	}
+	previousLocalAgentID := stateManager.GetState().AgentID
 
 	// Handle force flag: clean up existing local cluster before reinstall
 	if force {
@@ -349,6 +350,10 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	}
 	if reused {
 		log.Infof("Reusing agent '%s' (ID: %s)", name, agentID)
+	}
+
+	if err := rejectStaleLocalCluster(ctx, previousLocalAgentID, agentID, force); err != nil {
+		return err
 	}
 
 	// Update state with agent info

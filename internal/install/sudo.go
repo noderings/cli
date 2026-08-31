@@ -1,6 +1,7 @@
 package install
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"fmt"
@@ -56,37 +57,25 @@ func NewSudoManager(logger Logger) (*SudoManager, error) {
 	return sm, nil
 }
 
-// promptSudoPassword prompts the user for their sudo password securely
+// promptSudoPassword prompts for sudo with echo on. Hidden input looks like
+// paste failed; nr never disables terminal echo for any prompt.
 func (sm *SudoManager) promptSudoPassword() (string, error) {
-	// Check if stdin is a terminal
 	fd := int(os.Stdin.Fd())
 	if !term.IsTerminal(fd) {
 		return "", fmt.Errorf("stdin is not a terminal, cannot prompt for password")
 	}
 
-	// Prompt for password (use stderr so it doesn't interfere with stdout)
-	// Flush stderr to ensure prompt is displayed before reading
 	fmt.Fprint(os.Stderr, "Enter sudo password: ")
 	_ = os.Stderr.Sync()
 
-	// Read password without echoing to terminal
-	// term.ReadPassword automatically disables echo and restores it after reading
-	passwordBytes, err := term.ReadPassword(fd)
+	line, err := bufio.NewReader(os.Stdin).ReadString('\n')
 	if err != nil {
-		// Add newline on error (to stderr)
-		fmt.Fprintln(os.Stderr)
 		return "", fmt.Errorf("failed to read password: %w", err)
 	}
-
-	// Add newline after password input (to stderr)
-	// This ensures the cursor moves to a new line after password entry
-	fmt.Fprintln(os.Stderr)
-
-	password := strings.TrimSpace(string(passwordBytes))
+	password := strings.TrimSpace(line)
 	if password == "" {
 		return "", fmt.Errorf("password cannot be empty")
 	}
-
 	return password, nil
 }
 

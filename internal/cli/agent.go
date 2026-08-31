@@ -15,6 +15,7 @@ import (
 	generated "github.com/noderings/cli/internal/api/generated"
 	"github.com/noderings/cli/internal/auth"
 	"github.com/noderings/cli/internal/config"
+	"github.com/noderings/cli/internal/install"
 )
 
 var (
@@ -55,7 +56,7 @@ var (
 	agentDeleteCmd = &cobra.Command{
 		Use:   "delete",
 		Short: "Delete an agent",
-		Long:  "Delete an agent from the backend (does NOT uninstall k3s)",
+		Long:  "Delete an agent from the backend. If k3s is installed on this host, use nr cluster deregister instead (or pass --keep-cluster).",
 		RunE:  runAgentDelete,
 	}
 )
@@ -94,6 +95,7 @@ func init() {
 	agentDeleteCmd.Flags().String("agent-id", "", "Agent ID (UUID)")
 	agentDeleteCmd.Flags().String("name", "", "Agent name (alternative to ID)")
 	agentDeleteCmd.Flags().Bool("force", false, "Skip confirmation prompt")
+	agentDeleteCmd.Flags().Bool("keep-cluster", false, "Allow API-only delete while local k3s is still installed (not recommended)")
 }
 
 // defaultAPITimeout bounds an ordinary API call.
@@ -237,10 +239,11 @@ func getAuthenticatedAPIClient(cmd *cobra.Command, opts ...apiClientOption) (*ap
 	// Service account tokens (from env vars or config) don't support refresh
 	// They are long-lived JWT tokens that must be regenerated if expired
 
-	// OAuth binds to the home (often client) org. List organizations and send
-	// X-Organization-ID for the unique provider tenant. Service account JWTs are
-	// already org-scoped; ListOrganizations is user-only.
-	if !extra.skipProviderOrg && tokenInfo.IsOAuthToken {
+	// User JWTs (OAuth or NR_API_TOKEN from login) bind to the home (often client)
+	// org. List organizations and send X-Organization-ID for the unique provider
+	// tenant. Service account JWTs are already org-scoped; ListOrganizations is
+	// user-only and returns 401 — ensureProviderOrganization ignores that.
+	if !extra.skipProviderOrg {
 		if err := ensureProviderOrganization(context.Background(), apiClient); err != nil {
 			return nil, err
 		}
@@ -682,6 +685,12 @@ func runAgentDelete(cmd *cobra.Command, args []string) error {
 		}
 	}
 
+	keepCluster, _ := cmd.Flags().GetBool("keep-cluster")
+	k3sPresent, _, _, _ := install.DetectInstalledComponents(ctx)
+	if err := agentDeleteLocalClusterGuard(k3sPresent, keepCluster); err != nil {
+		return err
+	}
+
 	// Confirm deletion (unless --force)
 	force, _ := cmd.Flags().GetBool("force")
 	if !force {
@@ -721,7 +730,10 @@ func runAgentDelete(cmd *cobra.Command, args []string) error {
 	} else {
 		fmt.Printf("%s Agent (ID: %s) deleted successfully!\n", markPass(), agentID)
 	}
-	fmt.Println("Note: This only removes the agent from the API. k3s is NOT uninstalled.")
+	if keepCluster || k3sPresent {
+		fmt.Println("Note: This only removes the agent from the API. k3s is NOT uninstalled.")
+		fmt.Println("Wipe local k3s with: nr cluster deregister --name <name> --yes --skip-api")
+	}
 
 	return nil
 }

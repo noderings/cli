@@ -76,7 +76,7 @@ func runOperatorInstallPhase(
 	if err := collectOperatorInstallInputs(opCfg, instancesFile, nonInteractive, log); err != nil {
 		stateManager.SetError(state.PhaseOperatorInstall, err.Error(), true)
 		_ = stateManager.Save()
-		return fmt.Errorf("operator install config: %w (or use --skip-operator-install)", err)
+		return fmt.Errorf("operator install config: %w (or use --skip-operator-install)%s", err, operatorCredentialRecoveryHint(stateManager.GetState().AgentName))
 	}
 	log.Infof("Proxmox instances: %d", len(opCfg.Instances))
 
@@ -151,7 +151,7 @@ func runVirtFusionOperatorInstallPhase(
 	if err := collectVirtFusionOperatorInstallInputs(opCfg, instancesFile, nonInteractive, log); err != nil {
 		stateManager.SetError(state.PhaseOperatorInstall, err.Error(), true)
 		_ = stateManager.Save()
-		return fmt.Errorf("operator install config: %w (or use --skip-operator-install)", err)
+		return fmt.Errorf("operator install config: %w (or use --skip-operator-install)%s", err, operatorCredentialRecoveryHint(stateManager.GetState().AgentName))
 	}
 	log.Infof("VirtFusion instances: %d", len(opCfg.Instances))
 
@@ -223,7 +223,7 @@ func runSolusVMOperatorInstallPhase(
 	if err := collectSolusVMOperatorInstallInputs(opCfg, instancesFile, nonInteractive, log); err != nil {
 		stateManager.SetError(state.PhaseOperatorInstall, err.Error(), true)
 		_ = stateManager.Save()
-		return fmt.Errorf("operator install config: %w (or use --skip-operator-install)", err)
+		return fmt.Errorf("operator install config: %w (or use --skip-operator-install)%s", err, operatorCredentialRecoveryHint(stateManager.GetState().AgentName))
 	}
 	log.Infof("SolusVM instances: %d", len(opCfg.Instances))
 

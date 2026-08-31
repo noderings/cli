@@ -25,6 +25,10 @@ func rejectUnverifiedProvider(ctx context.Context, apiClient *api.Client) error 
 	}
 	defer func() { _ = resp.Body.Close() }()
 
+	if resp.StatusCode == http.StatusUnauthorized {
+		// Service-account JWTs cannot list orgs. Tenant is already on the token.
+		return rejectUnverifiedProviderFromGet(ctx, apiClient)
+	}
 	if resp.StatusCode >= 400 {
 		return api.ParseError(resp)
 	}
@@ -60,4 +64,35 @@ func providerReviewPendingFromListOrgs(body []byte) bool {
 		hasUnverifiedProvider = true
 	}
 	return hasUnverifiedProvider && !hasVerifiedProvider
+}
+
+func rejectUnverifiedProviderFromGet(ctx context.Context, apiClient *api.Client) error {
+	resp, err := apiClient.GetGeneratedClient().OrganizationServiceGetOrganization(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode >= 400 {
+		return api.ParseError(resp)
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	var parsed generated.V1GetOrganizationResponse
+	if err := json.Unmarshal(body, &parsed); err != nil || parsed.Organization == nil {
+		return nil
+	}
+	org := parsed.Organization
+	if org.Type == nil || *org.Type != generated.ORGANIZATIONTYPEPROVIDER {
+		return nil
+	}
+	if org.IsVerified != nil && *org.IsVerified {
+		return nil
+	}
+	return &api.APIError{
+		StatusCode: http.StatusForbidden,
+		Code:       "PERMISSION_DENIED",
+		Message:    api.ProviderReviewPendingMessage,
+	}
 }

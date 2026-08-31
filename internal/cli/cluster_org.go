@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -32,6 +33,11 @@ func ensureProviderOrganization(ctx context.Context, client *api.Client) error {
 
 	orgs, err := listProviderOrganizations(ctx, client)
 	if err != nil {
+		var apiErr *api.APIError
+		if errors.As(err, &apiErr) && apiErr.IsUnauthorized() {
+			// Service-account tokens cannot list orgs; they are already tenant-scoped.
+			return nil
+		}
 		return fmt.Errorf("list organizations: %w", err)
 	}
 	id, err := uniqueProviderOrganization(orgs)

@@ -44,16 +44,26 @@ func TestRejectUnverifiedProvider(t *testing.T) {
 			body:      `{"code":7,"message":"You are not allowed to perform this action."}`,
 			wantOther: true,
 		},
+		{
+			name:   "service account falls back to get organization",
+			status: http.StatusUnauthorized,
+			body:   `{"code":16,"message":"Your session is invalid. Please sign in again."}`,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				if r.URL.Path == "/v1/organization" && tt.status == http.StatusUnauthorized {
+					w.WriteHeader(http.StatusOK)
+					_, _ = w.Write([]byte(`{"organization":{"type":"ORGANIZATION_TYPE_PROVIDER","isVerified":true}}`))
+					return
+				}
 				if r.URL.Path != "/v1/organizations" {
 					t.Errorf("path = %s", r.URL.Path)
 				}
-				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(tt.status)
 				_, _ = w.Write([]byte(tt.body))
 			}))

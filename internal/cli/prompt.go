@@ -37,6 +37,19 @@ func isStdoutTerminal() bool {
 	return term.IsTerminal(int(os.Stdout.Fd()))
 }
 
+// promptVisibleToken asks for an API token with echo on. Do not add a
+// promptSecret / term.ReadPassword path: hidden paste looks like it failed.
+func promptVisibleToken(label string) (string, error) {
+	value, err := promptString(label, "")
+	if err != nil {
+		return "", err
+	}
+	if strings.TrimSpace(value) == "" {
+		return "", fmt.Errorf("%s is required", label)
+	}
+	return value, nil
+}
+
 // promptString asks for a non-secret value. Empty input keeps defaultValue.
 func promptString(label, defaultValue string) (string, error) {
 	if !isStdinTerminal() {
@@ -55,24 +68,6 @@ func promptString(label, defaultValue string) (string, error) {
 	value := strings.TrimSpace(line)
 	if value == "" {
 		return defaultValue, nil
-	}
-	return value, nil
-}
-
-// promptSecret asks for a secret with no echo. Empty input is allowed when allowEmpty is true.
-func promptSecret(label string, allowEmpty bool) (string, error) {
-	if !isStdinTerminal() {
-		return "", fmt.Errorf("stdin is not a terminal; set env/flags for non-interactive install")
-	}
-	fmt.Fprintf(os.Stderr, "%s: ", label)
-	b, err := term.ReadPassword(int(os.Stdin.Fd()))
-	fmt.Fprintln(os.Stderr)
-	if err != nil {
-		return "", fmt.Errorf("read %s: %w", label, err)
-	}
-	value := strings.TrimSpace(string(b))
-	if value == "" && !allowEmpty {
-		return "", fmt.Errorf("%s is required", label)
 	}
 	return value, nil
 }

@@ -216,6 +216,7 @@ func (p *ProxmoxOperatorInstaller) Install(ctx context.Context) error {
 		"upgrade", "--install", p.config.HelmRelease, chart,
 		"--namespace", p.config.HelmNamespace,
 		"--create-namespace",
+		// Endpoint is always --set from env (MIMIR_SERVICE_ENDPOINT) or metrics.noderings.com.
 		"--set-string", fmt.Sprintf("%s=%s", helmAlloyMimirServiceEndpoint, p.config.MimirServiceEndpoint),
 		"--set", fmt.Sprintf("%s=%t", helmAlloyMimirTLSEnabled, p.config.MimirTLSEnabled),
 		"--set-string", fmt.Sprintf("%s=%s", helmVNCGatewayNamespace, p.config.VNCGatewayNamespace),

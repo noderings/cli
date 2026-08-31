@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 )
+
+// proxmoxTokenSecretLooksLikeUUID matches the UUID Proxmox shows once at token
+// creation. Operators often paste that value into tokenId by mistake.
+var proxmoxTokenSecretLooksLikeUUID = regexp.MustCompile(`(?i)^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 
 // ProxmoxInstance holds one Proxmox API endpoint + token (user-supplied secrets).
 type ProxmoxInstance struct {
@@ -46,6 +51,14 @@ func (p ProxmoxInstance) Validate() error {
 	}
 	if parsed.Scheme != "https" {
 		return fmt.Errorf("proxmox instance %q url must use https:// (got %q)", p.ID, p.URL)
+	}
+	user := strings.TrimSpace(p.Username)
+	if !strings.Contains(user, "@") {
+		return fmt.Errorf("proxmox instance %q username must be user@realm (e.g. kopfoperator@pve), not the token ID %q", p.ID, user)
+	}
+	tokenID := strings.TrimSpace(p.TokenID)
+	if proxmoxTokenSecretLooksLikeUUID.MatchString(tokenID) {
+		return fmt.Errorf("proxmox instance %q tokenId looks like a UUID secret; use the token name (e.g. kopf-operator-token) and put the UUID in tokenSecret", p.ID)
 	}
 	return nil
 }

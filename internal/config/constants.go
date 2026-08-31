@@ -158,6 +158,7 @@ const (
 	//nolint:gosec // G101: Kubernetes Secret object name, not a credential value
 	DefaultMimirCredentialsSecret = "mimir-credentials"
 	// DefaultMimirServiceEndpoint is the production Mimir push endpoint host[:port].
+	// Lab/Tilt mothership is MIMIR_SERVICE_ENDPOINT + MIMIR_TLS_ENABLED, never this constant.
 	DefaultMimirServiceEndpoint = "metrics.noderings.com"
 
 	// DefaultHelmRolloutTimeout is the kubectl rollout status timeout after operator install.

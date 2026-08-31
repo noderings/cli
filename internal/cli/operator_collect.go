@@ -59,15 +59,15 @@ func collectOperatorInstallInputs(
 				return err
 			}
 			url = install.NormalizeHypervisorAPIURL(url)
-			user, err := promptString("Proxmox username", "kopfoperator@pve")
+			user, err := promptString("Proxmox username (user@realm, e.g. kopfoperator@pve — not the token ID)", "kopfoperator@pve")
 			if err != nil {
 				return err
 			}
-			tokenID, err := promptString("Proxmox token ID", "")
+			tokenID, err := promptString("Proxmox token ID (name after ! in user!tokenid — not the UUID secret)", "")
 			if err != nil {
 				return err
 			}
-			tokenSecret, err := promptSecret("Proxmox token secret", false)
+			tokenSecret, err := promptVisibleToken("Proxmox token secret (the UUID shown once when the token was created)")
 			if err != nil {
 				return err
 			}
@@ -152,13 +152,9 @@ func collectVirtFusionOperatorInstallInputs(
 				return err
 			}
 			url = install.NormalizeHypervisorAPIURL(url)
-			// Echo on paste: VF tokens are long; hidden prompts look like the paste failed.
-			token, err := promptString("VirtFusion Global API token", "")
+			token, err := promptVisibleToken("VirtFusion Global API token")
 			if err != nil {
 				return err
-			}
-			if strings.TrimSpace(token) == "" {
-				return fmt.Errorf("VirtFusion Global API token is required")
 			}
 			userName, err := promptString("VirtFusion client username (the panel user you created for NodeRings)", "")
 			if err != nil {
@@ -172,12 +168,9 @@ func collectVirtFusionOperatorInstallInputs(
 			if err != nil || userID < 1 {
 				return fmt.Errorf("VirtFusion client user ID must be a positive integer")
 			}
-			userAPIToken, err := promptString("VirtFusion User API token (Account → API while logged in as that user)", "")
+			userAPIToken, err := promptVisibleToken("VirtFusion User API token (Account → API while logged in as that user)")
 			if err != nil {
 				return err
-			}
-			if strings.TrimSpace(userAPIToken) == "" {
-				return fmt.Errorf("VirtFusion User API token is required")
 			}
 			inst := install.VirtFusionInstance{
 				ID:           id,
@@ -260,7 +253,7 @@ func collectSolusVMOperatorInstallInputs(
 				return err
 			}
 			url = install.NormalizeHypervisorAPIURL(url)
-			token, err := promptSecret("SolusVM API token", false)
+			token, err := promptVisibleToken("SolusVM API token")
 			if err != nil {
 				return err
 			}

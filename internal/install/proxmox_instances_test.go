@@ -89,6 +89,42 @@ func TestProxmoxInstanceValidateRequiresHTTPS(t *testing.T) {
 	}
 }
 
+func TestProxmoxInstanceValidateRejectsSwappedTokenFields(t *testing.T) {
+	// The trap: token ID typed as username, UUID secret typed as tokenId.
+	err := (ProxmoxInstance{
+		ID:          "proxmox-1",
+		URL:         "https://192.168.1.100:8006",
+		Username:    "kopf-operator-token",
+		TokenID:     "4e441214-2036-42c9-a924-963e9a0f1981",
+		TokenSecret: "unused",
+	}).Validate()
+	if err == nil || !strings.Contains(err.Error(), "user@realm") {
+		t.Fatalf("expected username realm error, got %v", err)
+	}
+
+	err = (ProxmoxInstance{
+		ID:          "proxmox-1",
+		URL:         "https://192.168.1.100:8006",
+		Username:    "kopfoperator@pve",
+		TokenID:     "4e441214-2036-42c9-a924-963e9a0f1981",
+		TokenSecret: "unused",
+	}).Validate()
+	if err == nil || !strings.Contains(err.Error(), "UUID") {
+		t.Fatalf("expected tokenId UUID error, got %v", err)
+	}
+
+	err = (ProxmoxInstance{
+		ID:          "proxmox-1",
+		URL:         "https://192.168.1.100:8006",
+		Username:    "kopfoperator@pve",
+		TokenID:     "kopf-operator-token",
+		TokenSecret: "4e441214-2036-42c9-a924-963e9a0f1981",
+	}).Validate()
+	if err != nil {
+		t.Fatalf("valid instance: %v", err)
+	}
+}
+
 func TestLoadProxmoxInstancesFileRejectsWorldReadable(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "instances.yaml")
 	content := "instances:\n  - id: p1\n    url: https://pve:8006\n    username: u@pve\n    tokenId: t\n    tokenSecret: s\n"

@@ -444,13 +444,25 @@ func (c *CalicoInstaller) waitForCalicoPods(ctx context.Context, timeout time.Du
 				continue
 			}
 
-			if daemonset.Status.NumberReady > 0 && daemonset.Status.NumberReady == daemonset.Status.DesiredNumberScheduled {
+			nodes, listErr := clientset.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
+			physicalReady := 0
+			if listErr == nil {
+				physicalReady = countReadyPhysicalNodes(nodes.Items)
+			}
+
+			ready := int(daemonset.Status.NumberReady)
+			desired := int(daemonset.Status.DesiredNumberScheduled)
+			if calicoReadyIgnoringVirtualNodes(ready, physicalReady) {
+				if desired > ready {
+					c.logger.Infof("Calico ready on %d physical node(s); ignoring %d DaemonSet slot(s) on Liqo virtual node(s)",
+						physicalReady, desired-ready)
+				}
 				return nil
 			}
 
 			if time.Now().After(deadline) {
-				return fmt.Errorf("timeout waiting for Calico pods (ready: %d/%d)",
-					daemonset.Status.NumberReady, daemonset.Status.DesiredNumberScheduled)
+				return fmt.Errorf("timeout waiting for Calico pods (ready: %d/%d, physical nodes: %d)",
+					ready, desired, physicalReady)
 			}
 		}
 	}
