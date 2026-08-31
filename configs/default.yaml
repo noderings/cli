@@ -1,0 +1,58 @@
+api:
+  base_url: "https://api.noderings.com"
+  timeout: 20
+  tls_insecure: false
+  ca_cert_path: "" # Optional path to custom CA certificate
+
+frontend:
+  base_url: "https://noderings.com"
+
+auth:
+  token: "" # Service account token (JWT) - can be set here or via NR_API_TOKEN env var
+  token_file: "~/.nr/tokens" # OAuth token storage path (used by 'nr auth login')
+  refresh_threshold: 300 # seconds before expiry (OAuth tokens only)
+
+logging:
+  level: "info"
+  file: "~/.nr/nr.log"
+
+downloads:
+  temp_dir: "" # Use system temp if empty
+  keep_on_error: false
+  verify_checksums: true
+
+clusters:
+  default_cluster_id: ""
+
+k3s:
+  install_script_url: "https://get.k3s.io"
+  kubeconfig_mode: "600"
+  cluster_cidr: "10.200.0.0/16"
+  service_cidr: "10.201.0.0/16"
+  flannel_backend: "none"
+  install_disables: "--disable-network-policy --disable=traefik"
+  install_channel: "" # Empty uses default channel
+  version: "" # Empty uses latest stable
+  min_version: "v1.25.0"
+
+calico:
+  version: "v3.30.2" # Empty uses latest
+  rollout_timeout: "10m"
+  min_version: "v3.26.0"
+
+liqo:
+  version: "v0.0.0-4600ebb8"
+  timeout: "10m"
+  gw_service_type: "NodePort"
+  gw_server_service_location: "Provider"
+  pod_offloading_strategy: "Local"
+  pod_cidr: "10.200.0.0/16"
+  service_cidr: "10.201.0.0/16"
+  min_version: "v0.0.0-4600ebb8"
+  chart_oci: "oci://harbor.noderings.com/noderings/liqo"
+  chart_version: "0.0.0-4600ebb8"
+  proxy_url: "" # Optional proxy URL for liqo peer command
+  api_server_url: "" # Optional; defaults to https://<agent-ip>:6443 during registration
+  gw_server_service_nodeport: "" # Optional UDP NodePort for liqoctl peer
+  gw_client_address: "" # Optional gateway client address override for liqoctl peer
+  gw_client_port: "" # Optional gateway client port override for liqoctl peer
