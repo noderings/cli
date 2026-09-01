@@ -138,8 +138,8 @@ func TestSolusVMInstanceFromEnv(t *testing.T) {
 func TestResolveSolusVMOperatorChartOCIDefault(t *testing.T) {
 	t.Setenv("SOLUSVM_OPERATOR_CHART", "")
 	t.Setenv("SOLUSVM_OPERATOR_CHART_VERSION", "")
-	chart, ver := ResolveSolusVMOperatorChart("oci://harbor.noderings.com/noderings/solusvm-operator")
-	if chart != "oci://harbor.noderings.com/noderings/solusvm-operator" {
+	chart, ver := ResolveSolusVMOperatorChart("oci://harbor.noderings.com/nrings/solusvm-operator")
+	if chart != "oci://harbor.noderings.com/nrings/solusvm-operator" {
 		t.Fatalf("chart=%q", chart)
 	}
 	if ver == "" {

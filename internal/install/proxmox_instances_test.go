@@ -172,8 +172,8 @@ func TestResolveOperatorChartOCIDefault(t *testing.T) {
 	// Avoid picking up a local sibling chart from the caller's cwd by using an explicit empty
 	// and verifying OCI when no local Chart.yaml is found relative to cwd — may still find
 	// sibling if tests run from monorepo. Prefer explicit OCI.
-	chart, ver := ResolveOperatorChart("oci://harbor.noderings.com/noderings/proxmox-operator")
-	if chart != "oci://harbor.noderings.com/noderings/proxmox-operator" {
+	chart, ver := ResolveOperatorChart("oci://harbor.noderings.com/nrings/proxmox-operator")
+	if chart != "oci://harbor.noderings.com/nrings/proxmox-operator" {
 		t.Fatalf("chart=%q", chart)
 	}
 	if ver == "" {

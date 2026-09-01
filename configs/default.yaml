@@ -49,7 +49,7 @@ liqo:
   pod_cidr: "10.200.0.0/16"
   service_cidr: "10.201.0.0/16"
   min_version: "v0.0.0-4600ebb8"
-  chart_oci: "oci://harbor.noderings.com/noderings/liqo"
+  chart_oci: "oci://harbor.noderings.com/nrings/liqo"
   chart_version: "0.0.0-4600ebb8"
   proxy_url: "" # Optional proxy URL for liqo peer command
   api_server_url: "" # Optional; defaults to https://<agent-ip>:6443 during registration

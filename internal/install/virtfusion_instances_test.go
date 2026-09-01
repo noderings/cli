@@ -154,8 +154,8 @@ func TestVirtFusionInstanceFromEnv(t *testing.T) {
 func TestResolveVirtFusionOperatorChartOCIDefault(t *testing.T) {
 	t.Setenv("VIRTFUSION_OPERATOR_CHART", "")
 	t.Setenv("VIRTFUSION_OPERATOR_CHART_VERSION", "")
-	chart, ver := ResolveVirtFusionOperatorChart("oci://harbor.noderings.com/noderings/virtfusion-operator")
-	if chart != "oci://harbor.noderings.com/noderings/virtfusion-operator" {
+	chart, ver := ResolveVirtFusionOperatorChart("oci://harbor.noderings.com/nrings/virtfusion-operator")
+	if chart != "oci://harbor.noderings.com/nrings/virtfusion-operator" {
 		t.Fatalf("chart=%q", chart)
 	}
 	if ver == "" {
