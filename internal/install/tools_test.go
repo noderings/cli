@@ -46,7 +46,7 @@ func TestDeriveToolDownloadURL(t *testing.T) {
 			version: "v0.0.0-4600ebb8",
 			goos:    "linux",
 			goarch:  "amd64",
-			want:    "oci://harbor.noderings.com/noderings/liqoctl-linux-amd64:v0.0.0-4600ebb8",
+			want:    "oci://harbor.noderings.com/nrings/liqoctl-linux-amd64:v0.0.0-4600ebb8",
 		},
 		{
 			name:    "arch normalization",
@@ -54,7 +54,7 @@ func TestDeriveToolDownloadURL(t *testing.T) {
 			version: "v0.0.0-4600ebb8",
 			goos:    "linux",
 			goarch:  "aarch64",
-			want:    "oci://harbor.noderings.com/noderings/liqoctl-linux-arm64:v0.0.0-4600ebb8",
+			want:    "oci://harbor.noderings.com/nrings/liqoctl-linux-arm64:v0.0.0-4600ebb8",
 		},
 		{
 			name:     "override wins",
@@ -174,7 +174,7 @@ func TestUpstreamChecksumURL(t *testing.T) {
 		{
 			name: "oci liqoctl has none",
 			tool: api.ComponentLiqoctl,
-			url:  "oci://harbor.noderings.com/noderings/liqoctl-linux-arm64:v1.1.1",
+			url:  "oci://harbor.noderings.com/nrings/liqoctl-linux-arm64:v1.1.1",
 			want: "",
 		},
 	}
@@ -290,7 +290,7 @@ func TestVerifyDownload(t *testing.T) {
 		boot := &ToolBootstrapper{logger: discardLogger{}, httpClient: http.DefaultClient}
 		pin := api.ComponentPin{Name: api.ComponentLiqoctl}
 		err := boot.verifyDownload(context.Background(), pin,
-			"oci://harbor.noderings.com/noderings/liqoctl-linux-arm64:v1.1.1", newArtifact(t))
+			"oci://harbor.noderings.com/nrings/liqoctl-linux-arm64:v1.1.1", newArtifact(t))
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}

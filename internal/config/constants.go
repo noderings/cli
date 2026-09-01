@@ -40,9 +40,9 @@ const (
 	// DefaultLiqoChartVersion is the Helm chart version (no leading v).
 	DefaultLiqoChartVersion = "0.0.0-4600ebb8"
 	// DefaultLiqoChartOCI is the OCI chart reference (without version tag).
-	DefaultLiqoChartOCI = "oci://harbor.noderings.com/noderings/liqo"
+	DefaultLiqoChartOCI = "oci://harbor.noderings.com/nrings/liqo"
 	// DefaultLiqoctlOCIRepo is the OCI project/repo prefix for liqoctl artifacts.
-	DefaultLiqoctlOCIRepo = "harbor.noderings.com/noderings"
+	DefaultLiqoctlOCIRepo = "harbor.noderings.com/nrings"
 	// DefaultLiqoNamespace is the Kubernetes namespace for Liqo components.
 	DefaultLiqoNamespace = "liqo"
 	// LiqoctlBinary is the Liqo CLI binary name expected on PATH.
@@ -76,7 +76,7 @@ const (
 	// DefaultVNCGatewayNamespace is the provider-local namespace offloaded to the remote cluster.
 	DefaultVNCGatewayNamespace = "vnc-gateway"
 	// DefaultVNCGatewayImageRepository is the Harbor image RFB and Proxmox charts pull.
-	DefaultVNCGatewayImageRepository = "harbor.noderings.com/noderings/vnc-gateway"
+	DefaultVNCGatewayImageRepository = "harbor.noderings.com/nrings/vnc-gateway"
 	// DefaultVNCGatewayImageTagProxmox is the stock Harbor tag. Proxmox readiness
 	// and /v1/vnc/ws need this digest — do not retag a local-rfb build over it.
 	DefaultVNCGatewayImageTagProxmox = "main"
@@ -115,9 +115,9 @@ const (
 	DefaultFrontendBaseURL = "https://noderings.com"
 
 	// DefaultProxmoxOperatorChartOCI is the OCI chart for provider operator install.
-	DefaultProxmoxOperatorChartOCI = "oci://harbor.noderings.com/noderings/proxmox-operator"
+	DefaultProxmoxOperatorChartOCI = "oci://harbor.noderings.com/nrings/proxmox-operator"
 	// DefaultProxmoxOperatorCRDsChartOCI is CRDs-only; install on every provider so Liqo can watch both API groups.
-	DefaultProxmoxOperatorCRDsChartOCI = "oci://harbor.noderings.com/noderings/proxmox-operator-crds"
+	DefaultProxmoxOperatorCRDsChartOCI = "oci://harbor.noderings.com/nrings/proxmox-operator-crds"
 	// DefaultProxmoxOperatorChartVersion is the chart version (no leading v).
 	DefaultProxmoxOperatorChartVersion = "0.1.2"
 	// DefaultProxmoxOperatorHelmRelease is the Helm release name (workload = release-chart).
@@ -128,9 +128,9 @@ const (
 	ProxmoxCRDAPIGroup = "vm.proxmox.com"
 
 	// DefaultVirtFusionOperatorChartOCI is the OCI chart for VirtFusion operator install.
-	DefaultVirtFusionOperatorChartOCI = "oci://harbor.noderings.com/noderings/virtfusion-operator"
+	DefaultVirtFusionOperatorChartOCI = "oci://harbor.noderings.com/nrings/virtfusion-operator"
 	// DefaultVirtFusionOperatorCRDsChartOCI is CRDs-only (install alongside Proxmox CRDs on every provider).
-	DefaultVirtFusionOperatorCRDsChartOCI = "oci://harbor.noderings.com/noderings/virtfusion-operator-crds"
+	DefaultVirtFusionOperatorCRDsChartOCI = "oci://harbor.noderings.com/nrings/virtfusion-operator-crds"
 	// DefaultVirtFusionOperatorChartVersion is the VirtFusion chart version (no leading v).
 	DefaultVirtFusionOperatorChartVersion = "0.1.4"
 	// DefaultVirtFusionOperatorHelmNamespace is the runtime namespace for the VirtFusion operator chart.
@@ -139,9 +139,9 @@ const (
 	VirtFusionCRDAPIGroup = "vm.virtfusion.com"
 
 	// DefaultSolusVMOperatorChartOCI is the OCI chart for SolusVM 2 operator install.
-	DefaultSolusVMOperatorChartOCI = "oci://harbor.noderings.com/noderings/solusvm-operator"
+	DefaultSolusVMOperatorChartOCI = "oci://harbor.noderings.com/nrings/solusvm-operator"
 	// DefaultSolusVMOperatorCRDsChartOCI is CRDs-only (install alongside other hypervisor CRDs on every provider).
-	DefaultSolusVMOperatorCRDsChartOCI = "oci://harbor.noderings.com/noderings/solusvm-operator-crds"
+	DefaultSolusVMOperatorCRDsChartOCI = "oci://harbor.noderings.com/nrings/solusvm-operator-crds"
 	// DefaultSolusVMOperatorChartVersion is the SolusVM chart version (no leading v).
 	DefaultSolusVMOperatorChartVersion = "0.1.3"
 	// DefaultSolusVMOperatorHelmNamespace is the runtime namespace for the SolusVM operator chart.
