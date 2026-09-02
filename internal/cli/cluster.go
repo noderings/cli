@@ -69,7 +69,7 @@ func init() {
 	clusterRegisterCmd.Flags().Bool("reinstall-operator", false, "Re-run hypervisor operator Helm install even if that phase already succeeded (use with --resume)")
 	clusterRegisterCmd.Flags().String("operator-chart", "", "Local path or OCI ref for the hypervisor operator chart (default: Harbor OCI or sibling checkout)")
 	clusterRegisterCmd.Flags().String("operator-chart-version", "", "Helm chart version when using OCI (default: "+config.DefaultProxmoxOperatorChartVersion+")")
-	clusterRegisterCmd.Flags().String("hypervisor-driver", "", "Optional. Uses the organization hypervisor driver when omitted. Must match the organization if set.")
+	clusterRegisterCmd.Flags().String("hypervisor-driver", "", "Required until the first agent in this organization is registered. After that, omit it or pass the same driver (proxmox, virtfusion, or solusvm).")
 	clusterRegisterCmd.Flags().String("proxmox-instances-file", "", "YAML file with proxmox.instances list (or PROXMOX_INSTANCES_FILE)")
 	clusterRegisterCmd.Flags().String("virtfusion-instances-file", "", "YAML file with virtfusion.instances list (or VIRTFUSION_INSTANCES_FILE)")
 	clusterRegisterCmd.Flags().String("solusvm-instances-file", "", "YAML file with solusvm.instances list (or SOLUSVM_INSTANCES_FILE)")
@@ -350,6 +350,9 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	}
 	if reused {
 		log.Infof("Reusing agent '%s' (ID: %s)", name, agentID)
+	}
+	if err := persistAgentHypervisorDriver(ctx, apiClient, agentID, registerOpts.hypervisorDriver); err != nil {
+		return fmt.Errorf("store hypervisor driver on agent: %w", err)
 	}
 
 	if err := rejectStaleLocalCluster(ctx, previousLocalAgentID, agentID, force); err != nil {
@@ -747,6 +750,29 @@ func createAgent(ctx context.Context, apiClient *api.Client, name, agentIP, gate
 	return *createResponse.Agent.Id, false, nil
 }
 
+// persistAgentHypervisorDriver stores the hypervisor driver on the agent. Console
+// create leaves it empty; register (including --agent-id reuse) is what binds it.
+func persistAgentHypervisorDriver(ctx context.Context, apiClient *api.Client, agentID, hypervisorDriver string) error {
+	apiDriver := hypervisorDriverToAPI(hypervisorDriver)
+	if apiDriver == nil {
+		return fmt.Errorf("hypervisor driver is required to register an agent")
+	}
+	genClient := apiClient.GetGeneratedClient()
+	resp, err := apiClient.DoWithAutoRefresh(ctx, 3, func() (*http.Response, error) {
+		return genClient.AgentServiceUpdateAgent(ctx, agentID, generated.AgentServiceUpdateAgentJSONRequestBody{
+			HypervisorDriver: apiDriver,
+		})
+	})
+	if err != nil {
+		return fmt.Errorf("update agent hypervisor driver: %w", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode >= 400 {
+		return api.ParseError(resp)
+	}
+	return nil
+}
+
 // preparePlatformVersions fetches server pins (unless offline), applies them to
 // config/state, and ensures helm/liqoctl are installed at the pinned versions.
 func preparePlatformVersions(
@@ -812,6 +838,10 @@ func handleResume(ctx context.Context, stateManager *state.Manager, apiClient *a
 
 	log.Infof("Resuming installation for agent %s (%s)", installState.AgentID, installState.AgentName)
 	log.Infof("Last phase: %s", installState.Phase)
+
+	if err := persistAgentHypervisorDriver(ctx, apiClient, installState.AgentID, registerOpts.hypervisorDriver); err != nil {
+		return fmt.Errorf("store hypervisor driver on agent: %w", err)
+	}
 
 	stateManager.SetRegisterScope(state.RegisterScope{
 		DisableOffloading:   registerOpts.disableOffloading,
