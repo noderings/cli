@@ -78,7 +78,7 @@ func EnsureRFBVNCGatewayImage(ctx context.Context, repository, tag string, logge
 		return nil
 	}
 	if err := importDockerImageToContainerd(ctx, ref, logger); err != nil {
-		return fmt.Errorf("import %s into containerd: %w (or pull harbor.noderings.com/noderings/vnc-gateway:rfb)", ref, err)
+		return fmt.Errorf("import %s into containerd: %w (or pull harbor.noderings.com/nrings/vnc-gateway:rfb)", ref, err)
 	}
 	logger.Infof("Loaded local-rfb vnc-gateway as %s", ref)
 	return nil

@@ -215,7 +215,7 @@ func (p *VirtFusionOperatorInstaller) Install(ctx context.Context) error {
 		args = append(args, "--set-string", fmt.Sprintf("vncGateway.image.tag=%s", p.config.VNCGatewayImageTag))
 	}
 	args = append(args, "--set", "virtfusion.verifySSL=false")
-	// Optional overrides; chart defaults publish to harbor.noderings.com/noderings.
+	// Optional overrides; chart defaults publish to harbor.noderings.com/nrings.
 	if v := strings.TrimSpace(os.Getenv("VIRTFUSION_OPERATOR_IMAGE_REPOSITORY")); v != "" {
 		args = append(args, "--set-string", fmt.Sprintf("image.repository=%s", v))
 	}

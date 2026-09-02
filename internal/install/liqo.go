@@ -42,7 +42,7 @@ type LiqoConfig struct {
 	GWClientAddress             string
 	GWClientPort                string
 	DisableAPIServerSanityCheck bool
-	// ChartOCI is the Helm OCI chart reference without version (e.g. oci://harbor.noderings.com/noderings/liqo).
+	// ChartOCI is the Helm OCI chart reference without version (e.g. oci://harbor.noderings.com/nrings/liqo).
 	ChartOCI string
 	// ChartVersion is the Helm chart version (usually Version without a leading v).
 	ChartVersion string
