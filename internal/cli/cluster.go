@@ -38,7 +38,11 @@ var (
 		Use:   "register",
 		Short: "Register VM and install k3s, Calico, and Liqo",
 		Long: `Register a VM with NodeRings and set up k3s, Calico, and Liqo.
-This command orchestrates the full installation process.`,
+
+Authenticate with a service-account token (NR_API_TOKEN). Pass --org-id with the
+provider organization UUID from the console (or NR_ORGANIZATION_ID). The CLI does
+not guess the organization from the API; --org-id only selects the tenant header
+and cannot replace a valid token.`,
 		RunE: runClusterRegister,
 	}
 )
@@ -78,6 +82,10 @@ func init() {
 
 func runClusterRegister(cmd *cobra.Command, args []string) error {
 	ctx := context.Background()
+
+	if _, err := requireOrganizationID(cmd); err != nil {
+		return err
+	}
 
 	// Get authenticated API client
 	apiClient, err := getAuthenticatedAPIClient(cmd)

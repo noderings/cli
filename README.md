@@ -24,41 +24,37 @@ curl -fsSL https://raw.githubusercontent.com/noderings/cli/main/scripts/install.
 
 See [Installation](docs/INSTALL.md) for checksums, source builds, and `go install`.
 
-## Sign in
+## Authenticate (service account)
 
-On a VM without a browser:
-
-```bash
-nr auth login --no-browser
-```
-
-Complete the printed URL on another device. If the VM has a browser, use `nr auth login`.
-
-You can sign in before marketplace approval. Creating agents and `nr cluster register` stay blocked until the organization is approved; those commands print `Provider organization review is pending.`
-
-For automation, create a service account token in **Access Control → Service Accounts**, then:
+On the agent VM, use a **service account token**, not `nr auth login`. Create the service account in the console (**Access Control → Service Accounts**), then:
 
 ```bash
 export NR_API_TOKEN="..."
+echo $NR_API_TOKEN
 nr auth status
 ```
 
+Creating agents and `nr cluster register` stay blocked until the organization is approved; those commands print `Provider organization review is pending.`
+
+`nr auth login` is for a laptop (for example creating the first service account). Do not run OAuth on the agent VM.
+
 ## Register an agent
 
-Run this on the Ubuntu VM that will host the agent:
+Run this on the Ubuntu VM that will host the agent. Copy `--org-id` from **Create agent** in the console (it is filled in for you):
 
 ```bash
 nr cluster register \
   --name edge-ams-01 \
   --agent-ip 203.0.113.10 \
-  --gateway-region AMS01
+  --gateway-region AMS01 \
+  --org-id <org-uuid>
 ```
+
+`--org-id` is required (or set `NR_ORGANIZATION_ID`). It only sends `X-Organization-ID`. A missing or unauthorized token still fails; a token from another organization cannot register into this one.
 
 The CLI uses the organization hypervisor driver (`proxmox`, `virtfusion`, or `solusvm`). Pass `--hypervisor-driver` only to confirm it; a mismatch is rejected.
 
 `--agent-ip` must be an address assigned to a local interface on the VM (`ip -4 addr`). k3s uses it as `--node-ip`; a placeholder such as `1.1.1.1` fails preflight.
-
-OAuth login binds to your home organization, which is often a client org. The CLI lists your organizations and uses the provider organization automatically (a user has one).
 
 The CLI prompts for hypervisor credentials unless you pass an instances file:
 
@@ -73,7 +69,7 @@ One organization should use one hypervisor driver.
 If registration is interrupted:
 
 ```bash
-nr cluster register --resume --name edge-ams-01
+nr cluster register --resume --name edge-ams-01 --org-id <org-uuid>
 ```
 
 ## Common commands

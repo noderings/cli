@@ -4,8 +4,8 @@
 
 **`nr auth status` shows unauthenticated**
 
-- Run `nr auth login` (or `nr auth login --no-browser` on a headless VM).
-- Or set `NR_API_TOKEN` from a service account token.
+- Set `NR_API_TOKEN` from a service account token (`export NR_API_TOKEN=...` then `echo $NR_API_TOKEN`).
+- Do not use `nr auth login` on the agent VM.
 - Confirm you can reach `https://api.noderings.com`.
 
 **`Provider organization review is pending.`**
@@ -37,12 +37,12 @@ Login succeeded; the provider organization is not marketplace-approved yet. Iden
 
 **`You are not allowed to perform this action.` on register**
 
-OAuth sessions bind to the user's home organization, which may be a client org. The CLI lists organizations and uses the provider organization automatically (a user has one). Confirm `nr auth status` and that the account has an approved provider organization.
+Confirm `NR_API_TOKEN` is a service account JWT for this provider organization, `--org-id` matches that organization, and the service account role includes agent permissions. `--org-id` cannot authenticate by itself. A token from a different organization is rejected.
 
 **Resume after failure**
 
 ```bash
-nr cluster register --resume --name <same-name>
+nr cluster register --resume --name <same-name> --org-id <org-uuid>
 ```
 
 Checkpoints live under `~/.nr/`. Use `nr cluster status` and `nr cluster debug` for details.

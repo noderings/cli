@@ -456,7 +456,7 @@ type authServerProbe struct {
 //
 // The call intentionally skips auto-refresh: status must report the token as it stands.
 func probeAuthWithServer(cmd *cobra.Command) authServerProbe {
-	apiClient, err := getAuthenticatedAPIClient(cmd, withAPITimeout(authVerifyTimeout), withoutProviderOrganization())
+	apiClient, err := getAuthenticatedAPIClient(cmd, withAPITimeout(authVerifyTimeout), withoutOrganizationHeader())
 	if err != nil {
 		return authServerProbe{err: err}
 	}

@@ -17,6 +17,11 @@ func rejectUnverifiedProvider(ctx context.Context, apiClient *api.Client) error 
 	if apiClient == nil {
 		return nil
 	}
+	// When --org-id is set, check that tenant only. Listing memberships must not
+	// choose an organization for the caller.
+	if apiClient.GetOrganizationID() != "" {
+		return rejectUnverifiedProviderFromGet(ctx, apiClient)
+	}
 	pageSize := int32(-1)
 	resp, err := apiClient.GetGeneratedClient().OrganizationServiceListOrganizations(ctx,
 		&generated.OrganizationServiceListOrganizationsParams{PageSize: &pageSize})
