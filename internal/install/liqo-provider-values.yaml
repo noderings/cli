@@ -4,15 +4,64 @@
 # - gatewayMasqueradeBypass: required with Calico (and helpful on k3s/Flannel nested VMs)
 # - externalCIDR 10.72.0.0/16: must not collide with the control-plane cluster CIDR (default 10.70.0.0/16)
 # - customResources: AllowList for Proxmox and VirtFusion CRDs (annotate instances with liqo.io/allow-reflection: "true")
+# - image.name: public harbor.noderings.com/nrings (anonymous pull)
 
 networking:
   fabric:
     config:
       gatewayMasqueradeBypass: true
+    image:
+      name: harbor.noderings.com/nrings/fabric
+  gatewayTemplates:
+    container:
+      gateway:
+        image:
+          name: harbor.noderings.com/nrings/gateway
+      wireguard:
+        image:
+          name: harbor.noderings.com/nrings/gateway-wireguard
+      geneve:
+        image:
+          name: harbor.noderings.com/nrings/gateway-geneve
+
+controllerManager:
+  image:
+    name: harbor.noderings.com/nrings/liqo-controller-manager
+webhook:
+  image:
+    name: harbor.noderings.com/nrings/webhook
+crdReplicator:
+  image:
+    name: harbor.noderings.com/nrings/crd-replicator
+metricAgent:
+  image:
+    name: harbor.noderings.com/nrings/metric-agent
+  initContainer:
+    image:
+      name: harbor.noderings.com/nrings/cert-creator
+telemetry:
+  image:
+    name: harbor.noderings.com/nrings/telemetry
+virtualKubelet:
+  image:
+    name: harbor.noderings.com/nrings/virtual-kubelet
+uninstaller:
+  image:
+    name: harbor.noderings.com/nrings/uninstaller
+proxy:
+  image:
+    name: harbor.noderings.com/nrings/proxy
+liqo-crds:
+  crdUpgrade:
+    image:
+      name: harbor.noderings.com/nrings/liqo-crd-upgrade
 
 ipam:
   # Keep ExternalCIDR distinct from the control-plane cluster so in-band proxy remapping works.
   externalCIDR: "10.72.0.0/16"
+  internal:
+    image:
+      name: harbor.noderings.com/nrings/ipam
 
 offloading:
   reflection:
