@@ -69,8 +69,8 @@ func listProviderOrganizations(ctx context.Context, client *api.Client) ([]provi
 	return providerOrgsFromListJSON(body), nil
 }
 
-// fetchOrganizationHypervisorDriver returns the canonical org driver, or empty
-// if the organization has not chosen one.
+// fetchOrganizationHypervisorDriver returns the canonical org driver derived
+// from registered agents, or empty if none have a hypervisor driver yet.
 func fetchOrganizationHypervisorDriver(ctx context.Context, client *api.Client) string {
 	if client == nil {
 		return ""
