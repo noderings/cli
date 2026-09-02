@@ -116,9 +116,8 @@ func withAPITimeout(timeout time.Duration) apiClientOption {
 	return func(cfg *api.Config, _ *apiClientExtras) { cfg.Timeout = timeout }
 }
 
-// withoutProviderOrganization skips listing orgs to set X-Organization-ID.
-// Use for auth status: ListOrganizations must work before a provider org exists.
-func withoutProviderOrganization() apiClientOption {
+// withoutOrganizationHeader skips sending X-Organization-ID (auth status probe).
+func withoutOrganizationHeader() apiClientOption {
 	return func(_ *api.Config, extra *apiClientExtras) {
 		extra.skipProviderOrg = true
 	}
@@ -239,13 +238,17 @@ func getAuthenticatedAPIClient(cmd *cobra.Command, opts ...apiClientOption) (*ap
 	// Service account tokens (from env vars or config) don't support refresh
 	// They are long-lived JWT tokens that must be regenerated if expired
 
-	// User JWTs (OAuth or NR_API_TOKEN from login) bind to the home (often client)
-	// org. List organizations and send X-Organization-ID for the unique provider
-	// tenant. Service account JWTs are already org-scoped; ListOrganizations is
-	// user-only and returns 401 — ensureProviderOrganization ignores that.
+	// Tenant comes from --org-id / NR_ORGANIZATION_ID only. Do not list orgs to
+	// guess a provider tenant (a token may belong to a client org, a provider
+	// org, or a service account). The API still authorizes the token against
+	// that UUID; a mismatched or unauthorized org-id is rejected server-side.
 	if !extra.skipProviderOrg {
-		if err := ensureProviderOrganization(context.Background(), apiClient); err != nil {
-			return nil, err
+		if id := organizationIDFromCmd(cmd); id != "" {
+			parsed, err := parseOrganizationID(id)
+			if err != nil {
+				return nil, err
+			}
+			apiClient.SetOrganizationID(parsed)
 		}
 	}
 

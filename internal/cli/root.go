@@ -127,6 +127,7 @@ func init() {
 	// Add global flags
 	rootCmd.PersistentFlags().String("api-url", "", "Override API base URL (highest precedence; see also NR_API_URL)")
 	rootCmd.PersistentFlags().String("config-dir", "", "Override default config directory (default: ~/.nr)")
+	rootCmd.PersistentFlags().String("org-id", "", "Organization UUID sent as X-Organization-ID (required for cluster register; or NR_ORGANIZATION_ID). Does not authenticate; the token must already belong to this org.")
 
 	// Hidden dev flag - enables all development features (debug, verbose, TLS insecure)
 	_ = rootCmd.PersistentFlags().Bool("dev", false, "Enable development mode")
