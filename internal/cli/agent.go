@@ -73,7 +73,7 @@ func init() {
 	agentCreateCmd.Flags().String("agent-ip", "", "Agent public IP address (required, must be valid public IP)")
 	agentCreateCmd.Flags().String("gateway-region", "", "Gateway region (required)")
 	agentCreateCmd.Flags().String("description", "", "Optional description for the agent")
-	agentCreateCmd.Flags().String("hypervisor-driver", "", "Optional. Uses the organization hypervisor driver when omitted. Must match the organization if set.")
+	agentCreateCmd.Flags().String("hypervisor-driver", "", "Required until the first agent in this organization is registered. After that, omit it or pass the same driver (proxmox, virtfusion, or solusvm).")
 	agentCreateCmd.Flags().String("output", config.OutputFormatText, "Output format: text|json")
 
 	// agent list flags

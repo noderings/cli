@@ -3150,6 +3150,9 @@ type AgentServiceGeneratePeeringConfigBody = map[string]interface{}
 type AgentServiceUpdateAgentBody struct {
 	Description *string `json:"description,omitempty"`
 	Name        *string `json:"name,omitempty"`
+	// HypervisorDriver Set when registering an existing (console-created) agent via CLI.
+	// Must match the organization driver after the first registered agent.
+	HypervisorDriver *V1PlatformDriver `json:"hypervisorDriver,omitempty"`
 }
 
 // AgentServiceUploadInboundPeeringConfigBody defines model for AgentServiceUploadInboundPeeringConfigBody.
@@ -3721,6 +3724,8 @@ type V1Agent struct {
 	ServiceStatus       *V1ServiceStatus        `json:"serviceStatus,omitempty"`
 	Status              *Protov1Status          `json:"status,omitempty"`
 	Timestamps          *V1Timestamps           `json:"timestamps,omitempty"`
+	// HypervisorDriver Set when this agent is registered via CLI. Empty/UNSPECIFIED until then.
+	HypervisorDriver *V1PlatformDriver `json:"hypervisorDriver,omitempty"`
 }
 
 // V1AgentGatewayRegion defines model for v1AgentGatewayRegion.
@@ -6621,7 +6626,7 @@ type V1Organization struct {
 	Owner             *string   `json:"owner,omitempty"`
 	ProviderLogoUrl   *string   `json:"providerLogoUrl,omitempty"`
 
-	// HypervisorDriver Hypervisor driver for this provider org. Set when the first agent is registered and immutable after that.
+	// HypervisorDriver Derived from registered agents (not stored on the organization). UNSPECIFIED until an agent is registered with a hypervisor driver; immutable after that.
 	HypervisorDriver *V1PlatformDriver `json:"hypervisorDriver,omitempty"`
 
 	// ProviderWebsiteUrl Public storefront / company website (http or https). Provider organizations only.

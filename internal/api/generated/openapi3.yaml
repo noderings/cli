@@ -8735,6 +8735,11 @@ components:
           type: string
         description:
           type: string
+        hypervisorDriver:
+          $ref: "#/components/schemas/v1PlatformDriver"
+          description: >-
+            Set when registering an existing (console-created) agent via CLI.
+            Must match the organization driver after the first registered agent.
     AgentServiceUploadInboundPeeringConfigBody:
       type: object
       properties:
@@ -9623,6 +9628,9 @@ components:
           type: string
         serviceStatus:
           $ref: "#/components/schemas/v1ServiceStatus"
+        hypervisorDriver:
+          $ref: "#/components/schemas/v1PlatformDriver"
+          description: Set when this agent is registered via CLI. Empty/UNSPECIFIED until then.
     v1AgentGatewayRegion:
       type: string
       enum:

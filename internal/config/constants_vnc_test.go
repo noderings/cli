@@ -6,6 +6,15 @@ func TestDefaultHarborRegistryIsNoderings(t *testing.T) {
 	if DefaultHarborRegistry != "harbor.noderings.com" {
 		t.Fatalf("DefaultHarborRegistry=%s want harbor.noderings.com (nrings.io is retired)", DefaultHarborRegistry)
 	}
+	if DefaultHarborPublicProject != "nrings" {
+		t.Fatalf("DefaultHarborPublicProject=%s want nrings (public provider images)", DefaultHarborPublicProject)
+	}
+	if DefaultVNCGatewayImageRepository != "harbor.noderings.com/nrings/vnc-gateway" {
+		t.Fatalf("DefaultVNCGatewayImageRepository=%s want harbor.noderings.com/nrings/vnc-gateway", DefaultVNCGatewayImageRepository)
+	}
+	if DefaultLiqoChartOCI != "oci://harbor.noderings.com/nrings/liqo" {
+		t.Fatalf("DefaultLiqoChartOCI=%s want oci://harbor.noderings.com/nrings/liqo", DefaultLiqoChartOCI)
+	}
 }
 
 func TestResolveVNCGatewayImageTagDefaults(t *testing.T) {

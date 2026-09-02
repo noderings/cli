@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/noderings/cli/internal/config"
@@ -170,6 +171,8 @@ func TestResolveHypervisorDriver(t *testing.T) {
 
 	if _, err := resolveHypervisorDriver("", false, ""); err == nil {
 		t.Fatal("expected error when org has no driver")
+	} else if !strings.Contains(err.Error(), "--hypervisor-driver") {
+		t.Fatalf("empty-org error should mention --hypervisor-driver, got %v", err)
 	}
 	got, err := resolveHypervisorDriver("", false, config.HypervisorDriverVirtFusion)
 	if err != nil || got != config.HypervisorDriverVirtFusion {

@@ -203,7 +203,7 @@ func resolveHypervisorDriver(flagRaw string, flagChanged bool, orgDriver string)
 	if org != "" {
 		return parseHypervisorDriver(org)
 	}
-	return "", UsageErrorf("this organization has no hypervisor driver")
+	return "", UsageErrorf("this organization has no hypervisor driver yet. Pass --hypervisor-driver (proxmox, virtfusion, or solusvm) when registering the first agent")
 }
 
 func hypervisorDriverToAPI(driver string) *generated.V1PlatformDriver {
