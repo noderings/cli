@@ -101,6 +101,7 @@ func (l *Loader) setDefaults() {
 	l.viper.SetDefault("liqo.gw_server_service_nodeport", "")
 	l.viper.SetDefault("liqo.gw_client_address", "")
 	l.viper.SetDefault("liqo.gw_client_port", "")
+	l.viper.SetDefault("liqo.inbound_api_proxy", DefaultInboundAPIProxy)
 
 	// Common env var names (AutomaticEnv would expect API_BASE_URL for api.base_url;
 	// these match docs and local dev usage.)
@@ -276,6 +277,9 @@ type LiqoConfig struct {
 	GWServerServiceNodePort string `mapstructure:"gw_server_service_nodeport"`
 	GWClientAddress         string `mapstructure:"gw_client_address"`
 	GWClientPort            string `mapstructure:"gw_client_port"`
+	// InboundAPIProxy controls whether the control plane reaches this cluster's API server
+	// through the Liqo api-server-proxy when peering back: auto, always, or never.
+	InboundAPIProxy string `mapstructure:"inbound_api_proxy"`
 	// ChartOCI is the Helm OCI chart reference without version (e.g. oci://harbor.noderings.com/nrings/liqo).
 	ChartOCI string `mapstructure:"chart_oci"`
 	// ChartVersion is the Helm chart version (usually Version without a leading v).
