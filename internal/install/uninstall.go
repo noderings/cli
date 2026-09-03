@@ -128,13 +128,12 @@ func (c *ClusterCleaner) UnpeerLiqo(ctx context.Context, remoteKubeconfig string
 	return nil
 }
 
-// UnoffloadNamespaces disables Liqo namespace offloading so uninstall does not hang.
-// liqoctl uninstall can hang silently when NamespaceOffloading resources remain.
+// UnoffloadNamespaces disables Liqo namespace offloading so uninstall does not hang
+// and a later register is not blocked by a leftover RemoteNamespaceName.
+//
+// DeleteAgent on the platform only unoffloads the mothership operator namespace. The
+// provider-local offload (vnc-gateway) lives here and must be removed locally.
 func (c *ClusterCleaner) UnoffloadNamespaces(ctx context.Context) error {
-	if _, err := exec.LookPath("liqoctl"); err != nil {
-		return fmt.Errorf("liqoctl not found: %w", err)
-	}
-
 	namespaces, err := c.listOffloadedNamespaces(ctx)
 	if err != nil {
 		return err
@@ -144,19 +143,47 @@ func (c *ClusterCleaner) UnoffloadNamespaces(ctx context.Context) error {
 		return nil
 	}
 
-	kubeconfigPath := EnsureReadableKubeconfig(ctx, "", c.logger)
-	args := append([]string{"unoffload", "namespace"}, namespaces...)
-	args = append(args, "--skip-confirm")
-	if kubeconfigPath != "" {
-		args = append(args, "--kubeconfig", kubeconfigPath)
+	var unoffloadErr error
+	if _, err := exec.LookPath("liqoctl"); err != nil {
+		c.logger.Warnf("liqoctl not found; deleting NamespaceOffloading CRs directly: %v", err)
+	} else {
+		kubeconfigPath := EnsureReadableKubeconfig(ctx, "", c.logger)
+		args := append([]string{"unoffload", "namespace"}, namespaces...)
+		args = append(args, "--skip-confirm")
+		if kubeconfigPath != "" {
+			args = append(args, "--kubeconfig", kubeconfigPath)
+		}
+
+		c.logger.Infof("Unoffloading namespaces: %s", strings.Join(namespaces, ", "))
+		cmd := exec.CommandContext(ctx, "liqoctl", args...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		unoffloadErr = cmd.Run()
+		if unoffloadErr != nil {
+			c.logger.Warnf("liqoctl unoffload returned an error (will still delete leftover CRs): %v", unoffloadErr)
+		}
 	}
 
-	c.logger.Infof("Unoffloading namespaces: %s", strings.Join(namespaces, ", "))
-	cmd := exec.CommandContext(ctx, "liqoctl", args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("liqoctl unoffload: %w", err)
+	if err := c.deleteLeftoverNamespaceOffloadings(ctx); err != nil {
+		if unoffloadErr != nil {
+			return fmt.Errorf("liqoctl unoffload: %w; also failed to delete leftover NamespaceOffloadings: %v", unoffloadErr, err)
+		}
+		return err
+	}
+
+	remaining, listErr := c.listOffloadedNamespaces(ctx)
+	if listErr != nil {
+		c.logger.Warnf("Could not verify NamespaceOffloading cleanup: %v", listErr)
+		if unoffloadErr != nil {
+			return fmt.Errorf("liqoctl unoffload: %w", unoffloadErr)
+		}
+		return nil
+	}
+	if len(remaining) > 0 {
+		return fmt.Errorf("NamespaceOffloading still present after cleanup: %s", strings.Join(remaining, ", "))
+	}
+	if unoffloadErr != nil {
+		c.logger.Info("No NamespaceOffloadings remain; treating unoffload as complete")
 	}
 	return nil
 }
@@ -247,12 +274,14 @@ func (c *ClusterCleaner) UninstallK3s(ctx context.Context) error {
 func (c *ClusterCleaner) ForceCleanupAll(ctx context.Context, peeringKubeconfig string) []error {
 	var errs []error
 
-	if err := c.UnpeerLiqo(ctx, peeringKubeconfig); err != nil {
-		c.logger.Warnf("Unpeer Liqo: %v", err)
-		errs = append(errs, err)
-	}
+	// Unoffload before unpeer: provider-local vnc-gateway is not cleaned by the
+	// platform, and unpeer/API failures must not leave the NamespaceOffloading behind.
 	if err := c.UnoffloadNamespaces(ctx); err != nil {
 		c.logger.Warnf("Unoffload namespaces: %v", err)
+		errs = append(errs, err)
+	}
+	if err := c.UnpeerLiqo(ctx, peeringKubeconfig); err != nil {
+		c.logger.Warnf("Unpeer Liqo: %v", err)
 		errs = append(errs, err)
 	}
 	// liqoctl uninstall refuses while leftover tenant networking CRs remain.
@@ -331,12 +360,7 @@ func (c *ClusterCleaner) listOffloadedNamespaces(ctx context.Context) ([]string,
 		return nil, fmt.Errorf("create dynamic client: %w", err)
 	}
 
-	gvr := schema.GroupVersionResource{
-		Group:    "offloading.liqo.io",
-		Version:  "v1beta1",
-		Resource: "namespaceoffloadings",
-	}
-	list, err := dyn.Resource(gvr).Namespace(metav1.NamespaceAll).List(ctx, metav1.ListOptions{})
+	list, err := dyn.Resource(namespaceOffloadingGVR).Namespace(metav1.NamespaceAll).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		// Liqo may already be gone or CRD not installed.
 		if strings.Contains(err.Error(), "not found") || strings.Contains(err.Error(), "the server could not find") {
@@ -359,6 +383,54 @@ func (c *ClusterCleaner) listOffloadedNamespaces(ctx context.Context) ([]string,
 		namespaces = append(namespaces, ns)
 	}
 	return namespaces, nil
+}
+
+func (c *ClusterCleaner) deleteLeftoverNamespaceOffloadings(ctx context.Context) error {
+	dyn, err := c.dynamicClient(ctx)
+	if err != nil {
+		return err
+	}
+	return deleteNamespaceOffloadingsIn(ctx, dyn, c.logger, "")
+}
+
+// deleteNamespaceOffloadingsIn deletes NamespaceOffloading CRs. If namespace is empty, every
+// namespace is scanned. Stuck finalizers are cleared so a later offload can recreate the CR.
+func deleteNamespaceOffloadingsIn(ctx context.Context, dyn dynamic.Interface, logger Logger, namespace string) error {
+	ns := namespace
+	if ns == "" {
+		ns = metav1.NamespaceAll
+	}
+	list, err := dyn.Resource(namespaceOffloadingGVR).Namespace(ns).List(ctx, metav1.ListOptions{})
+	if err != nil {
+		if isMissingAPI(err) {
+			return nil
+		}
+		if namespace == "" {
+			return fmt.Errorf("list namespaceoffloadings: %w", err)
+		}
+		return fmt.Errorf("list namespaceoffloadings in %s: %w", namespace, err)
+	}
+	if list == nil || len(list.Items) == 0 {
+		return nil
+	}
+
+	for _, item := range list.Items {
+		ns := item.GetNamespace()
+		name := item.GetName()
+		if logger != nil {
+			logger.Infof("Deleting leftover NamespaceOffloading %s/%s", ns, name)
+		}
+		if err := dyn.Resource(namespaceOffloadingGVR).Namespace(ns).Delete(ctx, name, metav1.DeleteOptions{}); err != nil {
+			if apierrors.IsNotFound(err) || strings.Contains(err.Error(), "not found") {
+				continue
+			}
+			return fmt.Errorf("delete namespaceoffloading %s/%s: %w", ns, name, err)
+		}
+		if err := forceDeleteIfStuck(ctx, dyn.Resource(namespaceOffloadingGVR).Namespace(ns), name, logger); err != nil {
+			return fmt.Errorf("delete namespaceoffloading %s/%s: %w", ns, name, err)
+		}
+	}
+	return nil
 }
 
 func (c *ClusterCleaner) listForeignClusterNames(ctx context.Context) ([]string, error) {
@@ -409,7 +481,7 @@ func (c *ClusterCleaner) deleteForeignClusters(ctx context.Context) error {
 		}
 		// Liqo finalizers revoke credentials and tenant state on the remote peer, so give
 		// them a chance to run; only force removal when deletion is genuinely stuck.
-		if err := c.forceDeleteIfStuck(ctx, dyn.Resource(foreignClusterGVR), name); err != nil {
+		if err := forceDeleteIfStuck(ctx, dyn.Resource(foreignClusterGVR), name, c.logger); err != nil {
 			return fmt.Errorf("delete foreigncluster %s: %w", name, err)
 		}
 	}
@@ -418,7 +490,7 @@ func (c *ClusterCleaner) deleteForeignClusters(ctx context.Context) error {
 
 // forceDeleteIfStuck waits for a deleting object to disappear and, if a finalizer blocks it,
 // clears the finalizers so local cleanup can proceed.
-func (c *ClusterCleaner) forceDeleteIfStuck(ctx context.Context, client dynamic.ResourceInterface, name string) error {
+func forceDeleteIfStuck(ctx context.Context, client dynamic.ResourceInterface, name string, logger Logger) error {
 	waitCtx, cancel := context.WithTimeout(ctx, finalizerGraceTimeout)
 	defer cancel()
 
@@ -446,7 +518,9 @@ func (c *ClusterCleaner) forceDeleteIfStuck(ctx context.Context, client dynamic.
 		return nil
 	}
 
-	c.logger.Warnf("Finalizers still block deletion of %s; clearing them", name)
+	if logger != nil {
+		logger.Warnf("Finalizers still block deletion of %s; clearing them", name)
+	}
 	obj.SetFinalizers(nil)
 	if _, err := client.Update(ctx, obj, metav1.UpdateOptions{}); err != nil && !apierrors.IsNotFound(err) {
 		return fmt.Errorf("clear finalizers on %s: %w", name, err)
@@ -537,7 +611,7 @@ func (c *ClusterCleaner) deleteNamespacedGVR(ctx context.Context, dyn dynamic.In
 			}
 			return fmt.Errorf("delete %s %s/%s: %w", gvr.Resource, namespace, name, err)
 		}
-		if err := c.forceDeleteIfStuck(ctx, dyn.Resource(gvr).Namespace(namespace), name); err != nil {
+		if err := forceDeleteIfStuck(ctx, dyn.Resource(gvr).Namespace(namespace), name, c.logger); err != nil {
 			return fmt.Errorf("delete %s %s/%s: %w", gvr.Resource, namespace, name, err)
 		}
 	}

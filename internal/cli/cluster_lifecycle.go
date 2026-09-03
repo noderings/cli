@@ -218,6 +218,13 @@ func runClusterDeregister(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("%s: %w", step, err)
 	}
 
+	// Provider-local offloads (vnc-gateway) are not removed by DeleteAgent. Do this first so
+	// a failed or aborted API delete cannot leave NamespaceOffloading behind for the next
+	// register (Liqo rejects changing RemoteNamespaceName in place).
+	if err := handleErr("unoffload namespaces", cleaner.UnoffloadNamespaces(ctx)); err != nil {
+		return err
+	}
+
 	// The platform must drop its inbound peering first: while it holds the peering, its
 	// controllers recreate the local ForeignCluster and `liqoctl uninstall` pre-checks fail.
 	// Not subject to --force: local teardown cannot succeed while that peering stands.
