@@ -41,16 +41,16 @@ calico:
   min_version: "v3.26.0"
 
 liqo:
-  version: "v0.0.0-4600ebb8"
+  version: "v0.0.0-3f1654f0"
   timeout: "10m"
   gw_service_type: "NodePort"
   gw_server_service_location: "Provider"
   pod_offloading_strategy: "Local"
   pod_cidr: "10.200.0.0/16"
   service_cidr: "10.201.0.0/16"
-  min_version: "v0.0.0-4600ebb8"
+  min_version: "v0.0.0-3f1654f0"
   chart_oci: "oci://harbor.noderings.com/nrings/liqo"
-  chart_version: "0.0.0-4600ebb8"
+  chart_version: "0.0.0-3f1654f0"
   proxy_url: "" # Optional proxy URL for liqo peer command
   api_server_url: "" # Optional; defaults to https://<agent-ip>:6443 during registration
   gw_server_service_nodeport: "" # Optional UDP NodePort for liqoctl peer
