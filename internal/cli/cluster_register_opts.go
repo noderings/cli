@@ -34,6 +34,7 @@ type clusterRegisterOpts struct {
 	agentID                   string
 	agentIP                   string
 	output                    string
+	inboundAPIProxy           string
 }
 
 func applyDevRegisterProfile(cfg *config.Config, dev bool) error {
@@ -138,6 +139,24 @@ func resolveRemoteClusterID(
 		return "", detectErr
 	}
 	return "", fmt.Errorf("remote Liqo cluster ID is empty; set --remote-cluster-id")
+}
+
+// parseInboundAPIProxyMode validates liqo.inbound_api_proxy, which decides whether the control
+// plane reaches this cluster's API server through the Liqo tunnel when it peers back.
+func parseInboundAPIProxyMode(raw string) (string, error) {
+	switch strings.ToLower(strings.TrimSpace(raw)) {
+	case "":
+		return config.DefaultInboundAPIProxy, nil
+	case config.InboundAPIProxyAuto:
+		return config.InboundAPIProxyAuto, nil
+	case config.InboundAPIProxyAlways:
+		return config.InboundAPIProxyAlways, nil
+	case config.InboundAPIProxyNever:
+		return config.InboundAPIProxyNever, nil
+	default:
+		return "", UsageErrorf("invalid liqo.inbound_api_proxy %q (want %s, %s, or %s)",
+			raw, config.InboundAPIProxyAuto, config.InboundAPIProxyAlways, config.InboundAPIProxyNever)
+	}
 }
 
 func collectOffloadNamespaces(opts clusterRegisterOpts) []string {

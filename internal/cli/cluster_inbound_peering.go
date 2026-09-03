@@ -11,6 +11,9 @@ import (
 	"strings"
 	"time"
 
+	"k8s.io/client-go/tools/clientcmd"
+	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
+
 	"github.com/noderings/cli/internal/api"
 	generated "github.com/noderings/cli/internal/api/generated"
 	"github.com/noderings/cli/internal/config"
@@ -63,6 +66,22 @@ func runInboundPeeringPhase(
 	}
 	kubeconfig := string(kubeconfigBytes)
 
+	remotePeeringKubeconfig := filepath.Join(configDir, fmt.Sprintf("peering-%s-kubeconfig.yaml", agentID))
+	kubeconfig, err = applyInboundAPIServerProxy(ctx, log, opts.inboundAPIProxy, kubeconfig,
+		func(ctx context.Context) (string, error) {
+			return liqoManager.ResolveInboundAPIServerProxyURL(ctx, remotePeeringKubeconfig, agentID)
+		})
+	if err != nil {
+		stateManager.SetError(state.PhaseInboundPeering, err.Error(), true)
+		_ = stateManager.Save()
+		return err
+	}
+	if err := os.WriteFile(outPath, []byte(kubeconfig), 0o600); err != nil {
+		stateManager.SetError(state.PhaseInboundPeering, err.Error(), true)
+		_ = stateManager.Save()
+		return fmt.Errorf("write inbound peering kubeconfig: %w", err)
+	}
+
 	if err := uploadInboundPeeringConfig(ctx, apiClient, agentID, kubeconfig); err != nil {
 		stateManager.SetError(state.PhaseInboundPeering, err.Error(), true)
 		_ = stateManager.Save()
@@ -79,6 +98,65 @@ func runInboundPeeringPhase(
 	stateManager.AddCheckpoint(state.PhaseInboundPeering, state.CheckpointStatusSuccess, "")
 	log.Info("✓ Inbound peering complete")
 	return nil
+}
+
+// applyInboundAPIServerProxy points the control plane at this cluster's api-server-proxy so it
+// can peer back over the existing Liqo tunnel. Without it the control plane dials the API
+// server address advertised at install time, which a NAT'd provider cannot expose.
+//
+// resolveProxyURL is injected so the decision logic stays independent of cluster access.
+func applyInboundAPIServerProxy(
+	ctx context.Context,
+	log *logger.Logger,
+	mode, kubeconfig string,
+	resolveProxyURL func(context.Context) (string, error),
+) (string, error) {
+	if mode == config.InboundAPIProxyNever {
+		return kubeconfig, nil
+	}
+
+	cfg, err := clientcmd.Load([]byte(kubeconfig))
+	if err != nil {
+		return "", fmt.Errorf("parse inbound peering kubeconfig: %w", err)
+	}
+	cluster, err := currentCluster(cfg)
+	if err != nil {
+		return "", err
+	}
+
+	if mode == config.InboundAPIProxyAuto && !install.APIServerNeedsProxy(cluster.Server) {
+		log.Infof("API server %s is publicly routable; the control plane will peer back directly", cluster.Server)
+		return kubeconfig, nil
+	}
+
+	proxyURL, err := resolveProxyURL(ctx)
+	if err != nil {
+		return "", fmt.Errorf("resolve API server proxy URL for inbound peering: %w", err)
+	}
+
+	// Only proxy-url is set: the Liqo proxy pins the CONNECT target to the in-cluster API
+	// server, so server must keep the advertised address for TLS verification to succeed.
+	cluster.ProxyURL = proxyURL
+
+	out, err := clientcmd.Write(*cfg)
+	if err != nil {
+		return "", fmt.Errorf("serialize inbound peering kubeconfig: %w", err)
+	}
+	log.Infof("Control plane will reach API server %s through %s", cluster.Server, proxyURL)
+	return string(out), nil
+}
+
+// currentCluster returns the cluster that the kubeconfig's current context points at.
+func currentCluster(cfg *clientcmdapi.Config) (*clientcmdapi.Cluster, error) {
+	kubeCtx, ok := cfg.Contexts[cfg.CurrentContext]
+	if !ok || kubeCtx == nil {
+		return nil, fmt.Errorf("kubeconfig has no context named %q", cfg.CurrentContext)
+	}
+	cluster, ok := cfg.Clusters[kubeCtx.Cluster]
+	if !ok || cluster == nil {
+		return nil, fmt.Errorf("kubeconfig context %q references unknown cluster %q", cfg.CurrentContext, kubeCtx.Cluster)
+	}
+	return cluster, nil
 }
 
 func uploadInboundPeeringConfig(ctx context.Context, apiClient *api.Client, agentID, kubeconfig string) error {
