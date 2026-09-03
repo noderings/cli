@@ -35,6 +35,16 @@ const (
 	// DefaultNamespaceMappingStrategy is the default Liqo namespace mapping strategy.
 	DefaultNamespaceMappingStrategy = "SelectedName"
 
+	// InboundAPIProxyAuto routes the control plane's inbound peering through the Liqo
+	// api-server-proxy only when this cluster's API server address is not publicly routable.
+	InboundAPIProxyAuto = "auto"
+	// InboundAPIProxyAlways always routes inbound peering through the api-server-proxy.
+	InboundAPIProxyAlways = "always"
+	// InboundAPIProxyNever keeps inbound peering on a direct connection to the API server.
+	InboundAPIProxyNever = "never"
+	// DefaultInboundAPIProxy is the default inbound API proxy mode.
+	DefaultInboundAPIProxy = InboundAPIProxyAuto
+
 	// DefaultHarborRegistry is the container registry host for operator images
 	// and charts. harbor.nrings.io is retired; do not use that hostname.
 	DefaultHarborRegistry = "harbor.noderings.com"
@@ -64,6 +74,11 @@ const (
 	LiqoNodeTypeVirtual = "virtual-node"
 	// LiqoLabelRemoteClusterID is the node label key for the peered remote cluster.
 	LiqoLabelRemoteClusterID = "liqo.io/remote-cluster-id"
+	// LiqoAPIServerProxyIPName is the IP resource holding the api-server-proxy address,
+	// which a peer uses to reach this cluster's API server through the Liqo tunnel.
+	LiqoAPIServerProxyIPName = "api-server-proxy"
+	// LiqoAPIServerProxyPort is the HTTP CONNECT port served by the liqo-proxy pod.
+	LiqoAPIServerProxyPort = 8118
 	// LiqoOffloadingAPIGroup is the API group for NamespaceOffloading.
 	LiqoOffloadingAPIGroup = "offloading.liqo.io"
 	// LiqoOffloadingAPIVersion is the API version for NamespaceOffloading.

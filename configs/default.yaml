@@ -56,3 +56,7 @@ liqo:
   gw_server_service_nodeport: "" # Optional UDP NodePort for liqoctl peer
   gw_client_address: "" # Optional gateway client address override for liqoctl peer
   gw_client_port: "" # Optional gateway client port override for liqoctl peer
+  # How the control plane reaches this cluster's API server when it peers back:
+  # auto (proxy through the Liqo tunnel only when the API server address is not public),
+  # always, or never.
+  inbound_api_proxy: "auto"
