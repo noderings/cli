@@ -693,6 +693,12 @@ func runAgentDelete(cmd *cobra.Command, args []string) error {
 	if err := agentDeleteLocalClusterGuard(k3sPresent, keepCluster); err != nil {
 		return err
 	}
+	if keepCluster && k3sPresent {
+		if err := unoffloadLocalNamespaces(ctx); err != nil {
+			return fmt.Errorf("unoffload local namespaces before API delete: %w\n"+
+				"vnc-gateway is still offloaded; wipe it with: nr cluster deregister --name <name> --yes --skip-api", err)
+		}
+	}
 
 	// Confirm deletion (unless --force)
 	force, _ := cmd.Flags().GetBool("force")
