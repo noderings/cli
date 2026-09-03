@@ -45,9 +45,9 @@ const (
 	DefaultHarborPublicProject = "nrings"
 
 	// DefaultLiqoVersion is the default Liqo / liqoctl version pin.
-	DefaultLiqoVersion = "v0.0.0-4600ebb8"
+	DefaultLiqoVersion = "v0.0.0-3f1654f0"
 	// DefaultLiqoChartVersion is the Helm chart version (no leading v).
-	DefaultLiqoChartVersion = "0.0.0-4600ebb8"
+	DefaultLiqoChartVersion = "0.0.0-3f1654f0"
 	// DefaultLiqoChartOCI is the OCI chart reference (without version tag).
 	DefaultLiqoChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/liqo"
 	// DefaultLiqoctlOCIRepo is the OCI project/repo prefix for liqoctl artifacts.

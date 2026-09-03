@@ -43,18 +43,18 @@ func TestDeriveToolDownloadURL(t *testing.T) {
 		{
 			name:    "liqoctl",
 			tool:    "liqoctl",
-			version: "v0.0.0-4600ebb8",
+			version: "v0.0.0-3f1654f0",
 			goos:    "linux",
 			goarch:  "amd64",
-			want:    "oci://harbor.noderings.com/nrings/liqoctl-linux-amd64:v0.0.0-4600ebb8",
+			want:    "oci://harbor.noderings.com/nrings/liqoctl-linux-amd64:v0.0.0-3f1654f0",
 		},
 		{
 			name:    "arch normalization",
 			tool:    "liqoctl",
-			version: "v0.0.0-4600ebb8",
+			version: "v0.0.0-3f1654f0",
 			goos:    "linux",
 			goarch:  "aarch64",
-			want:    "oci://harbor.noderings.com/nrings/liqoctl-linux-arm64:v0.0.0-4600ebb8",
+			want:    "oci://harbor.noderings.com/nrings/liqoctl-linux-arm64:v0.0.0-3f1654f0",
 		},
 		{
 			name:     "override wins",
@@ -321,9 +321,9 @@ func TestVersionSatisfiesTable(t *testing.T) {
 		{"v1.0.0", "", "v1.0.0", true},
 		{"v0.9.0", "v1.1.1", "v1.0.0", false},
 		{"", "v1.0.0", "", false},
-		{"Client version: v0.0.0-4600ebb8", "v0.0.0-4600ebb8", "", true},
-		{"Client version: v1.1.1", "v0.0.0-4600ebb8", "", false},
-		{"v1.1.1", "v0.0.0-4600ebb8", "", false},
+		{"Client version: v0.0.0-3f1654f0", "v0.0.0-3f1654f0", "", true},
+		{"Client version: v1.1.1", "v0.0.0-3f1654f0", "", false},
+		{"v1.1.1", "v0.0.0-3f1654f0", "", false},
 	}
 	for _, tc := range cases {
 		if got := VersionSatisfies(tc.current, tc.required, tc.min); got != tc.want {
