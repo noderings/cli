@@ -142,6 +142,11 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	inboundAPIProxy, err := parseInboundAPIProxyMode(cfg.Liqo.InboundAPIProxy)
+	if err != nil {
+		return err
+	}
+
 	orgDriver := fetchOrganizationHypervisorDriver(ctx, apiClient)
 	hypervisorDriver, err := resolveHypervisorDriver(
 		hypervisorDriverRaw,
@@ -173,6 +178,7 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		offloadNamespaces:         offloadNamespaces,
 		namespaceMappingStrategy:  namespaceMappingStrategy,
 		remoteClusterID:           remoteClusterID,
+		inboundAPIProxy:           inboundAPIProxy,
 		noderingsClusterName:      noderingsClusterName,
 		legacyClusterNameProvided: legacyClusterNameProvided,
 		agentID:                   strings.TrimSpace(agentIDFlag),
