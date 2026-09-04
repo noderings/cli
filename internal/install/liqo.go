@@ -779,6 +779,14 @@ func (l *LiqoManager) OffloadNamespace(ctx context.Context, ns, remoteNamespaceN
 		l.logger.Infof("Created namespace %s", ns)
 	}
 
+	alreadyOK, remapErr := l.recreateOffloadIfRemoteNameChanged(ctx, ns, remoteNamespaceName)
+	if remapErr != nil {
+		return remapErr
+	}
+	if alreadyOK {
+		return nil
+	}
+
 	// Execute liqoctl offload with proper flags
 	l.logger.Infof("Offloading namespace %s...", ns)
 

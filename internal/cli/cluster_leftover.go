@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/noderings/cli/internal/install"
+	"github.com/noderings/cli/internal/logger"
 )
 
 // leftoverLocalClusterError is the delete-then-register trap: API agent is gone
@@ -52,6 +53,20 @@ func agentDeleteLocalClusterGuard(k3sPresent, keepCluster bool) error {
 			"  nr cluster deregister --name <name> --yes\n" +
 			"API-only delete (not recommended): nr agent delete --name <name> --keep-cluster",
 	)
+}
+
+// unoffloadLocalNamespaces drops provider-local NamespaceOffloading (vnc-gateway)
+// before an API-only delete. The platform never removes that CR.
+func unoffloadLocalNamespaces(ctx context.Context) error {
+	log, err := logger.NewLogger("info", "")
+	if err != nil {
+		return err
+	}
+	cleaner, err := install.NewClusterCleaner(log)
+	if err != nil {
+		return err
+	}
+	return cleaner.UnoffloadNamespaces(ctx)
 }
 
 func operatorCredentialRecoveryHint(agentName string) string {

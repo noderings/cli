@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -218,6 +219,13 @@ func runClusterDeregister(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("%s: %w", step, err)
 	}
 
+	// Provider-local offloads (vnc-gateway) are not removed by DeleteAgent. Do this first so
+	// a failed or aborted API delete cannot leave NamespaceOffloading behind for the next
+	// register (Liqo rejects changing RemoteNamespaceName in place).
+	if err := handleErr("unoffload namespaces", cleaner.UnoffloadNamespaces(ctx)); err != nil {
+		return err
+	}
+
 	// The platform must drop its inbound peering first: while it holds the peering, its
 	// controllers recreate the local ForeignCluster and `liqoctl uninstall` pre-checks fail.
 	// Not subject to --force: local teardown cannot succeed while that peering stands.
@@ -245,8 +253,12 @@ func runClusterDeregister(cmd *cobra.Command, args []string) error {
 	if err := handleErr("unpeer Liqo", cleaner.UnpeerLiqo(ctx, peeringKubeconfig)); err != nil {
 		return err
 	}
-	if err := handleErr("unoffload namespaces", cleaner.UnoffloadNamespaces(ctx)); err != nil {
-		return err
+	// --skip-api never calls DeleteAgent, so mothership FC / tenant / operator
+	// namespaces stay unless we wipe them with the peering kubeconfig.
+	if !platformOwnsRemoteUnpeer && peeringKubeconfig != "" {
+		if err := handleErr("cleanup mothership leftovers", cleaner.CleanupRemotePeeringLeftovers(ctx, peeringKubeconfig, agentID)); err != nil {
+			return err
+		}
 	}
 	if err := handleErr("cleanup Liqo tenant leftovers", cleaner.CleanupLiqoTenantLeftovers(ctx)); err != nil {
 		return err
@@ -260,16 +272,30 @@ func runClusterDeregister(cmd *cobra.Command, args []string) error {
 	if err := handleErr("uninstall k3s", cleaner.UninstallK3s(ctx)); err != nil {
 		return err
 	}
-
-	if peeringKubeconfig != "" {
-		_ = os.Remove(peeringKubeconfig)
+	if err := handleErr("cleanup leftover host interfaces", cleaner.CleanupHostLeftovers(ctx)); err != nil {
+		return err
 	}
+
+	removeDeregisterKubeconfigs(configDir, agentID)
 	if err := handleErr("clear local state", stateManager.ClearLocalState()); err != nil {
 		return err
 	}
 
 	log.Infof("✓ Cluster deregistered (name=%s id=%s)", agentName, agentID)
 	return nil
+}
+
+func removeDeregisterKubeconfigs(configDir, agentID string) {
+	_ = os.Remove(filepath.Join(configDir, "k3s.kubeconfig"))
+	matches, _ := filepath.Glob(filepath.Join(configDir, "peering-*.yaml"))
+	inbound, _ := filepath.Glob(filepath.Join(configDir, "inbound-peering-*.yaml"))
+	for _, p := range append(matches, inbound...) {
+		_ = os.Remove(p)
+	}
+	if strings.TrimSpace(agentID) != "" {
+		_ = os.Remove(filepath.Join(configDir, fmt.Sprintf("peering-%s-kubeconfig.yaml", agentID)))
+		_ = os.Remove(filepath.Join(configDir, fmt.Sprintf("inbound-peering-%s-kubeconfig.yaml", agentID)))
+	}
 }
 
 func runClusterRollback(cmd *cobra.Command, args []string) error {
