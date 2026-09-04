@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.12] - 2026-09-04
+
+### Added
+
+- Route inbound peering through the Liqo API server proxy when the provider API is not publicly reachable (NAT / RFC1918 `--agent-ip`).
+
+### Fixed
+
+- Unoffload `vnc-gateway` before DeleteAgent and wipe leftover mothership ForeignCluster / tenant / operator objects (and stuck Liqo finalizers) on deregister, including `--skip-api`.
+- Remap an existing NamespaceOffloading when the remote namespace name changed so a new agent ID can register on the same host.
+
+### Changed
+
+- Pin Liqo to `v0.0.0-3f1654f0`.
+
 ## [1.0.11] - 2026-09-02
 
 ### Changed
