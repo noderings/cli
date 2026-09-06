@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Pin the VirtFusion operator chart to 0.1.5 so `nr cluster register` installs the User API reinstall fix.
+
 ## [1.0.12] - 2026-09-04
 
 ### Added
