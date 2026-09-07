@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Pin the VirtFusion operator chart to 0.1.6 so `nr cluster register` installs the RHEL-family guest password fix.
+- Pin the VirtFusion operator chart to 0.1.7 so `nr cluster register` installs the client cloud-init userdata fix.
 
 ## [1.0.12] - 2026-09-04
 
