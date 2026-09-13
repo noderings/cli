@@ -261,6 +261,12 @@ func (p *ProxmoxOperatorInstaller) Install(ctx context.Context) error {
 	}
 	args = append(args, "--set", "proxmox.verifySSL=false")
 	args = append(args, "--set", "vncGateway.proxmoxInsecureSkipVerify=true")
+	if v := strings.TrimSpace(os.Getenv("PROXMOX_OPERATOR_IMAGE_REPOSITORY")); v != "" {
+		args = append(args, "--set-string", fmt.Sprintf("image.repository=%s", v))
+	}
+	if v := strings.TrimSpace(os.Getenv("PROXMOX_OPERATOR_IMAGE_TAG")); v != "" {
+		args = append(args, "--set-string", fmt.Sprintf("image.tag=%s", v))
+	}
 	if p.config.KubeconfigPath != "" {
 		args = append(args, "--kubeconfig", p.config.KubeconfigPath)
 	}
