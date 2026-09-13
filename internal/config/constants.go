@@ -140,7 +140,7 @@ const (
 	// DefaultProxmoxOperatorCRDsChartOCI is CRDs-only; install on every provider so Liqo can watch both API groups.
 	DefaultProxmoxOperatorCRDsChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/proxmox-operator-crds"
 	// DefaultProxmoxOperatorChartVersion is the chart version (no leading v).
-	DefaultProxmoxOperatorChartVersion = "0.1.2"
+	DefaultProxmoxOperatorChartVersion = "0.1.3"
 	// DefaultProxmoxOperatorHelmRelease is the Helm release name (workload = release-chart).
 	DefaultProxmoxOperatorHelmRelease = "operator"
 	// DefaultProxmoxOperatorHelmNamespace is the runtime namespace for the operator chart.
@@ -153,7 +153,7 @@ const (
 	// DefaultVirtFusionOperatorCRDsChartOCI is CRDs-only (install alongside Proxmox CRDs on every provider).
 	DefaultVirtFusionOperatorCRDsChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/virtfusion-operator-crds"
 	// DefaultVirtFusionOperatorChartVersion is the VirtFusion chart version (no leading v).
-	DefaultVirtFusionOperatorChartVersion = "0.1.7"
+	DefaultVirtFusionOperatorChartVersion = "0.1.8"
 	// DefaultVirtFusionOperatorHelmNamespace is the runtime namespace for the VirtFusion operator chart.
 	DefaultVirtFusionOperatorHelmNamespace = "virtfusion-system"
 	// VirtFusionCRDAPIGroup is the API group registered by virtfusion-operator CRDs.
@@ -164,7 +164,7 @@ const (
 	// DefaultSolusVMOperatorCRDsChartOCI is CRDs-only (install alongside other hypervisor CRDs on every provider).
 	DefaultSolusVMOperatorCRDsChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/solusvm-operator-crds"
 	// DefaultSolusVMOperatorChartVersion is the SolusVM chart version (no leading v).
-	DefaultSolusVMOperatorChartVersion = "0.1.3"
+	DefaultSolusVMOperatorChartVersion = "0.1.4"
 	// DefaultSolusVMOperatorHelmNamespace is the runtime namespace for the SolusVM operator chart.
 	DefaultSolusVMOperatorHelmNamespace = "solusvm-system"
 	// SolusVMCRDAPIGroup is the API group registered by solusvm-operator CRDs.
