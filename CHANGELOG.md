@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.13] - 2026-09-14
+
 ### Changed
 
 - Pin `nr cluster register` operator charts to Proxmox `0.1.3`, SolusVM `0.1.4`, VirtFusion `0.1.8` (new installs only; existing agents stay on their current Helm release until `--reinstall-operator`). Harbor image tags are `v0.1.3` / `v0.1.4` / `v0.1.8` so they do not collide with the Helm OCI chart tags.
