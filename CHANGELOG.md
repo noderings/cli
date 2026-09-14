@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.14] - 2026-09-14
+
 ### Added
 
 - `nr cluster operator upgrade` bumps hypervisor CRD + operator Helm charts and the Harbor `v*` image tag while reusing cluster Secrets (no hypervisor token prompt). `nr cluster register --resume --reinstall-operator` does the same when credentials are not passed; pass `PROXMOX_*` / an instances file only to rotate tokens.
@@ -16,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Operator upgrade on agents that installed Proxmox CRDs as the operator subchart applies the standalone CRD chart in place instead of failing Helm ownership checks, and annotates those CRDs so Helm does not delete them when `crds.enabled=false`.
 - In-place operator upgrade uses Helm `--reset-then-reuse-values` so new chart keys (hooks, exporter image) apply while instance Secrets stay reused.
 - Operator upgrade pins `vncGateway.image.repository` to Harbor (retired `harbor.nrings.io` values cannot stick) and waits for the Proxmox exporter Deployment the same way VirtFusion/SolusVM already did.
+- `nr cluster operator upgrade` prepends `~/.nr/bin` so Helm installed by `nr cluster register` is found without extra PATH setup.
 
 ## [1.0.13] - 2026-09-14
 
