@@ -35,19 +35,20 @@ var clusterOperatorUpgradeCmd = &cobra.Command{
 }
 
 func operatorUpgradeLong() string {
-	chart := config.DefaultProxmoxOperatorChartVersion
 	return fmt.Sprintf(`Upgrade hypervisor CRD charts and the operator Helm release on this agent.
 
 Existing Kubernetes Secrets and Helm instance values are reused. Hypervisor
 tokens are not requested. The operator image tag is the Harbor v-prefix of the
-CLI-pinned chart (%s, not %s).
+CLI-pinned chart (Proxmox %s, VirtFusion %s, SolusVM %s; chart versions are bare SemVer).
 
 Does not require NR_API_TOKEN or --org-id. Run on the agent VM.
 
 To rotate hypervisor credentials instead, use:
   nr cluster register --resume --reinstall-operator --name <name> --org-id <org>
 with PROXMOX_* / VIRTFUSION_* / SOLUSVM_* or an instances file.`,
-		config.HarborOperatorImageTag(chart), chart)
+		config.HarborOperatorImageTag(config.DefaultProxmoxOperatorChartVersion),
+		config.HarborOperatorImageTag(config.DefaultVirtFusionOperatorChartVersion),
+		config.HarborOperatorImageTag(config.DefaultSolusVMOperatorChartVersion))
 }
 
 func init() {
@@ -100,6 +101,9 @@ func runClusterOperatorUpgrade(cmd *cobra.Command, args []string) error {
 		}
 	}
 
+	if _, err := install.EnsureCLIBinDir(); err != nil {
+		log.Warnf("Could not add ~/.nr/bin to PATH: %v", err)
+	}
 	kubeconfig := install.EnsureReadableKubeconfig(ctx, "", log)
 	existing, err := install.DetectReusableOperator(ctx, kubeconfig, driver)
 	if errors.Is(err, install.ErrNoReusableOperator) {
@@ -121,6 +125,9 @@ func runClusterOperatorUpgrade(cmd *cobra.Command, args []string) error {
 
 	u, err := install.NewOperatorUpgrade(driver, kubeconfig, chartPath, chartVersion)
 	if err != nil {
+		return err
+	}
+	if err := u.BindLiveRelease(existing.Release, existing.Namespace); err != nil {
 		return err
 	}
 	log.Infof("Reusing Secrets %s in %s (release %s)", strings.Join(existing.SecretNames, ", "), existing.Namespace, existing.Release)

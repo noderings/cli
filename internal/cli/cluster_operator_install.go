@@ -68,15 +68,11 @@ func runOperatorInstallPhase(
 	}
 	log.Infof("Operator chart: %s%s", opCfg.ChartPath, chartVersionSuffix(opCfg.ChartVersion))
 
-	reused, reuseErr := tryReuseOperatorSecrets(ctx, log, kubeconfig, config.HypervisorDriverProxmox, opCfg.ChartPath, opCfg.ChartVersion, opts)
-	if reuseErr != nil {
-		stateManager.SetError(state.PhaseOperatorInstall, reuseErr.Error(), true)
-		_ = stateManager.Save()
-		return reuseErr
+	done, err := completeOperatorInstallFromReuse(ctx, log, stateManager, kubeconfig, config.HypervisorDriverProxmox, opCfg.ChartPath, opCfg.ChartVersion, opts)
+	if err != nil {
+		return err
 	}
-	if reused {
-		stateManager.AddCheckpoint(state.PhaseOperatorInstall, state.CheckpointStatusSuccess, "")
-		log.Info("✓ Operator install complete")
+	if done {
 		return nil
 	}
 
@@ -155,15 +151,11 @@ func runVirtFusionOperatorInstallPhase(
 	}
 	log.Infof("Operator chart: %s%s", opCfg.ChartPath, chartVersionSuffix(opCfg.ChartVersion))
 
-	reused, reuseErr := tryReuseOperatorSecrets(ctx, log, kubeconfig, config.HypervisorDriverVirtFusion, opCfg.ChartPath, opCfg.ChartVersion, opts)
-	if reuseErr != nil {
-		stateManager.SetError(state.PhaseOperatorInstall, reuseErr.Error(), true)
-		_ = stateManager.Save()
-		return reuseErr
+	done, err := completeOperatorInstallFromReuse(ctx, log, stateManager, kubeconfig, config.HypervisorDriverVirtFusion, opCfg.ChartPath, opCfg.ChartVersion, opts)
+	if err != nil {
+		return err
 	}
-	if reused {
-		stateManager.AddCheckpoint(state.PhaseOperatorInstall, state.CheckpointStatusSuccess, "")
-		log.Info("✓ Operator install complete")
+	if done {
 		return nil
 	}
 
@@ -239,15 +231,11 @@ func runSolusVMOperatorInstallPhase(
 	}
 	log.Infof("Operator chart: %s%s", opCfg.ChartPath, chartVersionSuffix(opCfg.ChartVersion))
 
-	reused, reuseErr := tryReuseOperatorSecrets(ctx, log, kubeconfig, config.HypervisorDriverSolusVM, opCfg.ChartPath, opCfg.ChartVersion, opts)
-	if reuseErr != nil {
-		stateManager.SetError(state.PhaseOperatorInstall, reuseErr.Error(), true)
-		_ = stateManager.Save()
-		return reuseErr
+	done, err := completeOperatorInstallFromReuse(ctx, log, stateManager, kubeconfig, config.HypervisorDriverSolusVM, opCfg.ChartPath, opCfg.ChartVersion, opts)
+	if err != nil {
+		return err
 	}
-	if reused {
-		stateManager.AddCheckpoint(state.PhaseOperatorInstall, state.CheckpointStatusSuccess, "")
-		log.Info("✓ Operator install complete")
+	if done {
 		return nil
 	}
 
@@ -294,6 +282,30 @@ func chartVersionSuffix(version string) string {
 	return " @" + version
 }
 
+func completeOperatorInstallFromReuse(
+	ctx context.Context,
+	log *logger.Logger,
+	stateManager *state.Manager,
+	kubeconfig, driver, chart, version string,
+	opts clusterRegisterOpts,
+) (bool, error) {
+	if !opts.reinstallOperator {
+		return false, nil
+	}
+	reused, err := tryReuseOperatorSecrets(ctx, log, kubeconfig, driver, chart, version, opts)
+	if err != nil {
+		stateManager.SetError(state.PhaseOperatorInstall, err.Error(), true)
+		_ = stateManager.Save()
+		return false, err
+	}
+	if !reused {
+		return false, nil
+	}
+	stateManager.AddCheckpoint(state.PhaseOperatorInstall, state.CheckpointStatusSuccess, "")
+	log.Info("✓ Operator install complete")
+	return true, nil
+}
+
 func tryReuseOperatorSecrets(
 	ctx context.Context,
 	log *logger.Logger,
@@ -318,6 +330,9 @@ func tryReuseOperatorSecrets(
 	log.Infof("Reusing %d existing hypervisor Secret(s); skipping credential prompt", len(existing.SecretNames))
 	u, err := install.NewOperatorUpgrade(driver, kubeconfig, chart, version)
 	if err != nil {
+		return false, err
+	}
+	if err := u.BindLiveRelease(existing.Release, existing.Namespace); err != nil {
 		return false, err
 	}
 	if err := install.UpgradeOperatorRelease(ctx, u, log); err != nil {

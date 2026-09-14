@@ -148,6 +148,68 @@ func TestOperatorUpgradeValidateRejectsBareChartTag(t *testing.T) {
 	}
 }
 
+func TestOperatorUpgradeValidateAllowsVPrefixedChartAndImage(t *testing.T) {
+	t.Parallel()
+	tag := config.HarborOperatorImageTag(config.DefaultProxmoxOperatorChartVersion)
+	u := OperatorUpgrade{
+		Chart:        config.DefaultProxmoxOperatorChartOCI,
+		ChartVersion: tag,
+		ImageTag:     tag,
+		Release:      config.DefaultProxmoxOperatorHelmRelease,
+		Namespace:    config.DefaultProxmoxOperatorHelmNamespace,
+	}
+	if err := u.Validate(); err != nil {
+		t.Fatalf("v-prefixed chart+image should be allowed: %v", err)
+	}
+}
+
+func TestBindLiveReleaseRefreshesWorkloads(t *testing.T) {
+	t.Parallel()
+	u := OperatorUpgrade{
+		Driver:       config.HypervisorDriverProxmox,
+		Chart:        config.DefaultProxmoxOperatorChartOCI,
+		ChartVersion: config.DefaultProxmoxOperatorChartVersion,
+		ImageTag:     config.HarborOperatorImageTag(config.DefaultProxmoxOperatorChartVersion),
+		Release:      config.DefaultProxmoxOperatorHelmRelease,
+		Namespace:    config.DefaultProxmoxOperatorHelmNamespace,
+	}
+	liveRelease := "edge"
+	liveNS := "proxmox-edge"
+	if err := u.BindLiveRelease(liveRelease, liveNS); err != nil {
+		t.Fatal(err)
+	}
+	if u.Release != liveRelease || u.Namespace != liveNS {
+		t.Fatalf("release=%q ns=%q", u.Release, u.Namespace)
+	}
+	want := kubeDeployment(config.HelmProxmoxOperatorDeployName(liveRelease))
+	if !slices.Contains(u.Workloads, want) {
+		t.Fatalf("workloads=%v want %s", u.Workloads, want)
+	}
+}
+
+func TestSecretsExistInEveryNamespace(t *testing.T) {
+	t.Parallel()
+	secret := "operator-creds"
+	helmNS := config.DefaultProxmoxOperatorHelmNamespace
+	vncNS := config.DefaultVNCGatewayNamespace
+	both := map[string]map[string]struct{}{
+		helmNS: {secret: {}},
+		vncNS:  {secret: {}},
+	}
+	if !secretsExistInEveryNamespace(both, []string{secret}, []string{helmNS, vncNS}) {
+		t.Fatal("proxmox requires the secret in helm and vnc namespaces")
+	}
+	helmOnly := map[string]map[string]struct{}{
+		helmNS: {secret: {}},
+	}
+	if secretsExistInEveryNamespace(helmOnly, []string{secret}, []string{helmNS, vncNS}) {
+		t.Fatal("missing vnc-gateway secret must not count as reusable")
+	}
+	if !secretsExistInEveryNamespace(helmOnly, []string{secret}, []string{helmNS}) {
+		t.Fatal("virtfusion/solusvm only need the helm namespace")
+	}
+}
+
 func TestIsHelmReleaseNotFound(t *testing.T) {
 	t.Parallel()
 	err := &exec.ExitError{}
