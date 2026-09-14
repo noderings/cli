@@ -54,11 +54,33 @@ func (u OperatorUpgrade) Validate() error {
 		return fmt.Errorf("operator image tag is required")
 	}
 	ver := strings.TrimSpace(u.ChartVersion)
-	if ver != "" && tag == ver {
+	wantTag := config.HarborOperatorImageTag(ver)
+	if ver != "" && tag == ver && tag != wantTag {
 		return fmt.Errorf("refusing image.tag=%s: Harbor chart tags must not be used as image tags (want %s)",
-			tag, config.HarborOperatorImageTag(ver))
+			tag, wantTag)
 	}
 	return nil
+}
+
+// BindLiveRelease pins the upgrade to the Helm release DetectReusableOperator found
+// and refreshes workload names for that release.
+func (u *OperatorUpgrade) BindLiveRelease(release, namespace string) error {
+	if u == nil {
+		return fmt.Errorf("operator upgrade is required")
+	}
+	if rel := strings.TrimSpace(release); rel != "" {
+		u.Release = rel
+	}
+	if ns := strings.TrimSpace(namespace); ns != "" {
+		u.Namespace = ns
+	}
+	spec, err := specForDriver(u.Driver)
+	if err != nil {
+		return err
+	}
+	u.Workloads = spec.workloads(u.Release)
+	u.VNCDeployment = spec.vncDeployment(u.Release)
+	return u.Validate()
 }
 
 // ReusableOperator is a live Helm release whose instance Secrets still exist.
@@ -351,18 +373,32 @@ func operatorReleaseCandidates() []operatorReleaseCandidate {
 }
 
 func instanceSecretsExist(ctx context.Context, kubeconfig string, names, namespaces []string) (bool, error) {
+	present := make(map[string]map[string]struct{}, len(namespaces))
 	for _, ns := range namespaces {
+		present[ns] = make(map[string]struct{}, len(names))
 		for _, name := range names {
 			exists, err := kubeSecretExists(ctx, kubeconfig, ns, name)
 			if err != nil {
 				return false, err
 			}
-			if !exists {
-				return false, nil
+			if exists {
+				present[ns][name] = struct{}{}
 			}
 		}
 	}
-	return true, nil
+	return secretsExistInEveryNamespace(present, names, namespaces), nil
+}
+
+func secretsExistInEveryNamespace(present map[string]map[string]struct{}, names, namespaces []string) bool {
+	for _, ns := range namespaces {
+		inNS := present[ns]
+		for _, name := range names {
+			if _, ok := inNS[name]; !ok {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 // UpgradeOperatorRelease upgrades CRDs and the operator chart without rewriting Secrets.
@@ -410,7 +446,7 @@ func waitWorkload(ctx context.Context, kubeconfig, workload, namespace string, l
 			logger.Warnf("Skipping %s (not installed)", workload)
 			return nil
 		}
-		logger.Warnf("Could not restart %s: %v", workload, err)
+		return fmt.Errorf("restart %s: %w", workload, err)
 	}
 	if err := runCmd(ctx, binKubectl, withKubeconfig(kubeconfig, []string{
 		kubectlCmdRollout, kubectlRolloutStatus, workload, kubectlFlagNamespaceShort, namespace,

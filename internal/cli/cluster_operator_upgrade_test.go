@@ -30,3 +30,14 @@ func TestHypervisorCredsProvidedNone(t *testing.T) {
 		t.Fatal("expected no credentials")
 	}
 }
+
+func TestCompleteOperatorInstallFromReuseRequiresReinstallFlag(t *testing.T) {
+	t.Parallel()
+	done, err := completeOperatorInstallFromReuse(t.Context(), nil, nil, "", config.HypervisorDriverProxmox, "", "", clusterRegisterOpts{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if done {
+		t.Fatal("first install must not reuse Secrets without --reinstall-operator")
+	}
+}
