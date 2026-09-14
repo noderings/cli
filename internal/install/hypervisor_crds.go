@@ -1,6 +1,7 @@
 package install
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -20,7 +21,7 @@ type hypervisorCRDChart struct {
 }
 
 func crdChartVersion(def string) string {
-	if v := strings.TrimSpace(os.Getenv("HYPERVISOR_OPERATOR_CRDS_CHART_VERSION")); v != "" {
+	if v := strings.TrimSpace(os.Getenv(config.EnvHypervisorOperatorCRDsChartVersion)); v != "" {
 		return v
 	}
 	return def
@@ -29,32 +30,23 @@ func crdChartVersion(def string) string {
 func hypervisorCRDCharts() []hypervisorCRDChart {
 	return []hypervisorCRDChart{
 		{
-			release: "proxmox-operator-crds",
-			envKey:  "PROXMOX_OPERATOR_CRDS_CHART",
-			sibling: []string{
-				filepath.Join("..", "operator", "charts", "proxmox-operator-crds"),
-				filepath.Join("..", "..", "operator", "charts", "proxmox-operator-crds"),
-			},
+			release: helmReleaseProxmoxCRDs,
+			envKey:  config.EnvProxmoxOperatorCRDsChart,
+			sibling: operatorChartSiblings(helmReleaseProxmoxCRDs),
 			oci:     config.DefaultProxmoxOperatorCRDsChartOCI,
 			version: crdChartVersion(config.DefaultProxmoxOperatorChartVersion),
 		},
 		{
-			release: "virtfusion-operator-crds",
-			envKey:  "VIRTFUSION_OPERATOR_CRDS_CHART",
-			sibling: []string{
-				filepath.Join("..", "operator", "charts", "virtfusion-operator-crds"),
-				filepath.Join("..", "..", "operator", "charts", "virtfusion-operator-crds"),
-			},
+			release: helmReleaseVirtFusionCRDs,
+			envKey:  config.EnvVirtFusionOperatorCRDsChart,
+			sibling: operatorChartSiblings(helmReleaseVirtFusionCRDs),
 			oci:     config.DefaultVirtFusionOperatorCRDsChartOCI,
 			version: crdChartVersion(config.DefaultVirtFusionOperatorChartVersion),
 		},
 		{
-			release: "solusvm-operator-crds",
-			envKey:  "SOLUSVM_OPERATOR_CRDS_CHART",
-			sibling: []string{
-				filepath.Join("..", "operator", "charts", "solusvm-operator-crds"),
-				filepath.Join("..", "..", "operator", "charts", "solusvm-operator-crds"),
-			},
+			release: helmReleaseSolusVMCRDs,
+			envKey:  config.EnvSolusVMOperatorCRDsChart,
+			sibling: operatorChartSiblings(helmReleaseSolusVMCRDs),
 			oci:     config.DefaultSolusVMOperatorCRDsChartOCI,
 			version: crdChartVersion(config.DefaultSolusVMOperatorChartVersion),
 		},
@@ -66,12 +58,12 @@ func hypervisorCRDCharts() []hypervisorCRDChart {
 // Liqo on the provider must serve both API groups.
 func localOperatorChartEnvs() []string {
 	return []string{
-		"PROXMOX_OPERATOR_CRDS_CHART",
-		"VIRTFUSION_OPERATOR_CRDS_CHART",
-		"SOLUSVM_OPERATOR_CRDS_CHART",
-		"PROXMOX_OPERATOR_CHART",
-		"VIRTFUSION_OPERATOR_CHART",
-		"SOLUSVM_OPERATOR_CHART",
+		config.EnvProxmoxOperatorCRDsChart,
+		config.EnvVirtFusionOperatorCRDsChart,
+		config.EnvSolusVMOperatorCRDsChart,
+		config.EnvProxmoxOperatorChart,
+		config.EnvVirtFusionOperatorChart,
+		config.EnvSolusVMOperatorChart,
 	}
 }
 
@@ -91,7 +83,7 @@ func localChartParentDirs() []string {
 	}
 	for _, key := range localOperatorChartEnvs() {
 		env := strings.TrimSpace(os.Getenv(key))
-		if env == "" || strings.HasPrefix(env, "oci://") {
+		if env == "" || isOCIRef(env) {
 			continue
 		}
 		if isLocalHelmChart(env) {
@@ -106,12 +98,12 @@ func localChartParentDirs() []string {
 }
 
 func isLocalHelmChart(path string) bool {
-	st, err := os.Stat(filepath.Join(path, "Chart.yaml"))
+	st, err := os.Stat(filepath.Join(path, helmChartFile))
 	return err == nil && !st.IsDir()
 }
 
 func resolveLocalCRDChart(c hypervisorCRDChart) string {
-	if env := strings.TrimSpace(os.Getenv(c.envKey)); env != "" && !strings.HasPrefix(env, "oci://") {
+	if env := strings.TrimSpace(os.Getenv(c.envKey)); env != "" && !isOCIRef(env) {
 		if isLocalHelmChart(env) {
 			return env
 		}
@@ -134,7 +126,7 @@ func resolveLocalCRDChart(c hypervisorCRDChart) string {
 }
 
 func resolveCRDChart(c hypervisorCRDChart) (chart string, version string) {
-	if env := strings.TrimSpace(os.Getenv(c.envKey)); env != "" && strings.HasPrefix(env, "oci://") {
+	if env := strings.TrimSpace(os.Getenv(c.envKey)); env != "" && isOCIRef(env) {
 		return env, c.version
 	}
 	if local := resolveLocalCRDChart(c); local != "" {
@@ -146,32 +138,173 @@ func resolveCRDChart(c hypervisorCRDChart) (chart string, version string) {
 	return c.oci, c.version
 }
 
-// EnsureHypervisorCRDs installs both Proxmox and VirtFusion CRD charts.
-// Mothership Liqo AllowList always includes both API groups; missing CRDs on a
+func appendOCIChartVersion(args []string, chart, version string) []string {
+	if isOCIRef(chart) && version != "" {
+		return append(args, helmFlagVersion, version)
+	}
+	return args
+}
+
+func helmCRDInstallArgs(c hypervisorCRDChart, kubeconfig string) []string {
+	chart, version := resolveCRDChart(c)
+	args := []string{
+		helmCmdUpgrade, helmFlagInstall, c.release, chart,
+		helmFlagNamespace, config.DefaultHypervisorCRDsHelmNamespace,
+		helmFlagCreateNamespace,
+	}
+	args = appendOCIChartVersion(args, chart, version)
+	return withKubeconfig(kubeconfig, args)
+}
+
+func helmCRDTemplateArgs(c hypervisorCRDChart) []string {
+	chart, version := resolveCRDChart(c)
+	args := []string{helmCmdTemplate, c.release, chart}
+	return appendOCIChartVersion(args, chart, version)
+}
+
+func isHelmCRDOwnershipConflict(err error, output []byte) bool {
+	if err == nil {
+		return false
+	}
+	msg := strings.ToLower(err.Error() + "\n" + string(output))
+	return strings.Contains(msg, helmCRDOwnershipMetadata) ||
+		strings.Contains(msg, helmCRDCannotImport)
+}
+
+func crdBareName(name string) string {
+	name = strings.TrimSpace(name)
+	if _, rest, ok := strings.Cut(name, kubeResourceNameSeparator); ok {
+		return rest
+	}
+	return name
+}
+
+func hypervisorCRDAPIGroups() []string {
+	return []string{
+		config.ProxmoxCRDAPIGroup,
+		config.VirtFusionCRDAPIGroup,
+		config.SolusVMCRDAPIGroup,
+	}
+}
+
+func isHypervisorCRDName(name string) bool {
+	name = crdBareName(name)
+	for _, group := range hypervisorCRDAPIGroups() {
+		if strings.HasSuffix(name, kubeAPIGroupSeparator+group) {
+			return true
+		}
+	}
+	return false
+}
+
+func parseHypervisorCRDNames(kubectlOutput string) []string {
+	var names []string
+	for _, name := range strings.Split(kubectlOutput, "\n") {
+		name = crdBareName(name)
+		if isHypervisorCRDName(name) {
+			names = append(names, name)
+		}
+	}
+	return names
+}
+
+func crdKeepAnnotationArgs(names []string, kubeconfig string) []string {
+	args := []string{kubectlCmdAnnotate, kubectlResourceCRD}
+	args = append(args, names...)
+	args = append(args, helmResourcePolicyAnnotation(), kubectlFlagOverwrite)
+	return withKubeconfig(kubeconfig, args)
+}
+
+func applyCRDChartManifests(ctx context.Context, kubeconfig string, c hypervisorCRDChart, logger Logger) error {
+	args := helmCRDTemplateArgs(c)
+	logger.Infof("Applying %s CRDs in place (existing Helm ownership)...", c.release)
+	template := exec.CommandContext(ctx, binHelm, args...)
+	var stdout, stderr bytes.Buffer
+	template.Stdout = &stdout
+	template.Stderr = &stderr
+	if err := template.Run(); err != nil {
+		return fmt.Errorf("helm template %s: %w\n%s", c.release, err, strings.TrimSpace(stderr.String()+"\n"+stdout.String()))
+	}
+	manifests := stdout.Bytes()
+	if len(bytes.TrimSpace(manifests)) == 0 {
+		return fmt.Errorf("helm template %s produced no manifests", c.release)
+	}
+	// Server-side apply with force-conflicts updates CRD schemas without
+	// taking Helm release ownership (Helm 3.16 has no --take-ownership).
+	applyArgs := withKubeconfig(kubeconfig, []string{
+		kubectlCmdApply, kubectlFlagServerSide, kubectlFlagForceConflicts,
+		kubectlFlagFilename, kubectlStdinFilename,
+	})
+	apply := exec.CommandContext(ctx, binKubectl, applyArgs...)
+	apply.Stdin = bytes.NewReader(manifests)
+	out, err := apply.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("kubectl apply %s CRDs: %w\n%s", c.release, err, strings.TrimSpace(string(out)))
+	}
+	return nil
+}
+
+func keepHypervisorCRDsFromHelmPrune(ctx context.Context, kubeconfig string, logger Logger) error {
+	if logger == nil {
+		logger = noopLogger{}
+	}
+	listArgs := withKubeconfig(kubeconfig, []string{
+		kubectlCmdGet, kubectlResourceCRD, helmFlagOutput, kubectlCRDNamesJSONPath,
+	})
+	out, err := cmdOutput(ctx, binKubectl, listArgs...)
+	if err != nil {
+		return fmt.Errorf("list CRDs: %w", err)
+	}
+	names := parseHypervisorCRDNames(string(out))
+	if len(names) == 0 {
+		return nil
+	}
+	logger.Info("Keeping hypervisor CRDs if the operator chart drops the CRD subchart...")
+	return runCmd(ctx, binKubectl, crdKeepAnnotationArgs(names, kubeconfig)...)
+}
+
+func helmCRDOCIHint(c hypervisorCRDChart, chart string) string {
+	if !isOCIRef(chart) {
+		return ""
+	}
+	return fmt.Sprintf("\nset %s to a local chart dir, or place %s next to %s / %s / %s",
+		c.envKey, c.release,
+		config.EnvVirtFusionOperatorChart, config.EnvProxmoxOperatorChart, config.EnvSolusVMOperatorChart)
+}
+
+func ensureOneCRDChart(ctx context.Context, kubeconfig string, c hypervisorCRDChart, logger Logger) error {
+	chart, _ := resolveCRDChart(c)
+	args := helmCRDInstallArgs(c, kubeconfig)
+	logger.Infof("Ensuring CRDs (%s) via Helm %s...", c.release, chart)
+	cmd := exec.CommandContext(ctx, binHelm, args...)
+	out, err := cmd.CombinedOutput()
+	if err == nil {
+		return nil
+	}
+	if isHelmCRDOwnershipConflict(err, out) {
+		logger.Warnf("CRDs for %s already owned by another Helm release; applying manifests in place", c.release)
+		if applyErr := applyCRDChartManifests(ctx, kubeconfig, c, logger); applyErr != nil {
+			return fmt.Errorf("adopt %s CRDs: %w", c.release, applyErr)
+		}
+		return nil
+	}
+	return fmt.Errorf("helm %s: %w\n%s%s", c.release, err, out, helmCRDOCIHint(c, chart))
+}
+
+// EnsureHypervisorCRDs installs the Proxmox, VirtFusion, and SolusVM CRD charts.
+// Mothership Liqo AllowList always includes those API groups; missing CRDs on a
 // provider stall custom-resource informers with "the server could not find the requested resource".
+//
+// Agents that installed CRDs as the operator chart subchart already own those
+// objects. Helm 3.16 cannot --take-ownership, so we apply the CRD chart in
+// place instead of failing the upgrade.
 func EnsureHypervisorCRDs(ctx context.Context, kubeconfig string, logger Logger) error {
+	if logger == nil {
+		logger = noopLogger{}
+	}
 	for _, c := range hypervisorCRDCharts() {
-		chart, version := resolveCRDChart(c)
-		args := []string{
-			"upgrade", "--install", c.release, chart,
-			"--namespace", "kube-system",
-			"--create-namespace",
-		}
-		if strings.HasPrefix(chart, "oci://") && version != "" {
-			args = append(args, "--version", version)
-		}
-		if kubeconfig != "" {
-			args = append(args, "--kubeconfig", kubeconfig)
-		}
-		logger.Infof("Ensuring CRDs (%s) via Helm %s...", c.release, chart)
-		cmd := exec.CommandContext(ctx, "helm", args...)
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			hint := ""
-			if strings.HasPrefix(chart, "oci://") {
-				hint = fmt.Sprintf("\nset %s to a local chart dir, or place %s next to VIRTFUSION_OPERATOR_CHART / PROXMOX_OPERATOR_CHART / SOLUSVM_OPERATOR_CHART", c.envKey, c.release)
-			}
-			return fmt.Errorf("helm %s: %w\n%s%s", c.release, err, string(out), hint)
+		if err := ensureOneCRDChart(ctx, kubeconfig, c, logger); err != nil {
+			return err
 		}
 	}
 	return nil

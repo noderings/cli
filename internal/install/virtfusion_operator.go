@@ -168,7 +168,7 @@ func (p *VirtFusionOperatorInstaller) Install(ctx context.Context) error {
 		}
 	}
 
-	repo := strings.TrimSpace(os.Getenv("VIRTFUSION_VNC_GATEWAY_IMAGE_REPOSITORY"))
+	repo := strings.TrimSpace(os.Getenv(config.EnvVirtFusionVNCGatewayImageRepository))
 	if err := EnsureRFBVNCGatewayImage(ctx, repo, p.config.VNCGatewayImageTag, p.logger); err != nil {
 		return err
 	}
@@ -228,7 +228,7 @@ func (p *VirtFusionOperatorInstaller) Install(ctx context.Context) error {
 	if v := strings.TrimSpace(os.Getenv("VIRTFUSION_EXPORTER_IMAGE_TAG")); v != "" {
 		args = append(args, "--set-string", fmt.Sprintf("prometheusExporter.image.tag=%s", v))
 	}
-	if v := strings.TrimSpace(os.Getenv("VIRTFUSION_VNC_GATEWAY_IMAGE_REPOSITORY")); v != "" {
+	if v := strings.TrimSpace(os.Getenv(config.EnvVirtFusionVNCGatewayImageRepository)); v != "" {
 		args = append(args, "--set-string", fmt.Sprintf("vncGateway.image.repository=%s", v))
 	}
 	if p.config.KubeconfigPath != "" {

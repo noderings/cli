@@ -103,4 +103,4 @@ TLS verification is off. No flag or env var is required.
 
 Registration checkpoints live under `~/.nr/`. Do not copy these directories between machines.
 
-Never commit tokens, kubeconfigs, or instances files to version control. If a token may have leaked, rotate it and re-run `nr cluster register --resume --reinstall-operator`.
+Never commit tokens, kubeconfigs, or instances files to version control. If a hypervisor token leaked, rotate it and re-run `nr cluster register --resume --reinstall-operator` with the new credentials (env or instances file). Chart-only upgrades use `nr cluster operator upgrade` and do not rewrite Secrets.
