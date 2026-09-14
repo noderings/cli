@@ -70,7 +70,7 @@ func init() {
 	clusterRegisterCmd.Flags().Bool("dry-run", false, "Show what would be executed without running")
 	clusterRegisterCmd.Flags().Bool("offline", false, "Skip fetching platform versions from the API (use local config pins)")
 	clusterRegisterCmd.Flags().Bool("skip-operator-install", false, "Skip hypervisor operator / vnc-gateway Helm install")
-	clusterRegisterCmd.Flags().Bool("reinstall-operator", false, "Re-run hypervisor operator Helm install even if that phase already succeeded (use with --resume)")
+	clusterRegisterCmd.Flags().Bool("reinstall-operator", false, "Re-run hypervisor operator Helm install even if that phase already succeeded (use with --resume). Reuses cluster Secrets unless hypervisor credentials are provided.")
 	clusterRegisterCmd.Flags().String("operator-chart", "", "Local path or OCI ref for the hypervisor operator chart (default: Harbor OCI or sibling checkout)")
 	clusterRegisterCmd.Flags().String("operator-chart-version", "", "Helm chart version when using OCI (default: "+config.DefaultProxmoxOperatorChartVersion+")")
 	clusterRegisterCmd.Flags().String("hypervisor-driver", "", "Required until the first agent in this organization is registered. After that, omit it or pass the same driver (proxmox, virtfusion, or solusvm).")
@@ -891,7 +891,7 @@ func handleResume(ctx context.Context, stateManager *state.Manager, apiClient *a
 		if err := runPostRegisterVerify(ctx, apiClient, log, installState.AgentID, registerOpts); err != nil {
 			return err
 		}
-		log.Info("Tip: re-run operator install with --resume --reinstall-operator")
+		log.Info("Tip: upgrade charts with 'nr cluster operator upgrade', or --resume --reinstall-operator")
 		return nil
 	}
 

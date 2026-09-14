@@ -169,6 +169,13 @@ const (
 	DefaultSolusVMOperatorHelmNamespace = "solusvm-system"
 	// SolusVMCRDAPIGroup is the API group registered by solusvm-operator CRDs.
 	SolusVMCRDAPIGroup = "vm.solusvm.com"
+	// DefaultHypervisorCRDsHelmNamespace is where standalone CRD charts are
+	// installed (cluster-scoped CRDs, not the operator runtime namespace).
+	DefaultHypervisorCRDsHelmNamespace = "kube-system"
+	// HelmResourcePolicyKey is the annotation Helm honors when a resource leaves a chart.
+	HelmResourcePolicyKey = "helm.sh/resource-policy"
+	// HelmResourcePolicyKeep tells Helm not to delete a resource removed from a chart.
+	HelmResourcePolicyKeep = "keep"
 
 	// Hypervisor driver identifiers for cluster register / verify.
 	HypervisorDriverProxmox    = "proxmox"
@@ -207,11 +214,31 @@ const (
 	EnvVNCGatewayNamespace = "VNC_GATEWAY_NAMESPACE"
 	EnvVNCGatewayImageTag  = "VNC_GATEWAY_IMAGE_TAG"
 	// Driver-specific tag overrides win over EnvVNCGatewayImageTag.
-	EnvProxmoxVNCGatewayImageTag    = "PROXMOX_VNC_GATEWAY_IMAGE_TAG"
-	EnvVirtFusionVNCGatewayImageTag = "VIRTFUSION_VNC_GATEWAY_IMAGE_TAG"
-	EnvSolusVMVNCGatewayImageTag    = "SOLUSVM_VNC_GATEWAY_IMAGE_TAG"
-	EnvSkipVNCGatewayImageLoad      = "SKIP_VNC_GATEWAY_IMAGE_LOAD"
-	EnvMimirServiceEndpoint         = "MIMIR_SERVICE_ENDPOINT"
+	EnvProxmoxVNCGatewayImageTag           = "PROXMOX_VNC_GATEWAY_IMAGE_TAG"
+	EnvVirtFusionVNCGatewayImageTag        = "VIRTFUSION_VNC_GATEWAY_IMAGE_TAG"
+	EnvSolusVMVNCGatewayImageTag           = "SOLUSVM_VNC_GATEWAY_IMAGE_TAG"
+	EnvProxmoxVNCGatewayImageRepository    = "PROXMOX_VNC_GATEWAY_IMAGE_REPOSITORY"
+	EnvVirtFusionVNCGatewayImageRepository = "VIRTFUSION_VNC_GATEWAY_IMAGE_REPOSITORY"
+	EnvSolusVMVNCGatewayImageRepository    = "SOLUSVM_VNC_GATEWAY_IMAGE_REPOSITORY"
+	EnvSkipVNCGatewayImageLoad             = "SKIP_VNC_GATEWAY_IMAGE_LOAD"
+	EnvOperatorImageRegistry               = "OPERATOR_IMAGE_REGISTRY"
+	EnvProxmoxOperatorImageTag             = "PROXMOX_OPERATOR_IMAGE_TAG"
+	EnvVirtFusionOperatorImageTag          = "VIRTFUSION_OPERATOR_IMAGE_TAG"
+	EnvSolusVMOperatorImageTag             = "SOLUSVM_OPERATOR_IMAGE_TAG"
+	EnvProxmoxOperatorImageRepository      = "PROXMOX_OPERATOR_IMAGE_REPOSITORY"
+	EnvVirtFusionOperatorImageRepository   = "VIRTFUSION_OPERATOR_IMAGE_REPOSITORY"
+	EnvSolusVMOperatorImageRepository      = "SOLUSVM_OPERATOR_IMAGE_REPOSITORY"
+	EnvProxmoxOperatorChart                = "PROXMOX_OPERATOR_CHART"
+	EnvVirtFusionOperatorChart             = "VIRTFUSION_OPERATOR_CHART"
+	EnvSolusVMOperatorChart                = "SOLUSVM_OPERATOR_CHART"
+	EnvProxmoxInstancesFile                = "PROXMOX_INSTANCES_FILE"
+	EnvVirtFusionInstancesFile             = "VIRTFUSION_INSTANCES_FILE"
+	EnvSolusVMInstancesFile                = "SOLUSVM_INSTANCES_FILE"
+	EnvProxmoxOperatorCRDsChart            = "PROXMOX_OPERATOR_CRDS_CHART"
+	EnvVirtFusionOperatorCRDsChart         = "VIRTFUSION_OPERATOR_CRDS_CHART"
+	EnvSolusVMOperatorCRDsChart            = "SOLUSVM_OPERATOR_CRDS_CHART"
+	EnvHypervisorOperatorCRDsChartVersion  = "HYPERVISOR_OPERATOR_CRDS_CHART_VERSION"
+	EnvMimirServiceEndpoint                = "MIMIR_SERVICE_ENDPOINT"
 	//nolint:gosec // G101: environment variable name, not a credential value
 	EnvMimirBearerToken = "MIMIR_BEARER_TOKEN"
 	EnvMimirTLSEnabled  = "MIMIR_TLS_ENABLED"

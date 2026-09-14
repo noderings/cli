@@ -3,6 +3,7 @@ package cli
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -66,6 +67,14 @@ func runOperatorInstallPhase(
 		return err
 	}
 	log.Infof("Operator chart: %s%s", opCfg.ChartPath, chartVersionSuffix(opCfg.ChartVersion))
+
+	done, err := completeOperatorInstallFromReuse(ctx, log, stateManager, kubeconfig, config.HypervisorDriverProxmox, opCfg.ChartPath, opCfg.ChartVersion, opts)
+	if err != nil {
+		return err
+	}
+	if done {
+		return nil
+	}
 
 	instancesFile := opts.proxmoxInstancesFile
 	if instancesFile == "" {
@@ -142,6 +151,14 @@ func runVirtFusionOperatorInstallPhase(
 	}
 	log.Infof("Operator chart: %s%s", opCfg.ChartPath, chartVersionSuffix(opCfg.ChartVersion))
 
+	done, err := completeOperatorInstallFromReuse(ctx, log, stateManager, kubeconfig, config.HypervisorDriverVirtFusion, opCfg.ChartPath, opCfg.ChartVersion, opts)
+	if err != nil {
+		return err
+	}
+	if done {
+		return nil
+	}
+
 	instancesFile := opts.virtfusionInstancesFile
 	if instancesFile == "" {
 		instancesFile = strings.TrimSpace(os.Getenv("VIRTFUSION_INSTANCES_FILE"))
@@ -214,6 +231,14 @@ func runSolusVMOperatorInstallPhase(
 	}
 	log.Infof("Operator chart: %s%s", opCfg.ChartPath, chartVersionSuffix(opCfg.ChartVersion))
 
+	done, err := completeOperatorInstallFromReuse(ctx, log, stateManager, kubeconfig, config.HypervisorDriverSolusVM, opCfg.ChartPath, opCfg.ChartVersion, opts)
+	if err != nil {
+		return err
+	}
+	if done {
+		return nil
+	}
+
 	instancesFile := opts.solusvmInstancesFile
 	if instancesFile == "" {
 		instancesFile = strings.TrimSpace(os.Getenv("SOLUSVM_INSTANCES_FILE"))
@@ -255,6 +280,97 @@ func chartVersionSuffix(version string) string {
 		return ""
 	}
 	return " @" + version
+}
+
+func completeOperatorInstallFromReuse(
+	ctx context.Context,
+	log *logger.Logger,
+	stateManager *state.Manager,
+	kubeconfig, driver, chart, version string,
+	opts clusterRegisterOpts,
+) (bool, error) {
+	if !opts.reinstallOperator {
+		return false, nil
+	}
+	reused, err := tryReuseOperatorSecrets(ctx, log, kubeconfig, driver, chart, version, opts)
+	if err != nil {
+		stateManager.SetError(state.PhaseOperatorInstall, err.Error(), true)
+		_ = stateManager.Save()
+		return false, err
+	}
+	if !reused {
+		return false, nil
+	}
+	stateManager.AddCheckpoint(state.PhaseOperatorInstall, state.CheckpointStatusSuccess, "")
+	log.Info("✓ Operator install complete")
+	return true, nil
+}
+
+func tryReuseOperatorSecrets(
+	ctx context.Context,
+	log *logger.Logger,
+	kubeconfig, driver, chart, version string,
+	opts clusterRegisterOpts,
+) (bool, error) {
+	provided, err := hypervisorCredsProvided(driver, opts)
+	if err != nil {
+		return false, err
+	}
+	if provided {
+		log.Info("Hypervisor credentials provided; rewriting operator Secrets")
+		return false, nil
+	}
+	existing, err := install.DetectReusableOperator(ctx, kubeconfig, driver)
+	if errors.Is(err, install.ErrNoReusableOperator) {
+		return false, nil
+	}
+	if err != nil {
+		return false, fmt.Errorf("detect operator release: %w", err)
+	}
+	log.Infof("Reusing %d existing hypervisor Secret(s); skipping credential prompt", len(existing.SecretNames))
+	u, err := install.NewOperatorUpgrade(driver, kubeconfig, chart, version)
+	if err != nil {
+		return false, err
+	}
+	if err := u.BindLiveRelease(existing.Release, existing.Namespace); err != nil {
+		return false, err
+	}
+	if err := install.UpgradeOperatorRelease(ctx, u, log); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func hypervisorCredsProvided(driver string, opts clusterRegisterOpts) (bool, error) {
+	switch {
+	case config.IsSolusVMHypervisor(driver):
+		if strings.TrimSpace(opts.solusvmInstancesFile) != "" || strings.TrimSpace(os.Getenv(config.EnvSolusVMInstancesFile)) != "" {
+			return true, nil
+		}
+		inst, err := install.SolusVMInstanceFromEnv()
+		if err != nil {
+			return false, err
+		}
+		return inst != nil, nil
+	case config.IsVirtFusionHypervisor(driver):
+		if strings.TrimSpace(opts.virtfusionInstancesFile) != "" || strings.TrimSpace(os.Getenv(config.EnvVirtFusionInstancesFile)) != "" {
+			return true, nil
+		}
+		inst, err := install.VirtFusionInstanceFromEnv()
+		if err != nil {
+			return false, err
+		}
+		return inst != nil, nil
+	default:
+		if strings.TrimSpace(opts.proxmoxInstancesFile) != "" || strings.TrimSpace(os.Getenv(config.EnvProxmoxInstancesFile)) != "" {
+			return true, nil
+		}
+		inst, err := install.ProxmoxInstanceFromEnv()
+		if err != nil {
+			return false, err
+		}
+		return inst != nil, nil
+	}
 }
 
 // resolveExistingAgent loads an agent by ID and returns its name. Optionally checks name/IP consistency.
