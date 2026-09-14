@@ -72,6 +72,14 @@ If registration is interrupted:
 nr cluster register --resume --name edge-ams-01 --org-id <org-uuid>
 ```
 
+Upgrade the operator later without re-entering hypervisor tokens:
+
+```bash
+nr cluster operator upgrade
+```
+
+`nr cluster register --resume --reinstall-operator` also reuses existing Secrets unless you pass credentials (that path is for rotating tokens).
+
 ## Common commands
 
 ```bash
@@ -79,6 +87,7 @@ nr auth status
 nr cluster status --name edge-ams-01
 nr cluster verify --name edge-ams-01
 nr cluster health --name edge-ams-01
+nr cluster operator upgrade
 nr cluster deregister --name edge-ams-01
 ```
 

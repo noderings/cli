@@ -47,6 +47,16 @@ nr cluster register --resume --name <same-name> --org-id <org-uuid>
 
 Checkpoints live under `~/.nr/`. Use `nr cluster status` and `nr cluster debug` for details.
 
+**Upgrade operator charts (no hypervisor tokens)**
+
+```bash
+nr cluster operator upgrade
+```
+
+Reuses Helm values and Kubernetes Secrets. Does not need `NR_API_TOKEN` or `--org-id`. To rotate hypervisor credentials, use `--resume --reinstall-operator` with env or an instances file.
+
+If CRDs were first installed as the operator chart subchart, upgrade applies the dedicated CRD charts in place (Helm 3.16 cannot take ownership) and keeps the CRDs when the operator subchart is disabled.
+
 **Post-register verification failed**
 
 ```bash

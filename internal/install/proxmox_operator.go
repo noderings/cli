@@ -26,6 +26,11 @@ const (
 	helmAlloyAgentID          = "alloy.agentId"
 	helmAlloyEnvFrom          = "alloy.alloy.envFrom"
 	helmVNCGatewayNamespace   = "vncGateway.namespace"
+	helmVNCGatewayImageTag    = "vncGateway.image.tag"
+	helmVNCGatewayImageRepo   = "vncGateway.image.repository"
+	helmImageRegistry         = "image.registry"
+	helmImageRepository       = "image.repository"
+	helmImageTag              = "image.tag"
 	helmVNCAllowRemoteClients = "vncGateway.networkPolicy.allowRemoteClients=true"
 	// CRDs are installed into kube-system by EnsureHypervisorCRDs so Liqo can
 	// watch both API groups. The operator chart subchart must not try to adopt them.
@@ -219,7 +224,7 @@ func (p *ProxmoxOperatorInstaller) Install(ctx context.Context) error {
 		"--set-string", fmt.Sprintf("%s=%s", helmVNCGatewayNamespace, p.config.VNCGatewayNamespace),
 		"--set", helmVNCAllowRemoteClients,
 		"--set", helmDisableCRDSubchart,
-		"--set-string", fmt.Sprintf("image.registry=%s", getenvDefault("OPERATOR_IMAGE_REGISTRY", config.DefaultHarborRegistry)),
+		"--set-string", fmt.Sprintf("%s=%s", helmImageRegistry, getenvDefault(config.EnvOperatorImageRegistry, config.DefaultHarborRegistry)),
 	}
 	if requireMimirToken {
 		args = append(args,
@@ -251,7 +256,7 @@ func (p *ProxmoxOperatorInstaller) Install(ctx context.Context) error {
 		if strings.EqualFold(p.config.VNCGatewayImageTag, config.DefaultVNCGatewayImageTagRFB) {
 			p.logger.Warn("Proxmox vnc-gateway tag is rfb; stock Harbor main is required for Proxmox ticket/readiness")
 		}
-		args = append(args, "--set-string", fmt.Sprintf("vncGateway.image.tag=%s", p.config.VNCGatewayImageTag))
+		args = append(args, "--set-string", fmt.Sprintf("%s=%s", helmVNCGatewayImageTag, p.config.VNCGatewayImageTag))
 	}
 	if p.config.VNCTLSServerName != "" {
 		args = append(args, "--set-string", fmt.Sprintf("vncGateway.proxmoxTLSServerName=%s", p.config.VNCTLSServerName))
@@ -261,11 +266,11 @@ func (p *ProxmoxOperatorInstaller) Install(ctx context.Context) error {
 	}
 	args = append(args, "--set", "proxmox.verifySSL=false")
 	args = append(args, "--set", "vncGateway.proxmoxInsecureSkipVerify=true")
-	if v := strings.TrimSpace(os.Getenv("PROXMOX_OPERATOR_IMAGE_REPOSITORY")); v != "" {
-		args = append(args, "--set-string", fmt.Sprintf("image.repository=%s", v))
+	if v := strings.TrimSpace(os.Getenv(config.EnvProxmoxOperatorImageRepository)); v != "" {
+		args = append(args, "--set-string", fmt.Sprintf("%s=%s", helmImageRepository, v))
 	}
-	if v := strings.TrimSpace(os.Getenv("PROXMOX_OPERATOR_IMAGE_TAG")); v != "" {
-		args = append(args, "--set-string", fmt.Sprintf("image.tag=%s", v))
+	if v := strings.TrimSpace(os.Getenv(config.EnvProxmoxOperatorImageTag)); v != "" {
+		args = append(args, "--set-string", fmt.Sprintf("%s=%s", helmImageTag, v))
 	}
 	if p.config.KubeconfigPath != "" {
 		args = append(args, "--kubeconfig", p.config.KubeconfigPath)
