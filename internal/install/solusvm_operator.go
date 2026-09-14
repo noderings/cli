@@ -167,7 +167,7 @@ func (p *SolusVMOperatorInstaller) Install(ctx context.Context) error {
 		}
 	}
 
-	repo := strings.TrimSpace(os.Getenv("SOLUSVM_VNC_GATEWAY_IMAGE_REPOSITORY"))
+	repo := strings.TrimSpace(os.Getenv(config.EnvSolusVMVNCGatewayImageRepository))
 	if err := EnsureRFBVNCGatewayImage(ctx, repo, p.config.VNCGatewayImageTag, p.logger); err != nil {
 		return err
 	}
@@ -226,7 +226,7 @@ func (p *SolusVMOperatorInstaller) Install(ctx context.Context) error {
 	if v := strings.TrimSpace(os.Getenv("SOLUSVM_EXPORTER_IMAGE_TAG")); v != "" {
 		args = append(args, "--set-string", fmt.Sprintf("prometheusExporter.image.tag=%s", v))
 	}
-	if v := strings.TrimSpace(os.Getenv("SOLUSVM_VNC_GATEWAY_IMAGE_REPOSITORY")); v != "" {
+	if v := strings.TrimSpace(os.Getenv(config.EnvSolusVMVNCGatewayImageRepository)); v != "" {
 		args = append(args, "--set-string", fmt.Sprintf("vncGateway.image.repository=%s", v))
 	}
 	if p.config.KubeconfigPath != "" {

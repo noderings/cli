@@ -26,6 +26,11 @@ const (
 	helmAlloyAgentID          = "alloy.agentId"
 	helmAlloyEnvFrom          = "alloy.alloy.envFrom"
 	helmVNCGatewayNamespace   = "vncGateway.namespace"
+	helmVNCGatewayImageTag    = "vncGateway.image.tag"
+	helmVNCGatewayImageRepo   = "vncGateway.image.repository"
+	helmImageRegistry         = "image.registry"
+	helmImageRepository       = "image.repository"
+	helmImageTag              = "image.tag"
 	helmVNCAllowRemoteClients = "vncGateway.networkPolicy.allowRemoteClients=true"
 	// CRDs are installed into kube-system by EnsureHypervisorCRDs so Liqo can
 	// watch both API groups. The operator chart subchart must not try to adopt them.
