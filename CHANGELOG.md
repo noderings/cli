@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.15] - 2026-09-16
+
 ### Changed
 
 - Pin `nr cluster register` / `nr cluster operator upgrade` operator charts to Proxmox, SolusVM, and VirtFusion `0.1.9` (hook provider Secret injection; new installs and upgrades only — existing agents stay until upgrade / `--reinstall-operator`). Harbor image tags are `v0.1.9`.
