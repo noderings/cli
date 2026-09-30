@@ -10,6 +10,8 @@ import (
 	"github.com/noderings/cli/internal/install"
 	"github.com/noderings/cli/internal/logger"
 	"github.com/noderings/cli/internal/state"
+
+	"github.com/spf13/cobra"
 )
 
 type clusterRegisterOpts struct {
@@ -20,6 +22,8 @@ type clusterRegisterOpts struct {
 	operatorChartPath         string
 	operatorChartVersion      string
 	hypervisorDriver          string
+	installPterodactyl        bool
+	command                   *cobra.Command
 	proxmoxInstancesFile      string
 	virtfusionInstancesFile   string
 	solusvmInstancesFile      string
@@ -174,9 +178,14 @@ func collectOffloadNamespaces(opts clusterRegisterOpts) []string {
 		out = append(out, ns)
 	}
 
-	// VNC first (production default). Operator is only included when explicitly set
-	// via --operator-namespace (normally offloaded from the remote cluster after inbound peering).
+	// VNC first (production default). The game console Service is offloaded the same
+	// way when --pterodactyl is set: local pterodactyl-system, remote {agentID}-pterodactyl-system.
+	// Operator is only included when explicitly set via --operator-namespace
+	// (normally offloaded from the remote cluster after inbound peering).
 	add(opts.vncGatewayNamespace)
+	if opts.installPterodactyl {
+		add(config.DefaultPterodactylOperatorHelmNamespace)
+	}
 	add(opts.operatorNamespace)
 	for _, ns := range opts.offloadNamespaces {
 		add(ns)
@@ -194,14 +203,17 @@ func parseHypervisorDriver(raw string) (string, error) {
 		return config.HypervisorDriverVirtFusion, nil
 	case config.HypervisorDriverSolusVM:
 		return config.HypervisorDriverSolusVM, nil
+	case "pterodactyl":
+		return "", UsageErrorf("unsupported --hypervisor-driver %q. Pass --pterodactyl for game servers. --hypervisor-driver is proxmox, virtfusion, or solusvm", raw)
 	default:
 		return "", UsageErrorf("unsupported --hypervisor-driver %q (want proxmox, virtfusion, or solusvm)", raw)
 	}
 }
 
 // resolveHypervisorDriver uses an explicit flag, then the org driver.
-// There is no proxmox default: an empty org with no flag is an error.
-func resolveHypervisorDriver(flagRaw string, flagChanged bool, orgDriver string) (string, error) {
+// allowUnset is for a Pterodactyl-only agent: no hypervisor until one is added later.
+// There is no proxmox default. An empty org with no flag is an error unless allowUnset.
+func resolveHypervisorDriver(flagRaw string, flagChanged bool, orgDriver string, allowUnset bool) (string, error) {
 	org := strings.TrimSpace(orgDriver)
 	if flagChanged {
 		parsed, err := parseHypervisorDriver(flagRaw)
@@ -222,7 +234,10 @@ func resolveHypervisorDriver(flagRaw string, flagChanged bool, orgDriver string)
 	if org != "" {
 		return parseHypervisorDriver(org)
 	}
-	return "", UsageErrorf("this organization has no hypervisor driver yet. Pass --hypervisor-driver (proxmox, virtfusion, or solusvm) when registering the first agent")
+	if allowUnset {
+		return "", nil
+	}
+	return "", UsageErrorf("this organization has no hypervisor driver yet. Pass --hypervisor-driver (proxmox, virtfusion, or solusvm), or --pterodactyl for game servers only")
 }
 
 func hypervisorDriverToAPI(driver string) *generated.V1PlatformDriver {
@@ -253,9 +268,13 @@ func validateRegisterHypervisorOpts(opts clusterRegisterOpts) error {
 		if pveFile != "" || svmFile != "" {
 			return UsageErrorf("--proxmox-instances-file and --solusvm-instances-file are not valid with --hypervisor-driver virtfusion (use --virtfusion-instances-file)")
 		}
-	case config.HypervisorDriverProxmox, "":
+	case config.HypervisorDriverProxmox:
 		if vfFile != "" || svmFile != "" {
 			return UsageErrorf("--virtfusion-instances-file and --solusvm-instances-file are not valid with --hypervisor-driver proxmox")
+		}
+	case "":
+		if pveFile != "" || vfFile != "" || svmFile != "" {
+			return UsageErrorf("hypervisor instance files need --hypervisor-driver (proxmox, virtfusion, or solusvm)")
 		}
 	}
 	return nil

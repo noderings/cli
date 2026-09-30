@@ -40,9 +40,10 @@ const (
 	helmCRDCannotImport      = "exists and cannot be imported"
 	helmChartFile            = "Chart.yaml"
 
-	helmReleaseProxmoxCRDs    = "proxmox-operator-crds"
-	helmReleaseVirtFusionCRDs = "virtfusion-operator-crds"
-	helmReleaseSolusVMCRDs    = "solusvm-operator-crds"
+	helmReleaseProxmoxCRDs     = "proxmox-operator-crds"
+	helmReleaseVirtFusionCRDs  = "virtfusion-operator-crds"
+	helmReleaseSolusVMCRDs     = "solusvm-operator-crds"
+	helmReleasePterodactylCRDs = "pterodactyl-operator-crds"
 
 	kubectlCmdApply       = "apply"
 	kubectlCmdAnnotate    = "annotate"

@@ -47,10 +47,10 @@ func collectOperatorInstallInputs(
 		if nonInteractive {
 			return fmt.Errorf("proxmox credentials required: set PROXMOX_* env, --proxmox-instances-file, or run interactively (without --yes)")
 		}
-		log.Info("Configure Proxmox API access for the operator (supports multiple instances)")
+		beginCredentialPrompt("Configure Proxmox API access for the operator (supports multiple instances)")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("proxmox-%d", i+1)
-			id, err := promptString("Proxmox instance ID (local to this agent, not the platform name)", defaultID)
+			id, err := promptString("Proxmox instance ID (use the same name you use in the NodeRings UI when defining the platform)", defaultID)
 			if err != nil {
 				return err
 			}
@@ -139,11 +139,11 @@ func collectVirtFusionOperatorInstallInputs(
 		if nonInteractive {
 			return fmt.Errorf("virtfusion credentials required: set VIRTFUSION_URL, VIRTFUSION_TOKEN, VIRTFUSION_USER_API_TOKEN, VIRTFUSION_USER_ID, VIRTFUSION_USER_NAME, --virtfusion-instances-file, or run interactively (without --yes)")
 		}
-		log.Info("Configure VirtFusion API access for the operator (supports multiple instances)")
 		log.Info("Create a normal VirtFusion client user (not an admin). Copy the numeric user ID. Log in as that user and generate a User API token under Account → API.")
+		beginCredentialPrompt("Configure VirtFusion API access for the operator (supports multiple instances)")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("vf-%d", i+1)
-			id, err := promptString("VirtFusion instance ID (local to this agent, not the platform name)", defaultID)
+			id, err := promptString("VirtFusion instance ID (use the same name you use in the NodeRings UI when defining the platform)", defaultID)
 			if err != nil {
 				return err
 			}
@@ -241,10 +241,10 @@ func collectSolusVMOperatorInstallInputs(
 		if nonInteractive {
 			return fmt.Errorf("solusvm credentials required: set SOLUSVM_URL and SOLUSVM_TOKEN, --solusvm-instances-file, or run interactively (without --yes)")
 		}
-		log.Info("Configure SolusVM 2 API access for the operator (supports multiple instances)")
+		beginCredentialPrompt("Configure SolusVM 2 API access for the operator (supports multiple instances)")
 		for i := 0; ; i++ {
 			defaultID := fmt.Sprintf("svm-%d", i+1)
-			id, err := promptString("SolusVM instance ID (local to this agent, not the platform name)", defaultID)
+			id, err := promptString("SolusVM instance ID (use the same name you use in the NodeRings UI when defining the platform)", defaultID)
 			if err != nil {
 				return err
 			}
