@@ -42,6 +42,15 @@ func runInboundPeeringPhase(
 		log.Warnf("Failed to save state: %v", err)
 	}
 
+	// The mothership virtual-kubelet starts as soon as this kubeconfig is uploaded.
+	// CRDs and Liqo roles have to exist on this cluster before that.
+	log.Info("Ensuring game catalog reflection on this cluster...")
+	if err := liqoManager.PrepareGameCatalogReflection(ctx); err != nil {
+		stateManager.SetError(state.PhaseInboundPeering, err.Error(), true)
+		_ = stateManager.Save()
+		return fmt.Errorf("prepare game catalog reflection: %w", err)
+	}
+
 	detectedRemoteClusterID, detectErr := liqoManager.GetPeeredClusterID(ctx)
 	neoClusterID, err := resolveRemoteClusterID(log, opts, detectedRemoteClusterID, detectErr)
 	if err != nil {

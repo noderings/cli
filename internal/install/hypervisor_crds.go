@@ -50,6 +50,13 @@ func hypervisorCRDCharts() []hypervisorCRDChart {
 			oci:     config.DefaultSolusVMOperatorCRDsChartOCI,
 			version: crdChartVersion(config.DefaultSolusVMOperatorChartVersion),
 		},
+		{
+			release: helmReleasePterodactylCRDs,
+			envKey:  config.EnvPterodactylOperatorCRDsChart,
+			sibling: operatorChartSiblings(helmReleasePterodactylCRDs),
+			oci:     config.DefaultPterodactylOperatorCRDsChartOCI,
+			version: crdChartVersion(config.DefaultPterodactylOperatorChartVersion),
+		},
 	}
 }
 
@@ -61,9 +68,11 @@ func localOperatorChartEnvs() []string {
 		config.EnvProxmoxOperatorCRDsChart,
 		config.EnvVirtFusionOperatorCRDsChart,
 		config.EnvSolusVMOperatorCRDsChart,
+		config.EnvPterodactylOperatorCRDsChart,
 		config.EnvProxmoxOperatorChart,
 		config.EnvVirtFusionOperatorChart,
 		config.EnvSolusVMOperatorChart,
+		config.EnvPterodactylOperatorChart,
 	}
 }
 
@@ -184,6 +193,7 @@ func hypervisorCRDAPIGroups() []string {
 		config.ProxmoxCRDAPIGroup,
 		config.VirtFusionCRDAPIGroup,
 		config.SolusVMCRDAPIGroup,
+		config.PterodactylCRDAPIGroup,
 	}
 }
 
@@ -267,9 +277,9 @@ func helmCRDOCIHint(c hypervisorCRDChart, chart string) string {
 	if !isOCIRef(chart) {
 		return ""
 	}
-	return fmt.Sprintf("\nset %s to a local chart dir, or place %s next to %s / %s / %s",
+	return fmt.Sprintf("\nset %s to a local chart dir, or place %s next to %s / %s / %s / %s",
 		c.envKey, c.release,
-		config.EnvVirtFusionOperatorChart, config.EnvProxmoxOperatorChart, config.EnvSolusVMOperatorChart)
+		config.EnvVirtFusionOperatorChart, config.EnvProxmoxOperatorChart, config.EnvSolusVMOperatorChart, config.EnvPterodactylOperatorChart)
 }
 
 func ensureOneCRDChart(ctx context.Context, kubeconfig string, c hypervisorCRDChart, logger Logger) error {
@@ -291,7 +301,7 @@ func ensureOneCRDChart(ctx context.Context, kubeconfig string, c hypervisorCRDCh
 	return fmt.Errorf("helm %s: %w\n%s%s", c.release, err, out, helmCRDOCIHint(c, chart))
 }
 
-// EnsureHypervisorCRDs installs the Proxmox, VirtFusion, and SolusVM CRD charts.
+// EnsureHypervisorCRDs installs the Proxmox, VirtFusion, SolusVM, and Pterodactyl CRD charts.
 // Mothership Liqo AllowList always includes those API groups; missing CRDs on a
 // provider stall custom-resource informers with "the server could not find the requested resource".
 //
@@ -308,4 +318,10 @@ func EnsureHypervisorCRDs(ctx context.Context, kubeconfig string, logger Logger)
 		}
 	}
 	return nil
+}
+
+// AnnotateOperatorCRDsKeep marks operator CRDs so a later chart upgrade with
+// crds.enabled=false does not delete them.
+func AnnotateOperatorCRDsKeep(ctx context.Context, kubeconfig string, logger Logger) error {
+	return keepHypervisorCRDsFromHelmPrune(ctx, kubeconfig, logger)
 }

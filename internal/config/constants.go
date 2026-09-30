@@ -169,6 +169,13 @@ const (
 	DefaultSolusVMOperatorHelmNamespace = "solusvm-system"
 	// SolusVMCRDAPIGroup is the API group registered by solusvm-operator CRDs.
 	SolusVMCRDAPIGroup = "vm.solusvm.com"
+
+	// Pterodactyl is a second release on the agent, not a hypervisor driver.
+	DefaultPterodactylOperatorChartOCI      = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/pterodactyl-operator"
+	DefaultPterodactylOperatorCRDsChartOCI  = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/pterodactyl-operator-crds"
+	DefaultPterodactylOperatorChartVersion  = "0.1.0"
+	DefaultPterodactylOperatorHelmNamespace = "pterodactyl-system"
+	PterodactylCRDAPIGroup                  = "gs.pterodactyl.com"
 	// DefaultHypervisorCRDsHelmNamespace is where standalone CRD charts are
 	// installed (cluster-scoped CRDs, not the operator runtime namespace).
 	DefaultHypervisorCRDsHelmNamespace = "kube-system"
@@ -237,6 +244,8 @@ const (
 	EnvProxmoxOperatorCRDsChart            = "PROXMOX_OPERATOR_CRDS_CHART"
 	EnvVirtFusionOperatorCRDsChart         = "VIRTFUSION_OPERATOR_CRDS_CHART"
 	EnvSolusVMOperatorCRDsChart            = "SOLUSVM_OPERATOR_CRDS_CHART"
+	EnvPterodactylOperatorChart            = "PTERODACTYL_OPERATOR_CHART"
+	EnvPterodactylOperatorCRDsChart        = "PTERODACTYL_OPERATOR_CRDS_CHART"
 	EnvHypervisorOperatorCRDsChartVersion  = "HYPERVISOR_OPERATOR_CRDS_CHART_VERSION"
 	EnvMimirServiceEndpoint                = "MIMIR_SERVICE_ENDPOINT"
 	//nolint:gosec // G101: environment variable name, not a credential value

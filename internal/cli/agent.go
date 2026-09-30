@@ -329,6 +329,7 @@ func runAgentCreate(cmd *cobra.Command, args []string) error {
 		hypervisorDriverRaw,
 		cmd.Flags().Changed("hypervisor-driver"),
 		orgDriver,
+		!cmd.Flags().Changed("hypervisor-driver"),
 	)
 	if err != nil {
 		return err

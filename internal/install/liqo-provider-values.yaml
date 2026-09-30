@@ -136,8 +136,25 @@ offloading:
         resource: solusvmvncrequests
         workers: 2
         type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylservers
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylactions
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylgamecatalogs
+        workers: 2
+        type: AllowList
     skip:
       annotations:
+        - kopf.zalando.org/last-handled-configuration
         - virtfusion-operator.kopf.dev/last-handled-configuration
         - solusvm-operator.kopf.dev/last-handled-configuration
         - proxmox-operator.kopf.dev/last-handled-configuration
+        - pterodactyl-operator.kopf.dev/last-handled-configuration

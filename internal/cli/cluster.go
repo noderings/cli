@@ -73,7 +73,13 @@ func init() {
 	clusterRegisterCmd.Flags().Bool("reinstall-operator", false, "Re-run hypervisor operator Helm install even if that phase already succeeded (use with --resume). Reuses cluster Secrets unless hypervisor credentials are provided.")
 	clusterRegisterCmd.Flags().String("operator-chart", "", "Local path or OCI ref for the hypervisor operator chart (default: Harbor OCI or sibling checkout)")
 	clusterRegisterCmd.Flags().String("operator-chart-version", "", "Helm chart version when using OCI (default: "+config.DefaultProxmoxOperatorChartVersion+")")
-	clusterRegisterCmd.Flags().String("hypervisor-driver", "", "Required until the first agent in this organization is registered. After that, omit it or pass the same driver (proxmox, virtfusion, or solusvm).")
+	clusterRegisterCmd.Flags().String("hypervisor-driver", "", "Hypervisor for this agent: proxmox, virtfusion, or solusvm. Omit it with --pterodactyl to install game servers only. One hypervisor per organization.")
+	clusterRegisterCmd.Flags().Bool("pterodactyl", false, "Install the game server operator. Does not set a hypervisor. Combine with --hypervisor-driver to install both. Panel URL, keys, and user id are prompted unless set with flags or PTERODACTYL_* env.")
+	clusterRegisterCmd.Flags().String("panel-url", "", "Panel origin with no /admin, used with --pterodactyl (prompted, or PTERODACTYL_PANEL_URL)")
+	clusterRegisterCmd.Flags().String("application-key-file", "", "File containing the ptla_ application key (prompted, or PTERODACTYL_APPLICATION_KEY / PTERODACTYL_APPLICATION_KEY_FILE)")
+	clusterRegisterCmd.Flags().String("client-key-file", "", "File containing the ptlc_ client key (prompted, or PTERODACTYL_CLIENT_KEY / PTERODACTYL_CLIENT_KEY_FILE)")
+	clusterRegisterCmd.Flags().String("panel-user-id", "", "Panel user id that owns NodeRings servers (prompted, or PTERODACTYL_PANEL_USER_ID)")
+	clusterRegisterCmd.Flags().String("pterodactyl-chart", "", "Local chart path or OCI reference for the Pterodactyl operator")
 	clusterRegisterCmd.Flags().String("proxmox-instances-file", "", "YAML file with proxmox.instances list (or PROXMOX_INSTANCES_FILE)")
 	clusterRegisterCmd.Flags().String("virtfusion-instances-file", "", "YAML file with virtfusion.instances list (or VIRTFUSION_INSTANCES_FILE)")
 	clusterRegisterCmd.Flags().String("solusvm-instances-file", "", "YAML file with solusvm.instances list (or SOLUSVM_INSTANCES_FILE)")
@@ -148,10 +154,12 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	}
 
 	orgDriver := fetchOrganizationHypervisorDriver(ctx, apiClient)
+	installPterodactyl, _ := cmd.Flags().GetBool("pterodactyl")
 	hypervisorDriver, err := resolveHypervisorDriver(
 		hypervisorDriverRaw,
 		cmd.Flags().Changed("hypervisor-driver"),
 		orgDriver,
+		installPterodactyl && !cmd.Flags().Changed("hypervisor-driver"),
 	)
 	if err != nil {
 		return err
@@ -169,6 +177,8 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		operatorChartPath:         operatorChartPath,
 		operatorChartVersion:      operatorChartVersion,
 		hypervisorDriver:          hypervisorDriver,
+		installPterodactyl:        installPterodactyl,
+		command:                   cmd,
 		proxmoxInstancesFile:      proxmoxInstancesFile,
 		virtfusionInstancesFile:   virtfusionInstancesFile,
 		solusvmInstancesFile:      solusvmInstancesFile,
@@ -188,6 +198,15 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 
 	if err := validateRegisterHypervisorOpts(registerOpts); err != nil {
 		return err
+	}
+	if installPterodactyl {
+		if yes {
+			if _, err := loadPterodactylInstall(cmd, "pterodactyl-chart", true); err != nil {
+				return err
+			}
+		} else if err := preflightPterodactylInstall(cmd); err != nil {
+			return err
+		}
 	}
 
 	if err := applyDevRegisterProfile(cfg, devMode); err != nil {
@@ -273,7 +292,7 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 
 	// Handle resume
 	if resume {
-		return handleResume(ctx, stateManager, apiClient, log, configDir, skipPrechecks, dryRun, offline, cfg, registerOpts)
+		return handleResume(cmd, ctx, stateManager, apiClient, log, configDir, skipPrechecks, dryRun, offline, cfg, registerOpts)
 	}
 
 	// Handle dry-run
@@ -284,10 +303,13 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		if namespaces := collectOffloadNamespaces(registerOpts); len(namespaces) > 0 {
 			log.Infof("Would offload namespaces: %v", namespaces)
 		}
-		if registerOpts.skipOperatorInstall {
-			log.Infof("Would skip %s install", operatorHelmName(registerOpts.hypervisorDriver))
+		if registerOpts.hypervisorDriver == "" || registerOpts.skipOperatorInstall {
+			log.Info("Would skip the hypervisor operator")
 		} else {
 			log.Infof("Would install %s / vnc-gateway", operatorHelmName(registerOpts.hypervisorDriver))
+		}
+		if registerOpts.installPterodactyl {
+			log.Info("Would install the Pterodactyl operator")
 		}
 		log.Info("Would verify provider health (subsections scoped to register flags)")
 		return nil
@@ -530,8 +552,11 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// Step 9: Install hypervisor operator + vnc-gateway
+	// Step 9: Install hypervisor operator + vnc-gateway, then the game server operator when requested.
 	if err := runOperatorInstallPhase(ctx, apiClient, log, stateManager, agentID, registerOpts); err != nil {
+		return err
+	}
+	if err := ensurePterodactylRelease(cmd, registerOpts); err != nil {
 		return err
 	}
 
@@ -769,7 +794,7 @@ func createAgent(ctx context.Context, apiClient *api.Client, name, agentIP, gate
 func persistAgentHypervisorDriver(ctx context.Context, apiClient *api.Client, agentID, hypervisorDriver string) error {
 	apiDriver := hypervisorDriverToAPI(hypervisorDriver)
 	if apiDriver == nil {
-		return fmt.Errorf("hypervisor driver is required to register an agent")
+		return nil
 	}
 	genClient := apiClient.GetGeneratedClient()
 	resp, err := apiClient.DoWithAutoRefresh(ctx, 3, func() (*http.Response, error) {
@@ -836,7 +861,7 @@ func preparePlatformVersions(
 }
 
 // handleResume resumes a failed installation
-func handleResume(ctx context.Context, stateManager *state.Manager, apiClient *api.Client, log *logger.Logger, configDir string, skipPrechecks, dryRun, offline bool, cfg *config.Config, registerOpts clusterRegisterOpts) error {
+func handleResume(cmd *cobra.Command, ctx context.Context, stateManager *state.Manager, apiClient *api.Client, log *logger.Logger, configDir string, skipPrechecks, dryRun, offline bool, cfg *config.Config, registerOpts clusterRegisterOpts) error {
 	installState := stateManager.GetState()
 
 	if installState.AgentID == "" {
@@ -888,6 +913,9 @@ func handleResume(ctx context.Context, stateManager *state.Manager, apiClient *a
 
 	if installState.Phase == state.PhaseComplete && !operatorInstallPending {
 		log.Info("Installation already complete; verifying provider health...")
+		if err := ensurePterodactylRelease(cmd, registerOpts); err != nil {
+			return err
+		}
 		if err := runPostRegisterVerify(ctx, apiClient, log, installState.AgentID, registerOpts); err != nil {
 			return err
 		}
@@ -933,6 +961,9 @@ func handleResume(ctx context.Context, stateManager *state.Manager, apiClient *a
 			return resumeFromOperatorInstall(ctx, stateManager, apiClient, log, registerOpts)
 		case state.PhaseOperatorInstall:
 			log.Info("Operator install already completed; verifying before marking complete...")
+			if err := ensurePterodactylRelease(cmd, registerOpts); err != nil {
+				return err
+			}
 			if err := runPostRegisterVerify(ctx, apiClient, log, installState.AgentID, registerOpts); err != nil {
 				return err
 			}
@@ -1221,6 +1252,9 @@ func resumeFromInboundPeering(ctx context.Context, stateManager *state.Manager, 
 
 func resumeFromOperatorInstall(ctx context.Context, stateManager *state.Manager, apiClient *api.Client, log *logger.Logger, registerOpts clusterRegisterOpts) error {
 	if err := runOperatorInstallPhase(ctx, apiClient, log, stateManager, stateManager.GetAgentID(), registerOpts); err != nil {
+		return err
+	}
+	if err := ensurePterodactylRelease(registerOpts.command, registerOpts); err != nil {
 		return err
 	}
 	if err := runPostRegisterVerify(ctx, apiClient, log, stateManager.GetAgentID(), registerOpts); err != nil {
