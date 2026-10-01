@@ -49,6 +49,30 @@ func TestPterodactylHelmArgsDisablesCRDSubchart(t *testing.T) {
 	}
 }
 
+func TestPterodactylHelmArgsSetsAlloy(t *testing.T) {
+	args := pterodactylHelmArgs(pterodactylInstall{
+		Chart:           "oci://example.invalid/pterodactyl-operator",
+		Namespace:       "pterodactyl-system",
+		PanelURL:        "https://panel.example.com",
+		SecretName:      "operator-pterodactyl-operator-panel-credentials",
+		AgentID:         "f93ae364-c92a-4501-ac20-c4564ffb86f7",
+		MimirEndpoint:   "metrics.noderings.com",
+		MimirTLS:        true,
+		MimirSecretName: "mimir-credentials",
+	}, "/tmp/kubeconfig")
+	joined := strings.Join(args, " ")
+	for _, want := range []string{
+		"alloy.mimir.serviceEndpoint=metrics.noderings.com",
+		"alloy.mimir.tls.enabled=true",
+		"alloy.mimir.secretName=mimir-credentials",
+		"alloy.agentId=f93ae364-c92a-4501-ac20-c4564ffb86f7",
+	} {
+		if !strings.Contains(joined, want) {
+			t.Fatalf("missing %s in %s", want, joined)
+		}
+	}
+}
+
 func TestInstallPterodactylRejectsMissingURL(t *testing.T) {
 	clearPterodactylEnv(t)
 	_, err := loadPterodactylInstall(newPterodactylCmd("", "", "", "1"), "operator-chart", true)

@@ -12,10 +12,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 
 	"github.com/noderings/cli/internal/config"
 	nrinstall "github.com/noderings/cli/internal/install"
+	"github.com/noderings/cli/internal/logger"
 )
 
 // errPterodactylCredentialsRequired is returned when panel settings are still
@@ -37,17 +39,22 @@ It does not set --hypervisor-driver. The panel URL, application key, client key,
 	cmd.Flags().String("client-key-file", "", "File containing the ptlc_ client key (prompted, or PTERODACTYL_CLIENT_KEY / PTERODACTYL_CLIENT_KEY_FILE)")
 	cmd.Flags().String("panel-user-id", "", "Panel user id that owns NodeRings servers (prompted, or PTERODACTYL_PANEL_USER_ID)")
 	cmd.Flags().String("operator-chart", "", "Local chart path or OCI reference")
+	cmd.Flags().String("agent-id", "", "Agent UUID stamped on Pterodactyl metrics")
 	clusterCmd.AddCommand(cmd)
 }
 
 type pterodactylInstall struct {
-	PanelURL       string
-	ApplicationKey string
-	ClientKey      string
-	PanelUserID    string
-	Chart          string
-	Namespace      string
-	SecretName     string
+	PanelURL        string
+	ApplicationKey  string
+	ClientKey       string
+	PanelUserID     string
+	Chart           string
+	Namespace       string
+	SecretName      string
+	AgentID         string
+	MimirEndpoint   string
+	MimirTLS        bool
+	MimirSecretName string
 }
 
 func loadPterodactylInstall(cmd *cobra.Command, chartFlag string, nonInteractive bool) (pterodactylInstall, error) {
@@ -198,16 +205,22 @@ func runInstallPterodactyl(cmd *cobra.Command, _ []string) error {
 	if err != nil {
 		return err
 	}
+	agentID, _ := cmd.Flags().GetString("agent-id")
+	install.AgentID = strings.TrimSpace(agentID)
 	return applyPterodactylRelease(cmd, install)
 }
 
-func ensurePterodactylRelease(cmd *cobra.Command, opts clusterRegisterOpts) error {
+func ensurePterodactylRelease(cmd *cobra.Command, opts clusterRegisterOpts, agentID string) error {
 	if !opts.installPterodactyl {
 		return nil
 	}
 	install, err := loadPterodactylInstall(cmd, "pterodactyl-chart", opts.yes)
 	if err != nil {
 		return err
+	}
+	install.AgentID = strings.TrimSpace(agentID)
+	if install.AgentID == "" {
+		install.AgentID = strings.TrimSpace(opts.agentID)
 	}
 	return applyPterodactylRelease(cmd, install)
 }
@@ -227,6 +240,9 @@ func applyPterodactylRelease(cmd *cobra.Command, install pterodactylInstall) err
 		return fmt.Errorf("could not find a readable kubeconfig (tried KUBECONFIG, ~/.nr/k3s.kubeconfig, ~/.kube/config, and /etc/rancher/k3s/k3s.yaml)")
 	}
 	if err := applyPanelSecret(ctx, install, kubeconfig); err != nil {
+		return err
+	}
+	if err := configurePterodactylMetrics(ctx, cmd, &install, kubeconfig); err != nil {
 		return err
 	}
 	// CRDs are installed on their own before peering so the virtual-kubelet can
@@ -249,16 +265,145 @@ func applyPterodactylRelease(cmd *cobra.Command, install pterodactylInstall) err
 }
 
 func pterodactylHelmArgs(install pterodactylInstall, kubeconfig string) []string {
-	return []string{
+	args := []string{
 		"upgrade", "--install", "operator", install.Chart,
 		"--namespace", install.Namespace,
 		"--create-namespace",
 		"--set", "crds.enabled=false",
 		"--set-string", "panel.url=" + install.PanelURL,
 		"--set-string", "panel.existingSecret=" + install.SecretName,
-		"--wait", "--timeout", "180s",
-		"--kubeconfig", kubeconfig,
 	}
+	if install.MimirEndpoint != "" {
+		args = append(args,
+			"--set-string", "alloy.mimir.serviceEndpoint="+install.MimirEndpoint,
+			"--set", fmt.Sprintf("alloy.mimir.tls.enabled=%t", install.MimirTLS),
+		)
+		if install.MimirSecretName != "" {
+			args = append(args,
+				"--set", "alloy.mimir.secretName="+install.MimirSecretName,
+				"--set-json", fmt.Sprintf(`alloy.alloy.envFrom=[{"secretRef":{"name":"%s"}}]`, install.MimirSecretName),
+			)
+		} else {
+			args = append(args, "--set", "alloy.mimir.secretName=")
+		}
+		if install.AgentID != "" {
+			args = append(args, "--set-string", "alloy.agentId="+install.AgentID)
+		}
+	}
+	args = append(args, "--wait", "--timeout", "180s", "--kubeconfig", kubeconfig)
+	return args
+}
+
+func configurePterodactylMetrics(ctx context.Context, cmd *cobra.Command, install *pterodactylInstall, kubeconfig string) error {
+	if install.AgentID != "" {
+		if _, err := uuid.Parse(install.AgentID); err != nil {
+			return fmt.Errorf("invalid agent ID for alloy.agentId: %w", err)
+		}
+	}
+	endpoint := strings.TrimSpace(os.Getenv(config.EnvMimirServiceEndpoint))
+	if endpoint == "" {
+		endpoint = config.DefaultMimirServiceEndpoint
+	}
+	install.MimirEndpoint = endpoint
+	install.MimirTLS = pterodactylMimirTLS()
+	token := strings.TrimSpace(os.Getenv(config.EnvMimirBearerToken))
+	if token == "" {
+		token = existingMimirToken(ctx, kubeconfig)
+	}
+	if token == "" && install.AgentID != "" {
+		apiClient, err := getAuthenticatedAPIClient(cmd)
+		if err != nil {
+			if install.MimirTLS {
+				return fmt.Errorf("log in, or set %s, before installing Pterodactyl metrics: %w", config.EnvMimirBearerToken, err)
+			}
+		} else {
+			log, logErr := logger.NewLogger("info", "")
+			if logErr != nil {
+				return fmt.Errorf("logger: %w", logErr)
+			}
+			issued, issueErr := issueMetricsWriteCredential(ctx, apiClient, install.AgentID, log)
+			if issueErr != nil {
+				return fmt.Errorf("issue metrics write credential: %w", issueErr)
+			}
+			token = issued
+		}
+	}
+	if install.MimirTLS && token == "" {
+		return fmt.Errorf("%s is required for TLS remote_write (production)", config.EnvMimirBearerToken)
+	}
+	if token == "" {
+		return nil
+	}
+	install.MimirSecretName = config.DefaultMimirCredentialsSecret
+	return applyMimirSecret(ctx, install.Namespace, kubeconfig, token)
+}
+
+func pterodactylMimirTLS() bool {
+	value, set := os.LookupEnv(config.EnvMimirTLSEnabled)
+	if !set {
+		return true
+	}
+	switch strings.ToLower(strings.TrimSpace(value)) {
+	case "1", "true", "yes", "on":
+		return true
+	default:
+		return false
+	}
+}
+
+func existingMimirToken(ctx context.Context, kubeconfig string) string {
+	namespaces := []string{
+		config.DefaultProxmoxOperatorHelmNamespace,
+		config.DefaultVirtFusionOperatorHelmNamespace,
+		config.DefaultSolusVMOperatorHelmNamespace,
+		config.DefaultPterodactylOperatorHelmNamespace,
+	}
+	for _, ns := range namespaces {
+		cmd := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "get", "secret", config.DefaultMimirCredentialsSecret, "-n", ns, "-o", "jsonpath={.data.MIMIR_BEARER_TOKEN}")...)
+		out, err := cmd.Output()
+		if err != nil || len(bytesTrim(out)) == 0 {
+			continue
+		}
+		raw, err := base64.StdEncoding.DecodeString(strings.TrimSpace(string(out)))
+		if err != nil || len(raw) == 0 {
+			continue
+		}
+		return string(raw)
+	}
+	return ""
+}
+
+func bytesTrim(in []byte) string {
+	return strings.TrimSpace(string(in))
+}
+
+func applyMimirSecret(ctx context.Context, namespace, kubeconfig, token string) error {
+	ns := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "create", "namespace", namespace)...)
+	if out, err := ns.CombinedOutput(); err != nil && !strings.Contains(string(out), "AlreadyExists") {
+		return fmt.Errorf("create namespace: %w", err)
+	}
+	manifest := map[string]any{
+		"apiVersion": "v1",
+		"kind":       "Secret",
+		"metadata": map[string]string{
+			"name":      config.DefaultMimirCredentialsSecret,
+			"namespace": namespace,
+		},
+		"type": "Opaque",
+		"data": map[string]string{
+			config.EnvMimirBearerToken: base64.StdEncoding.EncodeToString([]byte(token)),
+		},
+	}
+	raw, err := json.Marshal(manifest)
+	if err != nil {
+		return fmt.Errorf("encode mimir secret: %w", err)
+	}
+	apply := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "apply", "-f", "-")...)
+	apply.Stdin = strings.NewReader(string(raw))
+	if out, err := apply.CombinedOutput(); err != nil {
+		return fmt.Errorf("write mimir secret: %s", strings.TrimSpace(string(out)))
+	}
+	return nil
 }
 
 func withKubeconfig(kubeconfig string, args ...string) []string {
