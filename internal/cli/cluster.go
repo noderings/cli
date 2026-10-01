@@ -556,7 +556,7 @@ func runClusterRegister(cmd *cobra.Command, args []string) error {
 	if err := runOperatorInstallPhase(ctx, apiClient, log, stateManager, agentID, registerOpts); err != nil {
 		return err
 	}
-	if err := ensurePterodactylRelease(cmd, registerOpts); err != nil {
+	if err := ensurePterodactylRelease(cmd, registerOpts, agentID); err != nil {
 		return err
 	}
 
@@ -913,7 +913,7 @@ func handleResume(cmd *cobra.Command, ctx context.Context, stateManager *state.M
 
 	if installState.Phase == state.PhaseComplete && !operatorInstallPending {
 		log.Info("Installation already complete; verifying provider health...")
-		if err := ensurePterodactylRelease(cmd, registerOpts); err != nil {
+		if err := ensurePterodactylRelease(cmd, registerOpts, installState.AgentID); err != nil {
 			return err
 		}
 		if err := runPostRegisterVerify(ctx, apiClient, log, installState.AgentID, registerOpts); err != nil {
@@ -961,7 +961,7 @@ func handleResume(cmd *cobra.Command, ctx context.Context, stateManager *state.M
 			return resumeFromOperatorInstall(ctx, stateManager, apiClient, log, registerOpts)
 		case state.PhaseOperatorInstall:
 			log.Info("Operator install already completed; verifying before marking complete...")
-			if err := ensurePterodactylRelease(cmd, registerOpts); err != nil {
+			if err := ensurePterodactylRelease(cmd, registerOpts, installState.AgentID); err != nil {
 				return err
 			}
 			if err := runPostRegisterVerify(ctx, apiClient, log, installState.AgentID, registerOpts); err != nil {
@@ -1254,7 +1254,7 @@ func resumeFromOperatorInstall(ctx context.Context, stateManager *state.Manager,
 	if err := runOperatorInstallPhase(ctx, apiClient, log, stateManager, stateManager.GetAgentID(), registerOpts); err != nil {
 		return err
 	}
-	if err := ensurePterodactylRelease(registerOpts.command, registerOpts); err != nil {
+	if err := ensurePterodactylRelease(registerOpts.command, registerOpts, stateManager.GetAgentID()); err != nil {
 		return err
 	}
 	if err := runPostRegisterVerify(ctx, apiClient, log, stateManager.GetAgentID(), registerOpts); err != nil {
