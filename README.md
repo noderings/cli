@@ -52,7 +52,7 @@ nr cluster register \
 
 `--org-id` is required (or set `NR_ORGANIZATION_ID`). It only sends `X-Organization-ID`. A missing or unauthorized token still fails; a token from another organization cannot register into this one.
 
-The CLI uses the organization hypervisor driver (`proxmox`, `virtfusion`, or `solusvm`). Pass `--hypervisor-driver` only to confirm it; a mismatch is rejected.
+The CLI uses the organization hypervisor driver (`proxmox`, `virtfusion`, or `solusvm`). Pass `--hypervisor-driver` only to confirm it; a mismatch is rejected. `pterodactyl` is not a hypervisor driver. After the agent is registered, `nr cluster install-pterodactyl` installs the game server operator beside it.
 
 `--agent-ip` must be an address assigned to a local interface on the VM (`ip -4 addr`). k3s uses it as `--node-ip`; a placeholder such as `1.1.1.1` fails preflight.
 

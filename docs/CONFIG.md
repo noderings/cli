@@ -99,6 +99,10 @@ TLS verification is off. No flag or env var is required.
 
 TLS verification is off. No flag or env var is required.
 
+### Pterodactyl (`nr cluster install-pterodactyl`)
+
+This is not a `--hypervisor-driver` value. Register the hypervisor agent first, then install the game server operator. The command asks for the panel URL, both keys, and the panel user id, and shows the keys as you type. Export `PTERODACTYL_APPLICATION_KEY` and `PTERODACTYL_CLIENT_KEY` to the keys themselves to skip those prompts. The keys are stored in a Secret on the agent and are not sent to NodeRings.
+
 ## State
 
 Registration checkpoints live under `~/.nr/`. Do not copy these directories between machines.
