@@ -111,6 +111,15 @@ func TestResolveCRDChartFallsBackToDefaultOCI(t *testing.T) {
 	if ver != config.DefaultSolusVMOperatorChartVersion {
 		t.Fatalf("solusvm version=%q", ver)
 	}
+
+	ptero := crdChartNamed(t, helmReleasePterodactylCRDs)
+	got, ver = resolveCRDChart(ptero)
+	if got != config.DefaultPterodactylOperatorCRDsChartOCI {
+		t.Fatalf("pterodactyl oci=%q", got)
+	}
+	if ver != config.DefaultPterodactylOperatorChartVersion {
+		t.Fatalf("pterodactyl version=%q", ver)
+	}
 }
 
 func TestIsHelmCRDOwnershipConflict(t *testing.T) {
@@ -139,6 +148,9 @@ func TestIsHypervisorCRDName(t *testing.T) {
 	}
 	if !isHypervisorCRDName("solusvmvms." + config.SolusVMCRDAPIGroup) {
 		t.Fatal("solusvm")
+	}
+	if !isHypervisorCRDName("pterodactylgamecatalogs." + config.PterodactylCRDAPIGroup) {
+		t.Fatal("pterodactyl")
 	}
 	if isHypervisorCRDName("connections.networking.liqo.io") {
 		t.Fatal("liqo must not be treated as a hypervisor CRD")

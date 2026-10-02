@@ -140,6 +140,25 @@ func TestCollectOffloadNamespaces(t *testing.T) {
 	if len(withOperator) != len(wantWithOp) {
 		t.Fatalf("got %v, want %v", withOperator, wantWithOp)
 	}
+	for i := range wantWithOp {
+		if withOperator[i] != wantWithOp[i] {
+			t.Fatalf("got %v, want %v", withOperator, wantWithOp)
+		}
+	}
+
+	withGame := collectOffloadNamespaces(clusterRegisterOpts{
+		vncGatewayNamespace: config.DefaultVNCGatewayNamespace,
+		installPterodactyl:  true,
+	})
+	wantGame := []string{config.DefaultVNCGatewayNamespace, config.DefaultPterodactylOperatorHelmNamespace}
+	if len(withGame) != len(wantGame) {
+		t.Fatalf("got %v, want %v", withGame, wantGame)
+	}
+	for i := range wantGame {
+		if withGame[i] != wantGame[i] {
+			t.Fatalf("got %v, want %v", withGame, wantGame)
+		}
+	}
 }
 
 func TestParseHypervisorDriver(t *testing.T) {
@@ -169,25 +188,46 @@ func TestParseHypervisorDriver(t *testing.T) {
 func TestResolveHypervisorDriver(t *testing.T) {
 	t.Parallel()
 
-	if _, err := resolveHypervisorDriver("", false, ""); err == nil {
+	if _, err := resolveHypervisorDriver("", false, "", false); err == nil {
 		t.Fatal("expected error when org has no driver")
 	} else if !strings.Contains(err.Error(), "--hypervisor-driver") {
 		t.Fatalf("empty-org error should mention --hypervisor-driver, got %v", err)
 	}
-	got, err := resolveHypervisorDriver("", false, config.HypervisorDriverVirtFusion)
+	got, err := resolveHypervisorDriver("", false, config.HypervisorDriverVirtFusion, false)
 	if err != nil || got != config.HypervisorDriverVirtFusion {
 		t.Fatalf("inherit org got %q err=%v", got, err)
 	}
-	got, err = resolveHypervisorDriver("solusvm", true, config.HypervisorDriverSolusVM)
+	got, err = resolveHypervisorDriver("solusvm", true, config.HypervisorDriverSolusVM, false)
 	if err != nil || got != config.HypervisorDriverSolusVM {
 		t.Fatalf("matching flag got %q err=%v", got, err)
 	}
-	if _, err := resolveHypervisorDriver("solusvm", true, config.HypervisorDriverVirtFusion); err == nil {
+	if _, err := resolveHypervisorDriver("solusvm", true, config.HypervisorDriverVirtFusion, false); err == nil {
 		t.Fatal("expected mismatch error")
 	}
-	got, err = resolveHypervisorDriver("virtfusion", true, "")
+	got, err = resolveHypervisorDriver("virtfusion", true, "", false)
 	if err != nil || got != config.HypervisorDriverVirtFusion {
 		t.Fatalf("explicit flag with empty org got %q err=%v", got, err)
+	}
+	got, err = resolveHypervisorDriver("", false, "", true)
+	if err != nil || got != "" {
+		t.Fatalf("pterodactyl-only got %q err=%v", got, err)
+	}
+	got, err = resolveHypervisorDriver("", false, config.HypervisorDriverProxmox, true)
+	if err != nil || got != config.HypervisorDriverProxmox {
+		t.Fatalf("pterodactyl on an existing hypervisor org got %q err=%v", got, err)
+	}
+}
+
+func TestConflictingHypervisorNamespace(t *testing.T) {
+	t.Parallel()
+	if err := conflictingHypervisorNamespace(nil, config.HypervisorDriverProxmox); err != nil {
+		t.Fatal(err)
+	}
+	if err := conflictingHypervisorNamespace([]string{config.DefaultProxmoxOperatorHelmNamespace}, config.HypervisorDriverProxmox); err != nil {
+		t.Fatal(err)
+	}
+	if err := conflictingHypervisorNamespace([]string{config.DefaultProxmoxOperatorHelmNamespace}, config.HypervisorDriverVirtFusion); err == nil {
+		t.Fatal("expected a second hypervisor to be rejected")
 	}
 }
 

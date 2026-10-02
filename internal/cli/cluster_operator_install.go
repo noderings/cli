@@ -26,6 +26,14 @@ func runOperatorInstallPhase(
 	agentID string,
 	opts clusterRegisterOpts,
 ) error {
+	if strings.TrimSpace(opts.hypervisorDriver) == "" {
+		log.Info("No hypervisor selected; skipping the hypervisor operator")
+		stateManager.AddCheckpoint(state.PhaseOperatorInstall, state.CheckpointStatusSuccess, "no hypervisor")
+		if err := stateManager.Save(); err != nil {
+			log.Warnf("Failed to save state: %v", err)
+		}
+		return nil
+	}
 	if opts.skipOperatorInstall {
 		log.Infof("Skipping %s install (--skip-operator-install)", operatorHelmName(opts.hypervisorDriver))
 		return nil

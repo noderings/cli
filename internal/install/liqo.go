@@ -73,7 +73,7 @@ func (l *LiqoManager) Install(ctx context.Context) error {
 	// Check if Liqo is already installed
 	if l.isInstalled(ctx) {
 		l.logger.Info("Liqo appears to be already installed, skipping installation")
-		return nil
+		return l.PrepareGameCatalogReflection(ctx)
 	}
 
 	// Execute liqoctl install k3s with proper flags
@@ -172,7 +172,7 @@ func (l *LiqoManager) Install(ctx context.Context) error {
 	}
 
 	l.logger.Info("✓ Liqo installed successfully")
-	return nil
+	return l.PrepareGameCatalogReflection(ctx)
 }
 
 // prepareLocalChart pulls the Harbor OCI chart (when configured) and returns an extracted chart path.
