@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.16] - 2026-10-03
+
+### Added
+
+- `nr cluster register --pterodactyl` installs the game server operator. Use it alone, or with `--hypervisor-driver`. The panel URL, application key, client key, and panel user id are prompted unless set with flags or `PTERODACTYL_*`. `nr cluster install-pterodactyl` adds it later. `nr cluster install-hypervisor` adds one hypervisor on an agent that was registered for game servers only.
+
 ## [1.0.15] - 2026-09-16
 
 ### Changed
