@@ -260,6 +260,9 @@ func applyPterodactylRelease(cmd *cobra.Command, install pterodactylInstall) err
 	if err := helm.Run(); err != nil {
 		return fmt.Errorf("install pterodactyl operator: %w", err)
 	}
+	if err := nrinstall.EnsurePterodactylLiqoRBAC(ctx, kubeconfig); err != nil {
+		return fmt.Errorf("update Liqo reflection RBAC: %w", err)
+	}
 	fmt.Fprintln(cmd.OutOrStdout(), "panel keys are stored only in the agent Secret")
 	return nil
 }
