@@ -151,6 +151,21 @@ offloading:
         resource: pterodactylgamecatalogs
         workers: 2
         type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylcontrols
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylnodes
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylwebsocketrequests
+        workers: 2
+        type: AllowList
     skip:
       annotations:
         - kopf.zalando.org/last-handled-configuration

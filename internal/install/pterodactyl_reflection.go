@@ -11,17 +11,30 @@ import (
 	"k8s.io/client-go/kubernetes"
 
 	"github.com/noderings/cli/internal/config"
+	"github.com/noderings/cli/internal/k8s"
 )
 
 const (
 	catalogAPIGroup = config.PterodactylCRDAPIGroup
-	catalogResource = "pterodactylgamecatalogs"
 	vkRoleLocal     = "liqo-virtual-kubelet-local"
 	vkRoleRemote    = "liqo-virtual-kubelet-remote"
 )
 
+// pterodactylReflectedResources is every gs.pterodactyl.com type the virtual
+// kubelet is told to reflect. A namespace reflector does not become ready
+// until each of those lists succeeds, so a missing rule stalls the game
+// catalog the same way it would stall a VirtFusion node.
+var pterodactylReflectedResources = []string{
+	"pterodactylservers",
+	"pterodactylactions",
+	"pterodactylgamecatalogs",
+	"pterodactylcontrols",
+	"pterodactylnodes",
+	"pterodactylwebsocketrequests",
+}
+
 // PrepareGameCatalogReflection installs the operator CRDs and the Liqo role
-// rules a new virtual-kubelet needs to reflect PterodactylGameCatalog.
+// rules a new virtual-kubelet needs to reflect Pterodactyl resources.
 // Already-installed Liqo does not re-apply its values, so this runs on every
 // install, including the skip path.
 func (l *LiqoManager) PrepareGameCatalogReflection(ctx context.Context) error {
@@ -32,6 +45,30 @@ func (l *LiqoManager) PrepareGameCatalogReflection(ctx context.Context) error {
 		return err
 	}
 	return ensureCatalogClusterRoles(ctx, l.k8sClient.GetClientset())
+}
+
+// EnsurePterodactylLiqoRBAC merges the Pterodactyl reflection rules into the
+// Liqo virtual-kubelet roles. A Proxmox agent that later runs install-pterodactyl
+// already has Liqo, and that command does not re-run liqoctl, so this is what
+// updates the roles. When Liqo is not installed yet the roles are absent and
+// the later register path adds them.
+func EnsurePterodactylLiqoRBAC(ctx context.Context, kubeconfig string) error {
+	client, err := k8s.NewClient(kubeconfig)
+	if err != nil {
+		return fmt.Errorf("kubernetes client: %w", err)
+	}
+	cs := client.GetClientset()
+	if cs == nil {
+		return fmt.Errorf("kubernetes client is not connected")
+	}
+	_, err = cs.RbacV1().ClusterRoles().Get(ctx, vkRoleLocal, metav1.GetOptions{})
+	if apierrors.IsNotFound(err) {
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("get ClusterRole %s: %w", vkRoleLocal, err)
+	}
+	return ensureCatalogClusterRoles(ctx, cs)
 }
 
 func ensureCatalogClusterRoles(ctx context.Context, cs kubernetes.Interface) error {
@@ -61,16 +98,26 @@ func ensureCatalogRole(ctx context.Context, cs kubernetes.Interface, name string
 }
 
 func localCatalogRules() []rbacv1.PolicyRule {
-	return []rbacv1.PolicyRule{
-		{APIGroups: []string{catalogAPIGroup}, Resources: []string{catalogResource}, Verbs: []string{"get", "list", "watch"}},
-		{APIGroups: []string{catalogAPIGroup}, Resources: []string{catalogResource + "/status"}, Verbs: []string{"get", "patch", "update"}},
+	rules := make([]rbacv1.PolicyRule, 0, len(pterodactylReflectedResources)*2)
+	for _, resource := range pterodactylReflectedResources {
+		rules = append(rules,
+			rbacv1.PolicyRule{APIGroups: []string{catalogAPIGroup}, Resources: []string{resource}, Verbs: []string{"get", "list", "watch"}},
+			rbacv1.PolicyRule{APIGroups: []string{catalogAPIGroup}, Resources: []string{resource + "/status"}, Verbs: []string{"get", "patch", "update"}},
+		)
 	}
+	return rules
 }
 
 func remoteCatalogRules() []rbacv1.PolicyRule {
-	return []rbacv1.PolicyRule{
-		{APIGroups: []string{catalogAPIGroup}, Resources: []string{catalogResource}, Verbs: []string{"create", "delete", "get", "list", "patch", "update", "watch"}},
+	rules := make([]rbacv1.PolicyRule, 0, len(pterodactylReflectedResources))
+	for _, resource := range pterodactylReflectedResources {
+		rules = append(rules, rbacv1.PolicyRule{
+			APIGroups: []string{catalogAPIGroup},
+			Resources: []string{resource},
+			Verbs:     []string{"create", "delete", "get", "list", "patch", "update", "watch"},
+		})
 	}
+	return rules
 }
 
 func mergeCatalogRules(have, want []rbacv1.PolicyRule) ([]rbacv1.PolicyRule, bool) {
