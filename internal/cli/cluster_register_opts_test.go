@@ -150,7 +150,7 @@ func TestCollectOffloadNamespaces(t *testing.T) {
 		vncGatewayNamespace: config.DefaultVNCGatewayNamespace,
 		installPterodactyl:  true,
 	})
-	wantGame := []string{config.DefaultVNCGatewayNamespace, config.DefaultPterodactylOperatorHelmNamespace}
+	wantGame := []string{config.DefaultVNCGatewayNamespace, config.DefaultPterodactylConsoleNamespace}
 	if len(withGame) != len(wantGame) {
 		t.Fatalf("got %v, want %v", withGame, wantGame)
 	}

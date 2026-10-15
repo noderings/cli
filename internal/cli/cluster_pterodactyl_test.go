@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/spf13/cobra"
+
+	"github.com/noderings/cli/internal/config"
 )
 
 func clearPterodactylEnv(t *testing.T) {
@@ -46,6 +48,12 @@ func TestPterodactylHelmArgsDisablesCRDSubchart(t *testing.T) {
 	joined := strings.Join(args, " ")
 	if !strings.Contains(joined, "--set crds.enabled=false") {
 		t.Fatalf("operator chart must not adopt CRDs installed before peering: %s", joined)
+	}
+	if !strings.Contains(joined, "consoleGateway.enabled=true") {
+		t.Fatalf("console gateway must be enabled for Liqo offload parity with vnc-gateway: %s", joined)
+	}
+	if !strings.Contains(joined, "consoleGateway.namespace="+config.DefaultPterodactylConsoleNamespace) {
+		t.Fatalf("console gateway must land in %s: %s", config.DefaultPterodactylConsoleNamespace, joined)
 	}
 }
 

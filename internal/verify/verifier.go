@@ -576,6 +576,25 @@ func (v *Verifier) checkPterodactylOperator(ctx context.Context, sec SectionResu
 	sec.Checks = append(sec.Checks, checkDeployment(ctx, cs, SectionOperator, CheckNameExporter,
 		helmNS, config.HelmPterodactylExporterDeployName(release))...)
 
+	consoleNS := config.DefaultPterodactylConsoleNamespace
+	if _, err := cs.CoreV1().Namespaces().Get(ctx, consoleNS, metav1.GetOptions{}); err != nil {
+		message := fmt.Sprintf("namespace %s: %v", consoleNS, err)
+		if apierrors.IsNotFound(err) {
+			message = fmt.Sprintf("namespace %s missing: %v", consoleNS, err)
+		}
+		sec.Checks = append(sec.Checks, Check{
+			Section: SectionOperator, Name: CheckNamePterodactylConsoleNS, Status: StatusFail,
+			Message: message,
+		})
+	} else {
+		sec.Checks = append(sec.Checks, Check{
+			Section: SectionOperator, Name: CheckNamePterodactylConsoleNS, Status: StatusPass,
+			Message: fmt.Sprintf("namespace %s present", consoleNS),
+		})
+		sec.Checks = append(sec.Checks, checkDeployment(ctx, cs, SectionOperator, CheckNamePterodactylConsole,
+			consoleNS, config.HelmPterodactylConsoleDeployName(release))...)
+	}
+
 	sec.Checks = append(sec.Checks, mimirSecretCheck(ctx, cs, helmNS)...)
 	return sec
 }

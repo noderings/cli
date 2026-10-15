@@ -140,7 +140,7 @@ const (
 	// DefaultProxmoxOperatorCRDsChartOCI is CRDs-only; install on every provider so Liqo can watch both API groups.
 	DefaultProxmoxOperatorCRDsChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/proxmox-operator-crds"
 	// DefaultProxmoxOperatorChartVersion is the chart version (no leading v).
-	DefaultProxmoxOperatorChartVersion = "0.1.9"
+	DefaultProxmoxOperatorChartVersion = "0.1.10"
 	// DefaultProxmoxOperatorHelmRelease is the Helm release name (workload = release-chart).
 	DefaultProxmoxOperatorHelmRelease = "operator"
 	// DefaultProxmoxOperatorHelmNamespace is the runtime namespace for the operator chart.
@@ -153,7 +153,7 @@ const (
 	// DefaultVirtFusionOperatorCRDsChartOCI is CRDs-only (install alongside Proxmox CRDs on every provider).
 	DefaultVirtFusionOperatorCRDsChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/virtfusion-operator-crds"
 	// DefaultVirtFusionOperatorChartVersion is the VirtFusion chart version (no leading v).
-	DefaultVirtFusionOperatorChartVersion = "0.1.9"
+	DefaultVirtFusionOperatorChartVersion = "0.1.10"
 	// DefaultVirtFusionOperatorHelmNamespace is the runtime namespace for the VirtFusion operator chart.
 	DefaultVirtFusionOperatorHelmNamespace = "virtfusion-system"
 	// VirtFusionCRDAPIGroup is the API group registered by virtfusion-operator CRDs.
@@ -164,7 +164,7 @@ const (
 	// DefaultSolusVMOperatorCRDsChartOCI is CRDs-only (install alongside other hypervisor CRDs on every provider).
 	DefaultSolusVMOperatorCRDsChartOCI = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/solusvm-operator-crds"
 	// DefaultSolusVMOperatorChartVersion is the SolusVM chart version (no leading v).
-	DefaultSolusVMOperatorChartVersion = "0.1.9"
+	DefaultSolusVMOperatorChartVersion = "0.1.10"
 	// DefaultSolusVMOperatorHelmNamespace is the runtime namespace for the SolusVM operator chart.
 	DefaultSolusVMOperatorHelmNamespace = "solusvm-system"
 	// SolusVMCRDAPIGroup is the API group registered by solusvm-operator CRDs.
@@ -173,9 +173,12 @@ const (
 	// Pterodactyl is a second release on the agent, not a hypervisor driver.
 	DefaultPterodactylOperatorChartOCI      = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/pterodactyl-operator"
 	DefaultPterodactylOperatorCRDsChartOCI  = "oci://" + DefaultHarborRegistry + "/" + DefaultHarborPublicProject + "/pterodactyl-operator-crds"
-	DefaultPterodactylOperatorChartVersion  = "0.1.0"
+	DefaultPterodactylOperatorChartVersion  = "0.1.10"
 	DefaultPterodactylOperatorHelmNamespace = "pterodactyl-system"
-	PterodactylCRDAPIGroup                  = "gs.pterodactyl.com"
+	// DefaultPterodactylConsoleNamespace is provider-local and offloaded like vnc-gateway.
+	// pterodactyl-system (operator, exporter, Alloy) stays local on the agent.
+	DefaultPterodactylConsoleNamespace = "pterodactyl-console"
+	PterodactylCRDAPIGroup             = "gs.pterodactyl.com"
 	// DefaultHypervisorCRDsHelmNamespace is where standalone CRD charts are
 	// installed (cluster-scoped CRDs, not the operator runtime namespace).
 	DefaultHypervisorCRDsHelmNamespace = "kube-system"
@@ -212,6 +215,7 @@ const (
 	SuffixHelmVirtFusionOperator  = "-virtfusion-operator"
 	SuffixHelmSolusVMOperator     = "-solusvm-operator"
 	SuffixHelmPterodactylOperator = "-pterodactyl-operator"
+	SuffixHelmPterodactylConsole  = "-console"
 	SuffixHelmAlloy               = "-alloy"
 	SuffixHelmExporter            = "-exporter"
 	SuffixHelmVNCGateway          = "-vnc-gateway"
@@ -334,6 +338,11 @@ func HelmPterodactylOperatorDeployName(release string) string {
 // HelmPterodactylExporterDeployName returns the Pterodactyl exporter Deployment name.
 func HelmPterodactylExporterDeployName(release string) string {
 	return HelmPterodactylOperatorDeployName(release) + SuffixHelmExporter
+}
+
+// HelmPterodactylConsoleDeployName returns the console bridge Deployment in pterodactyl-console.
+func HelmPterodactylConsoleDeployName(release string) string {
+	return HelmPterodactylOperatorDeployName(release) + SuffixHelmPterodactylConsole
 }
 
 // HelmSolusVMVNCGatewayDeployName returns the SolusVM VNC gateway Deployment name.
