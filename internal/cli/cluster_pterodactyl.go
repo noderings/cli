@@ -283,7 +283,7 @@ func pterodactylHelmArgs(install pterodactylInstall, kubeconfig string) []string
 		"--create-namespace",
 		"--set", "crds.enabled=false",
 		"--set", "consoleGateway.enabled=true",
-		"--set-string", "consoleGateway.namespace="+config.DefaultPterodactylConsoleNamespace,
+		"--set-string", "consoleGateway.namespace=" + config.DefaultPterodactylConsoleNamespace,
 		"--set-string", "panel.url=" + install.PanelURL,
 		"--set-string", "panel.existingSecret=" + install.SecretName,
 	}
@@ -461,7 +461,11 @@ func applyPanelSecret(ctx context.Context, install pterodactylInstall, kubeconfi
 		apply := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "apply", "-f", "-")...)
 		apply.Stdin = strings.NewReader(string(raw))
 		if out, err := apply.CombinedOutput(); err != nil {
-			return fmt.Errorf("write panel secret in %s: %s", namespace, strings.TrimSpace(string(out)))
+			msg := strings.TrimSpace(string(out))
+			if msg == "" {
+				msg = err.Error()
+			}
+			return fmt.Errorf("write panel secret in %s: %s", namespace, msg)
 		}
 	}
 	return nil
