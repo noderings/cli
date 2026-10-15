@@ -578,9 +578,13 @@ func (v *Verifier) checkPterodactylOperator(ctx context.Context, sec SectionResu
 
 	consoleNS := config.DefaultPterodactylConsoleNamespace
 	if _, err := cs.CoreV1().Namespaces().Get(ctx, consoleNS, metav1.GetOptions{}); err != nil {
+		message := fmt.Sprintf("namespace %s: %v", consoleNS, err)
+		if apierrors.IsNotFound(err) {
+			message = fmt.Sprintf("namespace %s missing: %v", consoleNS, err)
+		}
 		sec.Checks = append(sec.Checks, Check{
 			Section: SectionOperator, Name: CheckNamePterodactylConsoleNS, Status: StatusFail,
-			Message: fmt.Sprintf("namespace %s missing: %v", consoleNS, err),
+			Message: message,
 		})
 	} else {
 		sec.Checks = append(sec.Checks, Check{
