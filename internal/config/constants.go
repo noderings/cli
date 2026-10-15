@@ -208,12 +208,13 @@ const (
 	EnvDNSCheckImage = "NR_DNS_CHECK_IMAGE"
 
 	// Helm chart workload name suffixes (release + suffix).
-	SuffixHelmProxmoxOperator    = "-proxmox-operator"
-	SuffixHelmVirtFusionOperator = "-virtfusion-operator"
-	SuffixHelmSolusVMOperator    = "-solusvm-operator"
-	SuffixHelmAlloy              = "-alloy"
-	SuffixHelmExporter           = "-exporter"
-	SuffixHelmVNCGateway         = "-vnc-gateway"
+	SuffixHelmProxmoxOperator     = "-proxmox-operator"
+	SuffixHelmVirtFusionOperator  = "-virtfusion-operator"
+	SuffixHelmSolusVMOperator     = "-solusvm-operator"
+	SuffixHelmPterodactylOperator = "-pterodactyl-operator"
+	SuffixHelmAlloy               = "-alloy"
+	SuffixHelmExporter            = "-exporter"
+	SuffixHelmVNCGateway          = "-vnc-gateway"
 
 	// Environment variable names shared by install and verify.
 	EnvHelmNamespace       = "HELM_NAMESPACE"
@@ -323,6 +324,16 @@ func HelmSolusVMOperatorDeployName(release string) string {
 // HelmSolusVMExporterDeployName returns the SolusVM metrics exporter Deployment name.
 func HelmSolusVMExporterDeployName(release string) string {
 	return HelmSolusVMOperatorDeployName(release) + SuffixHelmExporter
+}
+
+// HelmPterodactylOperatorDeployName returns the Pterodactyl operator Deployment name.
+func HelmPterodactylOperatorDeployName(release string) string {
+	return helmReleaseOrDefault(release) + SuffixHelmPterodactylOperator
+}
+
+// HelmPterodactylExporterDeployName returns the Pterodactyl exporter Deployment name.
+func HelmPterodactylExporterDeployName(release string) string {
+	return HelmPterodactylOperatorDeployName(release) + SuffixHelmExporter
 }
 
 // HelmSolusVMVNCGatewayDeployName returns the SolusVM VNC gateway Deployment name.

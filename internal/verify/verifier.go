@@ -497,6 +497,13 @@ func (v *Verifier) checkOperator(ctx context.Context) SectionResult {
 		return sec
 	}
 
+	// Pterodactyl-only register leaves the hypervisor driver empty and does not
+	// install a hypervisor chart. The default proxmox-system namespace is not
+	// supposed to exist on that agent.
+	if strings.TrimSpace(v.opts.HypervisorDriver) == "" {
+		return v.checkPterodactylOperator(ctx, sec, cs)
+	}
+
 	helmNS := v.opts.helmNamespace()
 	vncNS := v.opts.vncNamespace()
 
@@ -514,32 +521,7 @@ func (v *Verifier) checkOperator(ctx context.Context) SectionResult {
 
 	// CRDs installed by the hypervisor operator CRDs subchart on the provider.
 	groups, err := cs.Discovery().ServerGroups()
-	if err != nil {
-		sec.Checks = append(sec.Checks, Check{
-			Section: SectionOperator, Name: CheckNameCRDs, Status: StatusFail,
-			Message: fmt.Sprintf("discovery: %v", err),
-		})
-	} else {
-		crdGroup := v.opts.crdAPIGroup()
-		found := false
-		for _, g := range groups.Groups {
-			if g.Name == crdGroup {
-				found = true
-				break
-			}
-		}
-		if !found {
-			sec.Checks = append(sec.Checks, Check{
-				Section: SectionOperator, Name: CheckNameCRDs, Status: StatusFail,
-				Message: fmt.Sprintf("API group %s not registered (CRDs missing)", crdGroup),
-			})
-		} else {
-			sec.Checks = append(sec.Checks, Check{
-				Section: SectionOperator, Name: CheckNameCRDs, Status: StatusPass,
-				Message: fmt.Sprintf("API group %s registered", crdGroup),
-			})
-		}
-	}
+	appendCRDCheck(&sec, groups, err, v.opts.crdAPIGroup())
 
 	sec.Checks = append(sec.Checks, checkDeployment(ctx, cs, SectionOperator, CheckNameOperatorDeploy,
 		helmNS, v.opts.operatorDeployName())...)
@@ -562,27 +544,92 @@ func (v *Verifier) checkOperator(ctx context.Context) SectionResult {
 			vncNS, v.opts.vncGatewayDeployName())...)
 	}
 
-	if secret, err := cs.CoreV1().Secrets(helmNS).Get(ctx, config.DefaultMimirCredentialsSecret, metav1.GetOptions{}); err != nil {
-		sec.Checks = append(sec.Checks, Check{
-			Section: SectionOperator, Name: CheckNameMimirSecret, Status: StatusFail,
-			Message: fmt.Sprintf("%s secret missing in %s: %v", config.DefaultMimirCredentialsSecret, helmNS, err),
-		})
-	} else {
-		token := string(secret.Data[config.EnvMimirBearerToken])
-		if token == "" {
-			sec.Checks = append(sec.Checks, Check{
-				Section: SectionOperator, Name: CheckNameMimirSecret, Status: StatusFail,
-				Message: fmt.Sprintf("%s present but %s key is empty", config.DefaultMimirCredentialsSecret, config.EnvMimirBearerToken),
-			})
-		} else {
-			sec.Checks = append(sec.Checks, Check{
-				Section: SectionOperator, Name: CheckNameMimirSecret, Status: StatusPass,
-				Message: fmt.Sprintf("%s has %s", config.DefaultMimirCredentialsSecret, config.EnvMimirBearerToken),
-			})
-		}
-	}
+	sec.Checks = append(sec.Checks, mimirSecretCheck(ctx, cs, helmNS)...)
 
 	return sec
+}
+
+// checkPterodactylOperator verifies the game-server chart on an agent that has
+// no hypervisor. It does not require proxmox-system or a VNC gateway Deployment.
+func (v *Verifier) checkPterodactylOperator(ctx context.Context, sec SectionResult, cs kubernetes.Interface) SectionResult {
+	helmNS := config.DefaultPterodactylOperatorHelmNamespace
+	if _, err := cs.CoreV1().Namespaces().Get(ctx, helmNS, metav1.GetOptions{}); err != nil {
+		sec.Checks = append(sec.Checks, Check{
+			Section: SectionOperator, Name: CheckNameHelmNamespace, Status: StatusSkip,
+			Message: "no hypervisor operator installed",
+		})
+		return sec
+	}
+	sec.Checks = append(sec.Checks, Check{
+		Section: SectionOperator, Name: CheckNameHelmNamespace, Status: StatusPass,
+		Message: fmt.Sprintf("namespace %s present", helmNS),
+	})
+
+	groups, err := cs.Discovery().ServerGroups()
+	appendCRDCheck(&sec, groups, err, config.PterodactylCRDAPIGroup)
+
+	release := v.opts.OperatorRelease
+	sec.Checks = append(sec.Checks, checkDeployment(ctx, cs, SectionOperator, CheckNameOperatorDeploy,
+		helmNS, config.HelmPterodactylOperatorDeployName(release))...)
+	sec.Checks = append(sec.Checks, checkDaemonSetOnPhysicalNodes(ctx, cs, SectionOperator, CheckNameAlloy,
+		helmNS, v.opts.alloyDaemonSetName())...)
+	sec.Checks = append(sec.Checks, checkDeployment(ctx, cs, SectionOperator, CheckNameExporter,
+		helmNS, config.HelmPterodactylExporterDeployName(release))...)
+
+	sec.Checks = append(sec.Checks, mimirSecretCheck(ctx, cs, helmNS)...)
+	return sec
+}
+
+func appendCRDCheck(sec *SectionResult, groups *metav1.APIGroupList, err error, crdGroup string) {
+	if err != nil {
+		sec.Checks = append(sec.Checks, Check{
+			Section: SectionOperator, Name: CheckNameCRDs, Status: StatusFail,
+			Message: fmt.Sprintf("discovery: %v", err),
+		})
+		return
+	}
+	if groups == nil {
+		groups = &metav1.APIGroupList{}
+	}
+	found := false
+	for _, g := range groups.Groups {
+		if g.Name == crdGroup {
+			found = true
+			break
+		}
+	}
+	if !found {
+		sec.Checks = append(sec.Checks, Check{
+			Section: SectionOperator, Name: CheckNameCRDs, Status: StatusFail,
+			Message: fmt.Sprintf("API group %s not registered (CRDs missing)", crdGroup),
+		})
+		return
+	}
+	sec.Checks = append(sec.Checks, Check{
+		Section: SectionOperator, Name: CheckNameCRDs, Status: StatusPass,
+		Message: fmt.Sprintf("API group %s registered", crdGroup),
+	})
+}
+
+func mimirSecretCheck(ctx context.Context, cs kubernetes.Interface, helmNS string) []Check {
+	secret, err := cs.CoreV1().Secrets(helmNS).Get(ctx, config.DefaultMimirCredentialsSecret, metav1.GetOptions{})
+	if err != nil {
+		return []Check{{
+			Section: SectionOperator, Name: CheckNameMimirSecret, Status: StatusFail,
+			Message: fmt.Sprintf("%s secret missing in %s: %v", config.DefaultMimirCredentialsSecret, helmNS, err),
+		}}
+	}
+	token := string(secret.Data[config.EnvMimirBearerToken])
+	if token == "" {
+		return []Check{{
+			Section: SectionOperator, Name: CheckNameMimirSecret, Status: StatusFail,
+			Message: fmt.Sprintf("%s present but %s key is empty", config.DefaultMimirCredentialsSecret, config.EnvMimirBearerToken),
+		}}
+	}
+	return []Check{{
+		Section: SectionOperator, Name: CheckNameMimirSecret, Status: StatusPass,
+		Message: fmt.Sprintf("%s has %s", config.DefaultMimirCredentialsSecret, config.EnvMimirBearerToken),
+	}}
 }
 
 func checkDeployment(ctx context.Context, cs kubernetes.Interface, section, name, ns, deploy string) []Check {

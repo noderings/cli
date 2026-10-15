@@ -10,6 +10,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/client-go/rest"
@@ -290,5 +291,78 @@ func TestCheckHelpersHandleListErrors(t *testing.T) {
 	_, _, err := countReadyNodesByKind(context.Background(), clientset)
 	if err == nil || !strings.Contains(err.Error(), "list failed") {
 		t.Fatalf("err=%v", err)
+	}
+}
+
+func TestPterodactylOnlyVerifyDoesNotRequireProxmox(t *testing.T) {
+	t.Setenv(config.EnvHelmNamespace, "")
+	opts := OptionsFromRegister(RegisterScope{AgentID: "agent"})
+	if opts.OperatorNamespace != config.DefaultProxmoxOperatorHelmNamespace {
+		t.Fatalf("unset driver still records the proxmox default, got %s", opts.OperatorNamespace)
+	}
+	clientset := fake.NewClientset(&corev1.Namespace{
+		ObjectMeta: metav1.ObjectMeta{Name: config.DefaultOperatorRemoteNamespace},
+	})
+	v := newVerifier(opts, fakeKubeClient{clientset: clientset}, nil)
+
+	section := v.checkOperator(context.Background())
+	helm := findCheck(t, section, CheckNameHelmNamespace)
+	if helm.Status != StatusSkip {
+		t.Fatalf("status=%s message=%s", helm.Status, helm.Message)
+	}
+	if strings.Contains(helm.Message, "proxmox-system") {
+		t.Fatalf("pterodactyl-only verify mentioned proxmox: %s", helm.Message)
+	}
+}
+
+func TestPterodactylOnlyVerifyChecksPterodactylChart(t *testing.T) {
+	t.Setenv(config.EnvHelmNamespace, "")
+	opts := OptionsFromRegister(RegisterScope{AgentID: "agent"})
+	ns := config.DefaultPterodactylOperatorHelmNamespace
+	release := opts.OperatorRelease
+	replicas := int32(1)
+	ready := appsv1.DeploymentStatus{ReadyReplicas: 1, UpdatedReplicas: 1}
+	clientset := fake.NewClientset(
+		readyNode("provider", false),
+		&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: config.DefaultOperatorRemoteNamespace}},
+		&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: ns}},
+		&appsv1.Deployment{
+			ObjectMeta: metav1.ObjectMeta{Name: config.HelmPterodactylOperatorDeployName(release), Namespace: ns},
+			Spec:       appsv1.DeploymentSpec{Replicas: &replicas},
+			Status:     ready,
+		},
+		&appsv1.Deployment{
+			ObjectMeta: metav1.ObjectMeta{Name: config.HelmPterodactylExporterDeployName(release), Namespace: ns},
+			Spec:       appsv1.DeploymentSpec{Replicas: &replicas},
+			Status:     ready,
+		},
+		&appsv1.DaemonSet{
+			ObjectMeta: metav1.ObjectMeta{Name: config.HelmAlloyDaemonSetName(release), Namespace: ns},
+			Status:     appsv1.DaemonSetStatus{DesiredNumberScheduled: 1, NumberReady: 1},
+		},
+		&corev1.Secret{
+			ObjectMeta: metav1.ObjectMeta{Name: config.DefaultMimirCredentialsSecret, Namespace: ns},
+			Data:       map[string][]byte{config.EnvMimirBearerToken: []byte("token")},
+		},
+	)
+	clientset.Discovery().(*fakediscovery.FakeDiscovery).Resources = []*metav1.APIResourceList{
+		{GroupVersion: config.PterodactylCRDAPIGroup + "/v1"},
+	}
+	v := newVerifier(opts, fakeKubeClient{clientset: clientset}, nil)
+
+	section := v.checkOperator(context.Background())
+	for _, name := range []string{CheckNameHelmNamespace, CheckNameCRDs, CheckNameOperatorDeploy, CheckNameAlloy, CheckNameExporter, CheckNameMimirSecret} {
+		check := findCheck(t, section, name)
+		if check.Status != StatusPass {
+			t.Fatalf("%s status=%s message=%s", name, check.Status, check.Message)
+		}
+		if strings.Contains(check.Message, "proxmox-system") {
+			t.Fatalf("%s mentioned proxmox: %s", name, check.Message)
+		}
+	}
+	for _, check := range section.Checks {
+		if check.Name == CheckNameVNCGateway || check.Name == CheckNameVNCNamespace {
+			t.Fatalf("pterodactyl-only verify required VNC: %#v", check)
+		}
 	}
 }
