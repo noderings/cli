@@ -322,10 +322,12 @@ func TestPterodactylOnlyVerifyChecksPterodactylChart(t *testing.T) {
 	release := opts.OperatorRelease
 	replicas := int32(1)
 	ready := appsv1.DeploymentStatus{ReadyReplicas: 1, UpdatedReplicas: 1}
+	consoleNS := config.DefaultPterodactylConsoleNamespace
 	clientset := fake.NewClientset(
 		readyNode("provider", false),
 		&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: config.DefaultOperatorRemoteNamespace}},
 		&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: ns}},
+		&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: consoleNS}},
 		&appsv1.Deployment{
 			ObjectMeta: metav1.ObjectMeta{Name: config.HelmPterodactylOperatorDeployName(release), Namespace: ns},
 			Spec:       appsv1.DeploymentSpec{Replicas: &replicas},
@@ -333,6 +335,11 @@ func TestPterodactylOnlyVerifyChecksPterodactylChart(t *testing.T) {
 		},
 		&appsv1.Deployment{
 			ObjectMeta: metav1.ObjectMeta{Name: config.HelmPterodactylExporterDeployName(release), Namespace: ns},
+			Spec:       appsv1.DeploymentSpec{Replicas: &replicas},
+			Status:     ready,
+		},
+		&appsv1.Deployment{
+			ObjectMeta: metav1.ObjectMeta{Name: config.HelmPterodactylConsoleDeployName(release), Namespace: consoleNS},
 			Spec:       appsv1.DeploymentSpec{Replicas: &replicas},
 			Status:     ready,
 		},
@@ -351,7 +358,7 @@ func TestPterodactylOnlyVerifyChecksPterodactylChart(t *testing.T) {
 	v := newVerifier(opts, fakeKubeClient{clientset: clientset}, nil)
 
 	section := v.checkOperator(context.Background())
-	for _, name := range []string{CheckNameHelmNamespace, CheckNameCRDs, CheckNameOperatorDeploy, CheckNameAlloy, CheckNameExporter, CheckNameMimirSecret} {
+	for _, name := range []string{CheckNameHelmNamespace, CheckNameCRDs, CheckNameOperatorDeploy, CheckNameAlloy, CheckNameExporter, CheckNamePterodactylConsoleNS, CheckNamePterodactylConsole, CheckNameMimirSecret} {
 		check := findCheck(t, section, name)
 		if check.Status != StatusPass {
 			t.Fatalf("%s status=%s message=%s", name, check.Status, check.Message)

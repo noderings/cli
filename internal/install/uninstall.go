@@ -133,7 +133,8 @@ func (c *ClusterCleaner) UnpeerLiqo(ctx context.Context, remoteKubeconfig string
 // and a later register is not blocked by a leftover RemoteNamespaceName.
 //
 // DeleteAgent on the platform only unoffloads the mothership operator namespace. The
-// provider-local offload (vnc-gateway) lives here and must be removed locally.
+// provider-local offloads (vnc-gateway, pterodactyl-console) live here and must be
+// removed locally.
 func (c *ClusterCleaner) UnoffloadNamespaces(ctx context.Context) error {
 	namespaces, err := c.listOffloadedNamespaces(ctx)
 	if err != nil {

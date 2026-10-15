@@ -253,6 +253,15 @@ func applyPterodactylRelease(cmd *cobra.Command, install pterodactylInstall) err
 	if err := nrinstall.AnnotateOperatorCRDsKeep(ctx, kubeconfig, nil); err != nil {
 		return err
 	}
+	// Local chart checkouts need the Alloy subchart vendored (same as proxmox-operator).
+	if !strings.HasPrefix(install.Chart, "oci://") {
+		dep := exec.CommandContext(ctx, "helm", "dependency", "build", install.Chart)
+		dep.Stdout = cmd.OutOrStdout()
+		dep.Stderr = cmd.ErrOrStderr()
+		if err := dep.Run(); err != nil {
+			return fmt.Errorf("helm dependency build for pterodactyl-operator: %w", err)
+		}
+	}
 	helmArgs := pterodactylHelmArgs(install, kubeconfig)
 	helm := exec.CommandContext(ctx, "helm", helmArgs...)
 	helm.Stdout = cmd.OutOrStdout()
@@ -273,6 +282,8 @@ func pterodactylHelmArgs(install pterodactylInstall, kubeconfig string) []string
 		"--namespace", install.Namespace,
 		"--create-namespace",
 		"--set", "crds.enabled=false",
+		"--set", "consoleGateway.enabled=true",
+		"--set-string", "consoleGateway.namespace="+config.DefaultPterodactylConsoleNamespace,
 		"--set-string", "panel.url=" + install.PanelURL,
 		"--set-string", "panel.existingSecret=" + install.SecretName,
 	}
@@ -417,33 +428,41 @@ func withKubeconfig(kubeconfig string, args ...string) []string {
 }
 
 func applyPanelSecret(ctx context.Context, install pterodactylInstall, kubeconfig string) error {
-	ns := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "create", "namespace", install.Namespace)...)
-	if out, err := ns.CombinedOutput(); err != nil && !strings.Contains(string(out), "AlreadyExists") {
-		return fmt.Errorf("create namespace: %w", err)
-	}
-	manifest := map[string]any{
-		"apiVersion": "v1",
-		"kind":       "Secret",
-		"metadata": map[string]string{
-			"name":      install.SecretName,
-			"namespace": install.Namespace,
-		},
-		"type": "Opaque",
-		"data": map[string]string{
-			"PANEL_URL":       base64.StdEncoding.EncodeToString([]byte(install.PanelURL)),
-			"APPLICATION_KEY": base64.StdEncoding.EncodeToString([]byte(install.ApplicationKey)),
-			"CLIENT_KEY":      base64.StdEncoding.EncodeToString([]byte(install.ClientKey)),
-			"PANEL_USER_ID":   base64.StdEncoding.EncodeToString([]byte(install.PanelUserID)),
-		},
-	}
-	raw, err := json.Marshal(manifest)
-	if err != nil {
-		return fmt.Errorf("encode panel secret: %w", err)
-	}
-	apply := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "apply", "-f", "-")...)
-	apply.Stdin = strings.NewReader(string(raw))
-	if _, err := apply.CombinedOutput(); err != nil {
-		return fmt.Errorf("write panel secret: %w", err)
+	// Same as Proxmox credentials: operator Helm NS plus the offloaded console NS.
+	namespaces := []string{install.Namespace, config.DefaultPterodactylConsoleNamespace}
+	for _, namespace := range namespaces {
+		ns := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "create", "namespace", namespace)...)
+		if out, err := ns.CombinedOutput(); err != nil && !strings.Contains(string(out), "AlreadyExists") {
+			return fmt.Errorf("create namespace %s: %w", namespace, err)
+		}
+		manifest := map[string]any{
+			"apiVersion": "v1",
+			"kind":       "Secret",
+			"metadata": map[string]any{
+				"name":      install.SecretName,
+				"namespace": namespace,
+				"annotations": map[string]string{
+					// Panel keys must never appear on the mothership via Liqo.
+					"liqo.io/skip-reflection": "true",
+				},
+			},
+			"type": "Opaque",
+			"data": map[string]string{
+				"PANEL_URL":       base64.StdEncoding.EncodeToString([]byte(install.PanelURL)),
+				"APPLICATION_KEY": base64.StdEncoding.EncodeToString([]byte(install.ApplicationKey)),
+				"CLIENT_KEY":      base64.StdEncoding.EncodeToString([]byte(install.ClientKey)),
+				"PANEL_USER_ID":   base64.StdEncoding.EncodeToString([]byte(install.PanelUserID)),
+			},
+		}
+		raw, err := json.Marshal(manifest)
+		if err != nil {
+			return fmt.Errorf("encode panel secret: %w", err)
+		}
+		apply := exec.CommandContext(ctx, "kubectl", withKubeconfig(kubeconfig, "apply", "-f", "-")...)
+		apply.Stdin = strings.NewReader(string(raw))
+		if out, err := apply.CombinedOutput(); err != nil {
+			return fmt.Errorf("write panel secret in %s: %s", namespace, strings.TrimSpace(string(out)))
+		}
 	}
 	return nil
 }

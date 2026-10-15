@@ -32,7 +32,9 @@ const (
 	CheckNameOperatorDeploy  = "operator-deployment"
 	CheckNameAlloy           = "alloy"
 	CheckNameExporter        = "exporter"
-	CheckNameVNCNamespace    = "vnc-namespace"
-	CheckNameVNCGateway      = "vnc-gateway"
+	CheckNameVNCNamespace         = "vnc-namespace"
+	CheckNameVNCGateway           = "vnc-gateway"
+	CheckNamePterodactylConsoleNS = "pterodactyl-console-namespace"
+	CheckNamePterodactylConsole   = "pterodactyl-console"
 	CheckNameMimirSecret     = "mimir-secret"
 )
