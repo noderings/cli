@@ -178,13 +178,14 @@ func collectOffloadNamespaces(opts clusterRegisterOpts) []string {
 		out = append(out, ns)
 	}
 
-	// VNC first (production default). The game console Service is offloaded the same
-	// way when --pterodactyl is set: local pterodactyl-system, remote {agentID}-pterodactyl-system.
+	// VNC first (production default). Game console is the same shape: offload
+	// pterodactyl-console only (local → {agentID}-pterodactyl-console). Operator,
+	// exporter, and Alloy stay in pterodactyl-system and are not offloaded.
 	// Operator is only included when explicitly set via --operator-namespace
 	// (normally offloaded from the remote cluster after inbound peering).
 	add(opts.vncGatewayNamespace)
 	if opts.installPterodactyl {
-		add(config.DefaultPterodactylOperatorHelmNamespace)
+		add(config.DefaultPterodactylConsoleNamespace)
 	}
 	add(opts.operatorNamespace)
 	for _, ns := range opts.offloadNamespaces {
