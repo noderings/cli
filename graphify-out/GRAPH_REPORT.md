@@ -1,455 +1,480 @@
-# Graph Report - cli  (2026-10-10)
+# Graph Report - cli  (2026-10-15)
 
 ## Corpus Check
-- 156 files · ~401,745 words
+- 149 files · ~402,212 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 5)
 
 ## Summary
-- 7534 nodes · 23293 edges · 441 communities (228 shown, 213 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 615 edges (avg confidence: 0.85)
+- 7543 nodes · 23333 edges · 461 communities (238 shown, 223 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 619 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
+## Graph Freshness
+- Built from commit: `e2a001fb`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
+
 ## Community Hubs (Navigation)
-- Generated API client
-- Generated API client AddonServiceAddAddonToSubscription
-- Generated API client Request
-- Generated API client AddonServiceAddAddonToSubscriptionBody
-- Internal Install Liqo
-- Go Pkg K8s
-- Internal Cli Cluster
-- Internal Cli Cluster ClientOption
-- Internal Config Constants
-- Internal Cli Cluster Config
-- Generated API client GetJSON200
-- Generated API client GetJSON200
-- Generated API client ProviderDashboardServiceListDashboardTicketStatistics
-- OpenAPI service catalog
-- Install tool versions
-- Hypervisor CRD install
-- Internal Install Liqo APIError
-- Internal Cli Prompt
-- Ticket API client
-- Cloud Init User Data API client
-- Ticket API client TicketServiceListTicketTemplates
-- User API client
-- Generated API client ServiceAccountServiceListServiceAccounts
-- Generated API client IPAMServiceRemoveReservedIPWithResponse
-- Generated API client NodeServiceGetNodeCPUMapWithResponse
-- Generated API client AgentServiceUpdateAgentBody
-- CLI release notes
-- Firewall API client
-- Agent API client
-- Generated API client CloudInitTemplateServiceUpdateCloudInitTemplateJSONRequestBody
-- VNC gateway install
-- Subscription API client
-- Generated API client FirewallServiceListFirewallRulesWithResponse
-- Provider Customer API client
-- Roadmap API client
-- Github Workflows
-- Generated API client NodeServiceListNodesWithResponse
-- Internal Install Uninstall
-- Generated API client InviteServiceDeclineInvite
-- User API client UserServiceListUsers
-- Generated API client EnvironmentVariableServiceCreateEnvironmentVariableJSONRequestBody
-- Internal Install Calico
-- Pterodactyl cluster install
-- OAuth2 API client
-- CLI documentation
-- Metrics Credential API client
-- Provider Network API client
-- Firewall API client FirewallServiceMoveFirewallRuleJSONRequestBody
-- Payout Configuration API client
-- Provider Network API client ProviderNetworkServiceGetSmtpOutboundProviderPolicyWithResponse
-- Generated API client OAuth2ServiceRevokeTokenWithResponse
-- Roadmap API client RoadmapServiceRemoveRoadmapFeatureRequestVoteWithResponse
-- CLI documentation Code
-- Internal Install Validator
-- Cluster CLI commands
-- Install K3sinstaller
-- Github Workflows Enabled
-- Marketplace API client
-- Generated API client PayoutInvoiceServiceGetPayoutInvoiceWithResponse
-- Plan API client
-- Provider Customer API client ProviderCustomerServiceStopProviderCustomerVirtualMachineWithResponse
-- Liqo install
-- Internal Verify Liqo
-- Internal Auth Storage
-- Addon API client
-- Addon API client AddonServiceListAddonSubscriptionsParams
-- Group API client
-- Instant App API client
-- Invoice API client
-- Payment API client
-- Payout Invoice API client
-- Platform API client
-- Provider Customer API client ProviderCustomerServiceListProviderCustomers
-- Snapshot API client
-- Virtual Machine API client
-- Marketplace API client MarketplaceServiceListProvidersWithResponse
-- Provider Review API client
-- Live Validation API client
-- Provider Dashboard API client
-- Provider Dashboard API client ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseries
-- Provider Dashboard API client ProviderDashboardServiceListDashboardInfrastructure
-- Region API client
-- Provider Dashboard API client ProviderDashboardServiceListDashboardIpamAssignmentsWithResponse
-- Internal K8s Client
-- Install Liqomanager Deletepeeringnoncesecrets
-- Agent API client AgentServiceGeneratePeeringConfigJSONRequestBody
-- Agent API client AgentServiceUpdateAgentJSONRequestBody
-- Client Provider Review API client
-- Client Provider Review API client ClientProviderReviewServiceUpdateClientReviewJSONRequestBody
-- Firewall API client FirewallServiceUpdateFirewallAddressGroupJSONRequestBody
-- Addon API client AddonServiceRemoveAddonParams
-- Backup API client
-- Client Provider Review API client ClientProviderReviewServiceListClientProviderReviewAssets
-- Cloud Init Template API client
-- Credit API client
-- Environment Variable API client
-- Firewall API client FirewallServiceGetFirewallRule
-- Firewall API client FirewallServiceListFirewallAddressGroups
-- Invite API client
-- Invite API client InviteServiceListMyInvites
-- IPAM API client
-- IPAM API client IPAMServiceListNetworks
-- Live Validation API client LiveValidationServiceGetPlanLiveValidation
-- Live Validation API client LiveValidationServiceListPlanLiveValidations
-- Manual Payout API client
-- Marketplace API client MarketplaceServiceListMarketplaceProviderDirectory
-- Metric API client
-- Payout Invoice API client PayoutInvoiceServiceGetProviderRevenue
-- Permission API client
-- Permission API client PermissionServiceListPermissions
-- Preflight API client
-- Provider Dashboard API client ProviderDashboardServiceListDashboardPlanSubscriptionStats
-- Region API client RegionServiceListCountriesCities
-- Region API client RegionServiceListRegions
-- Roadmap API client RoadmapServiceListRoadmapFeatureRequestComments
-- Role API client
-- Secret API client
-- SSHKey API client
-- Subscription API client SubscriptionServiceListSubscriptions
-- VMTemplate API client
-- Generated API client ClientDashboardServiceGetClientDashboardBillingResponse
-- Group API client GroupServiceUpdateGroupWithBodyWithResponse
-- Live Validation API client LiveValidationServiceStartPlanLiveValidationWithBodyWithResponse
-- Node Placement API client
-- Node API client
-- OAuth2 API client OAuth2ServiceCreateClientWithBodyWithResponse
-- Plan API client PlanServiceSubscribeWithResponse
-- Generated API client ProviderOnboardingServiceGetProviderOnboardingChecklistWithResponse
-- Refund API client
-- Roadmap API client RoadmapServiceUpdateRoadmapFeatureRequestCommentWithBodyWithResponse
-- Ticket API client TicketServiceCreateTicketWithBodyWithResponse
-- Usage Report API client
-- User API client UserServiceVerifyMfaEnrollmentWithBodyWithResponse
-- Virtual Machine API client VirtualMachineServiceEnableAdditionalIPWithResponse
-- VMTemplate API client VMTemplateServiceUpdateVMTemplateWithBodyWithResponse
-- Addon API client AddonServiceAddAddonToSubscriptionJSONRequestBody
-- Agent API client AgentServiceGenerateInstallCommandJSONRequestBody
-- Agent API client AgentServiceUploadInboundPeeringConfigJSONRequestBody
-- Auth Oauthclient Exchangecode
-- Backup API client BackupServiceRestoreBackupJSONRequestBody
-- Credit API client CreditServicePurchaseCreditsJSONRequestBody
-- Environment Variable API client EnvironmentVariableServiceUpdateEnvironmentVariableJSONRequestBody
-- Exchange Rate API client
-- Firewall API client FirewallServiceCreateFirewallRuleJSONRequestBody
-- Firewall API client FirewallServiceCreateFirewallRuleSetJSONRequestBody
-- Firewall API client FirewallServiceDeleteFirewallRuleSet
-- Group API client GroupServiceRemoveUserFromGroup
-- Invite API client InviteServiceAcceptInvite
-- IPAM API client IPAMServiceRemoveReservedPrefix
-- Live Validation API client LiveValidationServiceDeletePlanLiveValidation
-- Client Dashboard API client
-- Group API client GroupServiceAddUserToGroupWithBodyWithResponse
-- Instant App API client InstantAppServiceGetInstantApp2WithResponse
-- Invite API client InviteServiceUpdateInviteWithBodyWithResponse
-- IPAM API client IPAMServiceAssignNetworkToNodeWithBodyWithResponse
-- IPAM API client IPAMServiceCreatePrefixWithBodyWithResponse
-- IPAM API client IPAMServiceReserveAllPrefixIPsWithBodyWithResponse
-- IPAM API client IPAMServiceUpdateNetworkWithResponse
-- IPAM API client IPAMServiceUpdatePrefixWithResponse
-- Metadata API client
-- Metrics Credential API client MetricsCredentialServiceListMetricsWriteCredentialsWithResponse
-- OAuth2 API client OAuth2ServiceListClientsWithResponse
-- Organization API client
-- Organization API client OrganizationServiceUpdateOrganizationWithResponse
-- Payment Method API client
-- Platform API client PlatformServiceUpdatePlatformWithResponse
-- Provider Connect API client
-- Provider Connect API client ProviderConnectServiceCreateConnectTaxSessionWithResponse
-- Provider Plan API client
-- Provider Review API client ProviderReviewServiceUpdateProviderReviewReplyWithResponse
-- Roadmap API client RoadmapServiceSubmitRoadmapFeatureRequestWithResponse
-- Role API client RoleServiceCreateRoleWithBodyWithResponse
-- Role API client RoleServiceUpdateRoleWithResponse
-- Secret API client SecretServiceUpdateSecretWithBodyWithResponse
-- Account API client
-- Account API client ServiceAccountServiceListTokensWithResponse
-- Subscription API client SubscriptionServiceRetryPaymentWithResponse
-- Ticket API client TicketServiceSetTicketPriorityWithBodyWithResponse
-- Ticket API client TicketServiceSetTicketStatusWithBodyWithResponse
-- Usage Report API client UsageReportServiceBatchRecordUsageWithResponse
-- Usage Report API client UsageReportServiceRecordUsageWithResponse
-- User API client UserServiceEnrollMfaTotpWithResponse
-- User API client UserServiceRegenerateMfaBackupCodesWithResponse
-- User API client UserServiceRegisterUserWithBodyWithResponse
-- User API client UserServiceResendVerificationEmailWithBodyWithResponse
-- User API client UserServiceResetPasswordWithBodyWithResponse
-- User API client UserServiceUpdateUserWithResponse
-- Virtual Machine API client VirtualMachineServiceCreateVirtualMachineWithBodyWithResponse
-- Virtual Machine API client VirtualMachineServiceEnableBackupWithBodyWithResponse
-- Virtual Machine API client VirtualMachineServiceRestartVirtualMachineWithBodyWithResponse
-- Virtual Machine API client VirtualMachineServiceStopVirtualMachineWithBodyWithResponse
-- Webhook API client
-- Install verification
-- Addon API client AddonServiceCreateAddonJSONRequestBody
-- Addon API client AddonServiceUpdateAddonJSONRequestBody
-- Chat API client
-- Chat API client ChatServiceChatJSONRequestBody
-- Cloud Init Template API client CloudInitTemplateServiceCreateCloudInitTemplateJSONRequestBody
-- CLI configuration
-- Domain API client
-- Firewall API client FirewallServiceCreateFirewallAddressGroupJSONRequestBody
-- Firewall API client FirewallServiceUpdateFirewallRuleJSONRequestBody
-- Chat API client ChatServiceListConversationsResponse
-- Instant App API client InstantAppServiceGetInstantApp
-- IPAM API client IPAMServiceListPrefixes
-- Provider Dashboard API client ProviderDashboardServiceGetDashboardBillingSales
-- Provider Dashboard API client ProviderDashboardServiceListDashboardAddonCatalogStats
-- Provider Dashboard API client ProviderDashboardServiceListDashboardVirtualMachines
-- Provider Plan API client ProviderPlanServiceListAssignableNodesForPlan
-- Firewall API client FirewallServiceGetFirewallAddressGroupWithResponse
-- Group Add API client
-- Group API client GroupServiceCreateGroupWithResponse
-- Group API client GroupServiceGetGroupWithResponse
-- Invite API client InviteServiceCreateInviteWithResponse
-- IPAM API client IPAMServiceAddReservedIPWithResponse
-- IPAM API client IPAMServiceAddReservedPrefixWithResponse
-- IPAM API client IPAMServiceClearAllPrefixReservedIPsWithResponse
-- IPAM API client IPAMServiceCreateNetworkWithResponse
-- IPAM API client IPAMServiceListAvailableIPsWithResponse
-- Live Validation API client LiveValidationServiceListEligibleNodesForPlanWithResponse
-- Marketplace API client MarketplaceServiceListAvailableRegionsWithResponse
-- Metadata API client MetadataServiceGetPlatformVersionsWithResponse
-- Metrics Credential API client MetricsCredentialServiceRevokeMetricsWriteCredentialWithResponse
-- Metric API client MetricServiceGetMetricWithResponse
-- Node API client NodeServiceCreateNodeWithResponse
-- Node API client NodeServiceValidateNodeTopologyWithBodyWithResponse
-- OAuth2 API client OAuth2ServiceAuthorizeWithResponse
-- Payment Method API client PaymentMethodServiceListPaymentMethodsWithResponse
-- Permission API client PermissionServiceAssignPermissionToRoleWithResponse
-- Platform API client PlatformServiceAssignAgentWithResponse
-- Provider Connect API client ProviderConnectServiceGetConnectAccountWithResponse
-- Provider Customer API client ProviderCustomerServiceRestartProviderCustomerVirtualMachineWithResponse
-- Provider Customer API client ProviderCustomerServiceStartProviderCustomerVirtualMachineWithResponse
-- Provider Dashboard API client ProviderDashboardServiceListDashboardIpamWithResponse
-- Provider Plan API client ProviderPlanServiceCreatePlanWithResponse
-- Provider Review API client ProviderReviewServiceCreateProviderReviewReplyWithBodyWithResponse
-- Region API client RegionServiceCreateRegionWithBodyWithResponse
-- Roadmap API client RoadmapServiceGetRoadmapStatsWithResponse
-- Role API client RoleServiceReplaceRoleForGroupWithResponse
-- Role Replace Role For API client
-- Role API client RoleServiceReplaceRoleForUserWithResponse
-- Snapshot API client SnapshotServiceCreateSnapshotWithResponse
-- Snapshot API client SnapshotServiceRestoreSnapshotWithResponse
-- Ticket API client TicketServiceAddReplyToTicketWithResponse
-- Ticket API client TicketServiceSearchTicketsWithBodyWithResponse
-- Usage Report API client UsageReportServiceGetUsageReportWithResponse
-- User API client UserServiceChangePasswordWithResponse
-- User API client UserServiceDisableMfaWithResponse
-- User API client UserServiceForgotPasswordWithResponse
-- User API client UserServiceGetActiveSessionsWithResponse
-- User API client UserServiceListLinkedIdentitiesWithResponse
-- User API client UserServiceLogoutWithResponse
-- User API client UserServiceSetPasswordWithResponse
-- Virtual Machine API client VirtualMachineServiceAttachVMFirewallWithResponse
-- Virtual Machine API client VirtualMachineServiceDetachVMFirewallWithResponse
-- Virtual Machine API client VirtualMachineServiceDisableAdditionalIPWithResponse
-- Virtual Machine API client VirtualMachineServiceDisableBackupWithResponse
-- Virtual Machine API client VirtualMachineServiceReinstallVirtualMachineWithResponse
-- Virtual Machine API client VirtualMachineServiceStartVirtualMachineWithResponse
-- Virtual Machine API client VirtualMachineServiceUpdateVirtualMachineWithResponse
-- VMTemplate API client VMTemplateServiceGetVMTemplateWithResponse
-- Internal Install Pterodactyl
-- Backup API client BackupServiceGetBackupResponse
-- Chat API client ChatServiceGetConversationHistoryResponse
-- Client Provider Review API client ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse
-- Credit API client CreditServiceGetCreditBalanceWithResponse
-- Exchange Rate API client ExchangeRateServiceGetAllExchangeRatesWithResponse
-- Exchange Rate API client ExchangeRateServiceGetExchangeRateWithResponse
-- Exchange Rate API client ExchangeRateServiceListSupportedCurrenciesWithResponse
-- Group Remove API client
-- IPAM API client IPAMServiceGetNetworkWithResponse
-- IPAM API client IPAMServiceGetNodeNetworkWithResponse
-- IPAM API client IPAMServiceGetPrefixUtilizationWithResponse
-- IPAM API client IPAMServiceGetPrefixWithResponse
-- IPAM API client IPAMServiceListNetworkNodesWithResponse
-- Manual Payout API client ManualPayoutServiceGetManualPayoutWithResponse
-- Marketplace API client MarketplaceServiceGetProviderWithResponse
-- Marketplace API client MarketplaceServiceSearchMarketplaceWithResponse
-- Metadata API client MetadataServiceGetVersionWithResponse
-- Node Placement API client NodePlacementServiceGetNodePlacementPolicyWithResponse
-- Organization API client OrganizationServiceGetOrganizationWithResponse
-- Payment Method API client PaymentMethodServiceRemovePaymentMethodWithResponse
-- Permission API client PermissionServiceRemovePermissionFromRoleWithResponse
-- Provider Customer API client ProviderCustomerServiceGetProviderCustomerStatsWithResponse
-- Provider Dashboard Plans Tab API client
-- Provider Review API client ProviderReviewServiceDeleteProviderReviewReplyWithResponse
-- Roadmap API client RoadmapServiceDeleteRoadmapFeatureRequestCommentWithResponse
-- Roadmap API client RoadmapServiceGetRoadmapFeatureRequestWithResponse
-- Secret API client SecretServiceCreateSecretWithResponse
-- Secret API client SecretServiceGetSecretWithResponse
-- Snapshot API client SnapshotServiceGetSnapshotWithResponse
-- SSHKey API client SSHKeyServiceCreateSSHKeyWithResponse
-- SSHKey API client SSHKeyServiceGetSSHKeyWithResponse
-- Subscription API client SubscriptionServiceGetSubscriptionStatusWithResponse
-- Ticket API client TicketServiceAddInternalCommentWithResponse
-- Ticket API client TicketServiceDownloadTicketAttachmentWithResponse
-- Ticket API client TicketServiceListInternalCommentsWithResponse
-- Usage Report API client UsageReportServiceGetUsageRecordWithResponse
-- User API client UserServiceGetMfaStatusWithResponse
-- User API client UserServiceVerifyEmailWithResponse
-- Virtual Machine API client VirtualMachineServiceGetVNCConsoleWithResponse
-- Virtual Machine API client VirtualMachineServiceListVMTagsWithResponse
-- Addon API client AddonServiceDeleteAddonResponse
-- Agent API client AgentServiceDeleteAgentResponse
-- Backup API client BackupServiceDeleteBackupResponse
-- Chat API client ChatServiceDeleteConversationResponse
-- Client Provider Review API client ClientProviderReviewServiceDeleteClientReviewResponse
-- Cloud Init Template API client CloudInitTemplateServiceDeleteCloudInitTemplateWithResponse
-- Cloud Init User Data API client CloudInitUserDataServiceDeleteCloudInitUserDataWithResponse
-- Domain API client DomainServiceDeleteDomainWithResponse
-- Domain API client DomainServiceVerifyDomainWithResponse
-- Environment Variable API client EnvironmentVariableServiceDeleteEnvironmentVariableWithResponse
-- Firewall API client FirewallServiceDeleteFirewallAddressGroupWithResponse
-- Firewall API client FirewallServiceDeleteFirewallRuleWithResponse
-- Group API client GroupServiceDeleteGroupWithResponse
-- Invite API client InviteServiceDeleteInviteWithResponse
-- Invite API client InviteServiceResendInviteWithResponse
-- IPAM API client IPAMServiceDeleteNetworkWithResponse
-- IPAM API client IPAMServiceDeletePrefixWithResponse
-- IPAM API client IPAMServiceUnassignNetworkFromNodeWithResponse
-- Manual Payout API client ManualPayoutServiceDeleteManualPayoutWithResponse
-- Node API client NodeServiceDeleteNodeWithResponse
-- OAuth2 API client OAuth2ServiceDeleteClientWithResponse
-- Platform API client PlatformServiceDeletePlatformWithResponse
-- Provider Connect API client ProviderConnectServiceDisconnectConnectAccountWithResponse
-- Provider Plan API client ProviderPlanServiceDeletePlanWithResponse
-- Region API client RegionServiceDeleteRegionWithResponse
-- Role API client RoleServiceDeleteRoleWithResponse
-- Secret API client SecretServiceDeleteSecretWithResponse
-- Account Delete API client
-- Account API client ServiceAccountServiceRevokeTokenWithResponse
-- Snapshot API client SnapshotServiceDeleteSnapshotWithResponse
-- Ticket API client TicketServiceDeleteTicketAttachmentWithResponse
-- Ticket API client TicketServiceDeleteTicketTemplateWithResponse
-- Ticket API client TicketServiceDeleteTicketWithResponse
-- User API client UserServiceDeleteUserWithResponse
-- Virtual Machine API client VirtualMachineServiceGetVirtualMachineWithResponse
-- VMTemplate API client VMTemplateServiceDeleteVMTemplateWithResponse
-- Install Discardlogger
-- Addon API client AddonServiceGetAddonResponse
-- Cloud Init Template API client CloudInitTemplateServiceGetCloudInitTemplateWithResponse
-- Domain API client DomainServiceGetDomainWithResponse
-- Environment Variable API client EnvironmentVariableServiceGetEnvironmentVariableWithResponse
-- Invoice API client InvoiceServiceGetInvoiceWithResponse
-- Payment API client PaymentServiceGetPaymentWithResponse
-- Provider Dashboard API client ProviderDashboardServiceGetDashboardSummaryWithResponse
-- Refund API client RefundServiceGetRefundWithResponse
-- OpenAPI service catalog Pending
-- Generated API client ClientOption
-- Install Liqomanager Currentoffloadremotename
-- Internal K8s Manifests
+- net/http.Response
+- Client
+- client.gen.go
+- types.gen.go
+- testing.T
+- cluster.go
+- Client
+- github.com/spf13/cobra.Command
+- operator_upgrade.go
+- cluster_inbound_peering_test.go
+- V1BillingType
+- time.Time
+- TicketServiceGetTicketResponse
+- NodeRings API
+- PlatformPins
+- hypervisor_crds.go
+- LiqoManager
+- prompt.go
+- TicketServiceConfirmTicketAttachmentUploadResponse
+- CloudInitUserDataServiceListCloudInitUserDataResponse
+- TicketServiceUpdateTicketTemplateResponse
+- UserServiceCompleteSSOLinkResponse
+- ServiceAccountServiceCreateServiceAccountResponse
+- IPAMServiceRemoveReservedIPResponse
+- NodeServiceGetNodeCPUMapResponse
+- OrganizationServiceListOrganizationsResponse
+- Changelog
+- FirewallServiceUpdateFirewallRuleSetResponse
+- AgentServiceCreateAgentResponse
+- PlatformServiceUnassignAgentResponse
+- vnc_gateway_image.go
+- SubscriptionServiceCancelRenewalResponse
+- FirewallServiceListFirewallRulesResponse
+- ProviderCustomerServiceListProviderCustomerAssetsResponse
+- RoadmapServiceListRoadmapProductCategoriesResponse
+- GoReleaser configuration
+- NodeServiceListNodesResponse
+- ClusterCleaner
+- InviteServiceDeclineInviteResponse
+- UserServiceListUsersResponse
+- EnvironmentVariableServiceCreateEnvironmentVariableResponse
+- oauth.go
+- loadPterodactylInstall
+- OAuth2ServiceRefreshTokenResponse
+- Service account token
+- MetricsCredentialServiceCreateMetricsWriteCredentialResponse
+- ProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse
+- FirewallServiceMoveFirewallRuleResponse
+- PayoutConfigurationServiceUpdatePayoutConfigurationResponse
+- ProviderNetworkServiceUpdateSmtpOutboundProviderPolicyResponse
+- OAuth2ServiceRevokeTokenResponse
+- RoadmapServiceVoteRoadmapFeatureRequestResponse
+- Troubleshooting
+- SystemCheckResult
+- ProviderDashboardServiceListDashboardTicketStatisticsResponse
+- K3sInstaller
+- NodeRings CLI
+- MarketplaceServiceListAvailableAddonsResponse
+- PayoutInvoiceServiceGetPayoutInvoiceResponse
+- PlanServiceListPlansResponse
+- ProviderCustomerServiceStopProviderCustomerVirtualMachineResponse
+- Default CLI config
+- Verifier
+- noopLogger
+- AddonServiceListAddonsResponse
+- AddonServiceListAddonSubscriptionsResponse
+- GroupServiceListGroupsResponse
+- InstantAppServiceListInstantAppsResponse
+- InvoiceServiceListInvoicesResponse
+- PaymentServiceListPaymentsResponse
+- PayoutInvoiceServiceListPayoutInvoicesResponse
+- PlatformServiceListPlatformsResponse
+- ProviderCustomerServiceListProviderCustomersResponse
+- SnapshotServiceListSnapshotsResponse
+- VirtualMachineServiceListVirtualMachinesResponse
+- MarketplaceServiceListProvidersResponse
+- ProviderReviewServiceListProviderReviewsResponse
+- LiveValidationServiceListPlanLiveValidationBenchmarksResponse
+- ProviderDashboardServiceGetDashboardAssetSalesTimeseriesResponse
+- ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesResponse
+- ProviderDashboardServiceListDashboardInfrastructureResponse
+- RegionServiceListDatacentersResponse
+- ProviderDashboardServiceListDashboardIpamAssignmentsResponse
+- Client
+- LiqoManager
+- AgentServiceGeneratePeeringConfigResponse
+- AgentServiceUpdateAgentResponse
+- ClientProviderReviewServiceCreateClientReviewResponse
+- ClientProviderReviewServiceUpdateClientReviewResponse
+- FirewallServiceUpdateFirewallAddressGroupResponse
+- AddonServiceRemoveAddonResponse
+- BackupServiceListBackupsResponse
+- ClientProviderReviewServiceListClientProviderReviewAssetsResponse
+- CloudInitTemplateServiceListCloudInitTemplatesResponse
+- CreditServiceListCreditLedgerEntriesResponse
+- EnvironmentVariableServiceListEnvironmentVariablesResponse
+- FirewallServiceGetFirewallRuleResponse
+- FirewallServiceListFirewallAddressGroupsResponse
+- InviteServiceListInvitesResponse
+- InviteServiceListMyInvitesResponse
+- IPAMServiceListAllocationsResponse
+- IPAMServiceListNetworksResponse
+- LiveValidationServiceGetPlanLiveValidationResponse
+- LiveValidationServiceListPlanLiveValidationsResponse
+- ManualPayoutServiceCreateManualPayoutResponse
+- MarketplaceServiceListMarketplaceProviderDirectoryResponse
+- MetricServiceListMetricsResponse
+- PayoutInvoiceServiceGetProviderRevenueResponse
+- PermissionServiceListEffectivePermissionsResponse
+- PermissionServiceListPermissionsResponse
+- PreflightServiceListPreflightChecksResponse
+- ProviderDashboardServiceListDashboardPlanSubscriptionStatsResponse
+- RegionServiceListCountriesCitiesResponse
+- RegionServiceListRegionsResponse
+- RoadmapServiceListRoadmapFeatureRequestCommentsResponse
+- RoleServiceListRolesResponse
+- SecretServiceListSecretsResponse
+- SSHKeyServiceListSSHKeysResponse
+- SubscriptionServiceListSubscriptionsResponse
+- VMTemplateServiceListVMTemplatesResponse
+- ClientDashboardServiceGetClientDashboardBillingResponse
+- GroupServiceUpdateGroupResponse
+- LiveValidationServiceStartPlanLiveValidationResponse
+- NodePlacementServiceUpdateNodePlacementPolicyResponse
+- NodeServiceUpdateNodeResponse
+- OAuth2ServiceCreateClientResponse
+- PlanServiceSubscribeResponse
+- ProviderOnboardingServiceGetProviderOnboardingChecklistResponse
+- RefundServiceListRefundsResponse
+- RoadmapServiceUpdateRoadmapFeatureRequestCommentResponse
+- TicketServiceCreateTicketResponse
+- UsageReportServiceListUsageRecordsResponse
+- UserServiceVerifyMfaEnrollmentResponse
+- VirtualMachineServiceEnableAdditionalIPResponse
+- VMTemplateServiceUpdateVMTemplateResponse
+- AddonServiceAddAddonToSubscriptionResponse
+- AgentServiceGenerateInstallCommandResponse
+- AgentServiceUploadInboundPeeringConfigResponse
+- APIError
+- BackupServiceRestoreBackupResponse
+- CreditServicePurchaseCreditsResponse
+- EnvironmentVariableServiceUpdateEnvironmentVariableResponse
+- ExchangeRateServiceConvertCurrencyResponse
+- FirewallServiceCreateFirewallRuleResponse
+- FirewallServiceCreateFirewallRuleSetResponse
+- FirewallServiceDeleteFirewallRuleSetResponse
+- GroupServiceRemoveUserFromGroupResponse
+- InviteServiceAcceptInviteResponse
+- IPAMServiceRemoveReservedPrefixResponse
+- LiveValidationServiceDeletePlanLiveValidationResponse
+- ClientDashboardServiceGetClientDashboardSummaryResponse
+- GroupServiceAddUserToGroupResponse
+- InstantAppServiceGetInstantApp2Response
+- InviteServiceUpdateInviteResponse
+- IPAMServiceAssignNetworkToNodeResponse
+- IPAMServiceCreatePrefixResponse
+- IPAMServiceReserveAllPrefixIPsResponse
+- IPAMServiceUpdateNetworkResponse
+- IPAMServiceUpdatePrefixResponse
+- MetadataServiceHealthCheckResponse
+- MetricsCredentialServiceListMetricsWriteCredentialsResponse
+- OAuth2ServiceListClientsResponse
+- OrganizationServiceCreateOrganizationResponse
+- OrganizationServiceUpdateOrganizationResponse
+- PaymentMethodServiceSetDefaultPaymentMethodResponse
+- PlatformServiceUpdatePlatformResponse
+- ProviderConnectServiceCreateConnectAccountResponse
+- ProviderConnectServiceCreateConnectTaxSessionResponse
+- ProviderPlanServiceUpdatePlanResponse
+- ProviderReviewServiceUpdateProviderReviewReplyResponse
+- RoadmapServiceSubmitRoadmapFeatureRequestResponse
+- RoleServiceCreateRoleResponse
+- RoleServiceUpdateRoleResponse
+- SecretServiceUpdateSecretResponse
+- ServiceAccountServiceGenerateTokenResponse
+- ServiceAccountServiceListTokensResponse
+- SubscriptionServiceRetryPaymentResponse
+- TicketServiceSetTicketPriorityResponse
+- TicketServiceSetTicketStatusResponse
+- UsageReportServiceBatchRecordUsageResponse
+- UsageReportServiceRecordUsageResponse
+- UserServiceEnrollMfaTotpResponse
+- UserServiceRegenerateMfaBackupCodesResponse
+- UserServiceRegisterUserResponse
+- UserServiceResendVerificationEmailResponse
+- UserServiceResetPasswordResponse
+- UserServiceUpdateUserResponse
+- VirtualMachineServiceCreateVirtualMachineResponse
+- VirtualMachineServiceEnableBackupResponse
+- VirtualMachineServiceRestartVirtualMachineResponse
+- VirtualMachineServiceStopVirtualMachineResponse
+- WebhookServiceHandleWebhookResponse
+- Report
+- .AddonServiceCreateAddon
+- AddonServiceUpdateAddonResponse
+- ChatServiceChatAnonymousResponse
+- ChatServiceChatResponse
+- CloudInitTemplateServiceCreateCloudInitTemplateResponse
+- applyMothershipProfile
+- DomainServiceCreateDomainResponse
+- FirewallServiceCreateFirewallAddressGroupResponse
+- FirewallServiceUpdateFirewallRuleResponse
+- ChatServiceListConversationsResponse
+- InstantAppServiceGetInstantAppResponse
+- IPAMServiceListPrefixesResponse
+- ProviderDashboardServiceGetDashboardBillingSalesResponse
+- ProviderDashboardServiceListDashboardAddonCatalogStatsResponse
+- ProviderDashboardServiceListDashboardVirtualMachinesResponse
+- ProviderPlanServiceListAssignableNodesForPlanResponse
+- FirewallServiceGetFirewallAddressGroupResponse
+- GroupServiceAddServiceAccountToGroupResponse
+- GroupServiceCreateGroupResponse
+- GroupServiceGetGroupResponse
+- InviteServiceCreateInviteResponse
+- IPAMServiceAddReservedIPResponse
+- IPAMServiceAddReservedPrefixResponse
+- IPAMServiceClearAllPrefixReservedIPsResponse
+- IPAMServiceCreateNetworkResponse
+- IPAMServiceListAvailableIPsResponse
+- LiveValidationServiceListEligibleNodesForPlanResponse
+- MarketplaceServiceListAvailableRegionsResponse
+- MetadataServiceGetPlatformVersionsResponse
+- MetricsCredentialServiceRevokeMetricsWriteCredentialResponse
+- MetricServiceGetMetricResponse
+- NodeServiceCreateNodeResponse
+- NodeServiceValidateNodeTopologyResponse
+- OAuth2ServiceAuthorizeResponse
+- PaymentMethodServiceListPaymentMethodsResponse
+- PermissionServiceAssignPermissionToRoleResponse
+- PlatformServiceAssignAgentResponse
+- context.Context
+- ProviderCustomerServiceRestartProviderCustomerVirtualMachineResponse
+- ProviderCustomerServiceStartProviderCustomerVirtualMachineResponse
+- ProviderDashboardServiceListDashboardIpamResponse
+- ProviderPlanServiceCreatePlanResponse
+- ProviderReviewServiceCreateProviderReviewReplyResponse
+- RegionServiceCreateRegionResponse
+- RoadmapServiceGetRoadmapStatsResponse
+- ClientWithResponses
+- RoadmapServiceListRoadmapFeatureRequestsResponse
+- RoleServiceReplaceRoleForUserResponse
+- SnapshotServiceCreateSnapshotResponse
+- SnapshotServiceRestoreSnapshotResponse
+- TicketServiceAddReplyToTicketResponse
+- TicketServiceSearchTicketsResponse
+- UsageReportServiceGetUsageReportResponse
+- UserServiceChangePasswordResponse
+- UserServiceDisableMfaResponse
+- UserServiceForgotPasswordResponse
+- UserServiceGetActiveSessionsResponse
+- UserServiceListLinkedIdentitiesResponse
+- UserServiceLogoutResponse
+- UserServiceSetPasswordResponse
+- VirtualMachineServiceAttachVMFirewallResponse
+- VirtualMachineServiceDetachVMFirewallResponse
+- VirtualMachineServiceDisableAdditionalIPResponse
+- VirtualMachineServiceDisableBackupResponse
+- V1VirtualMachine
+- VirtualMachineServiceStartVirtualMachineResponse
+- VirtualMachineServiceUpdateVirtualMachineResponse
+- VMTemplateServiceGetVMTemplateResponse
+- NewManager
+- BackupServiceGetBackupResponse
+- ChatServiceGetConversationHistoryResponse
+- ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse
+- CreditServiceGetCreditBalanceResponse
+- ExchangeRateServiceGetAllExchangeRatesResponse
+- ExchangeRateServiceGetExchangeRateResponse
+- ExchangeRateServiceListSupportedCurrenciesResponse
+- GroupServiceRemoveServiceAccountFromGroupResponse
+- IPAMServiceGetNetworkResponse
+- IPAMServiceGetNodeNetworkResponse
+- IPAMServiceGetPrefixUtilizationResponse
+- IPAMServiceGetPrefixResponse
+- IPAMServiceListNetworkNodesResponse
+- k8s.io/client-go/kubernetes.Interface
+- CloudInitUserDataServiceUpdateCloudInitUserDataResponse
+- MarketplaceServiceSearchMarketplaceResponse
+- MetadataServiceGetVersionResponse
+- NodePlacementServiceGetNodePlacementPolicyResponse
+- OrganizationServiceGetOrganizationResponse
+- PaymentMethodServiceRemovePaymentMethodResponse
+- PermissionServiceRemovePermissionFromRoleResponse
+- ProviderCustomerServiceGetProviderCustomerStatsResponse
+- ProviderDashboardPlansTabServiceGetDashboardPlansTabStatsResponse
+- ProviderReviewServiceDeleteProviderReviewReplyResponse
+- RoadmapServiceDeleteRoadmapFeatureRequestCommentResponse
+- RoadmapServiceGetRoadmapFeatureRequestResponse
+- SecretServiceCreateSecretResponse
+- SecretServiceGetSecretResponse
+- SnapshotServiceGetSnapshotResponse
+- SSHKeyServiceCreateSSHKeyResponse
+- SSHKeyServiceGetSSHKeyResponse
+- SubscriptionServiceGetSubscriptionStatusResponse
+- TicketServiceAddInternalCommentResponse
+- TicketServiceDownloadTicketAttachmentResponse
+- TicketServiceListInternalCommentsResponse
+- UsageReportServiceGetUsageRecordResponse
+- UserServiceGetMfaStatusResponse
+- UserServiceVerifyEmailResponse
+- VirtualMachineServiceGetVNCConsoleResponse
+- VirtualMachineServiceListVMTagsResponse
+- V1SuccessResponse
+- AgentServiceDeleteAgentResponse
+- BackupServiceDeleteBackupResponse
+- ChatServiceDeleteConversationResponse
+- ClientProviderReviewServiceDeleteClientReviewResponse
+- CloudInitTemplateServiceDeleteCloudInitTemplateResponse
+- CloudInitUserDataServiceDeleteCloudInitUserDataResponse
+- DomainServiceDeleteDomainResponse
+- DomainServiceVerifyDomainResponse
+- EnvironmentVariableServiceDeleteEnvironmentVariableResponse
+- FirewallServiceDeleteFirewallAddressGroupResponse
+- FirewallServiceDeleteFirewallRuleResponse
+- GroupServiceDeleteGroupResponse
+- InviteServiceDeleteInviteResponse
+- InviteServiceResendInviteResponse
+- CloudInitUserDataServiceGetCloudInitUserDataResponse
+- IPAMServiceDeletePrefixResponse
+- IPAMServiceUnassignNetworkFromNodeResponse
+- ManualPayoutServiceDeleteManualPayoutResponse
+- NodeServiceDeleteNodeResponse
+- OAuth2ServiceDeleteClientResponse
+- ProviderPlanServiceCalculatePlanPricingResponse
+- ProviderConnectServiceDisconnectConnectAccountResponse
+- ProviderPlanServiceDeletePlanResponse
+- TicketServiceListTicketTemplatesResponse
+- RoleServiceDeleteRoleResponse
+- SecretServiceDeleteSecretResponse
+- ServiceAccountServiceDeleteServiceAccountResponse
+- ServiceAccountServiceRevokeTokenResponse
+- SnapshotServiceDeleteSnapshotResponse
+- TicketServiceDeleteTicketAttachmentResponse
+- TicketServiceDeleteTicketTemplateResponse
+- TicketServiceDeleteTicketResponse
+- UserServiceDeleteUserResponse
+- VirtualMachineServiceGetVirtualMachineResponse
+- VMTemplateServiceDeleteVMTemplateResponse
+- discardLogger
+- AddonServiceGetAddonResponse
+- CloudInitTemplateServiceGetCloudInitTemplateResponse
+- DomainServiceGetDomainResponse
+- EnvironmentVariableServiceGetEnvironmentVariableResponse
+- InvoiceServiceGetInvoiceResponse
+- PaymentServiceGetPaymentResponse
+- ifaceAddr
+- RefundServiceGetRefundResponse
+- Provider organization review
+- ClientOption
+- PaymentMethodServiceAttachPaymentMethodResponse
+- .applyManifestFromReader
 - Security policy
-- Internal Verify Verifier
-- Install Liqomanager Getapiserverproxyip
-- Generated API client NewAddonServiceCreateAddonRequest
-- Generated API client NewAddonServiceUpdateAddonRequest
-- Generated API client NewAgentServiceGenerateInstallCommandRequest
-- Generated API client NewAgentServiceGeneratePeeringConfigRequest
-- Generated API client NewBackupServiceRestoreBackupRequest
-- Generated API client NewChatServiceChatRequest
-- Generated API client NewClientProviderReviewServiceCreateClientReviewRequest
-- Generated API client NewClientProviderReviewServiceUpdateClientReviewRequest
-- Generated API client NewCloudInitUserDataServiceUpdateCloudInitUserDataRequest
-- Generated API client NewEnvironmentVariableServiceCreateEnvironmentVariableRequest
-- Generated API client NewEnvironmentVariableServiceUpdateEnvironmentVariableRequest
-- Generated API client NewFirewallServiceCreateFirewallAddressGroupRequest
-- Generated API client NewFirewallServiceCreateFirewallRuleRequest
-- Generated API client NewFirewallServiceCreateFirewallRuleSetRequest
-- Generated API client NewGroupServiceAddServiceAccountToGroupRequest
-- Generated API client NewGroupServiceAddUserToGroupRequest
-- Generated API client NewGroupServiceCreateGroupRequest
-- Generated API client NewInviteServiceCreateInviteRequest
-- Generated API client NewInviteServiceUpdateInviteRequest
-- Generated API client NewIPAMServiceAddReservedPrefixRequest
-- Generated API client NewIPAMServiceClearAllPrefixReservedIPsRequest
-- Generated API client NewIPAMServiceCreateNetworkRequest
-- Generated API client NewIPAMServiceCreatePrefixRequest
-- Generated API client NewIPAMServiceUpdatePrefixRequest
-- Generated API client NewManualPayoutServiceCreateManualPayoutRequest
-- Generated API client NewMarketplaceServiceSearchMarketplaceRequest
-- Generated API client NewMetricsCredentialServiceCreateMetricsWriteCredentialRequest
-- Generated API client NewNodeServiceCreateNodeRequest
-- Generated API client NewNodeServiceValidateNodeTopologyRequest
-- Generated API client NewOAuth2ServiceRefreshTokenRequest
-- Generated API client NewOAuth2ServiceRevokeTokenRequest
-- Generated API client NewOAuth2ServiceTokenRequest
-- Generated API client NewOrganizationServiceCreateOrganizationRequest
-- Generated API client NewOrganizationServiceUpdateOrganizationRequest
-- Generated API client NewPaymentMethodServiceAttachPaymentMethodRequest
-- Generated API client NewPaymentMethodServiceSetDefaultPaymentMethodRequest
-- Generated API client NewPayoutConfigurationServiceUpdatePayoutConfigurationRequest
-- Generated API client NewPermissionServiceAssignPermissionToRoleRequest
-- Generated API client NewPlatformServiceAssignAgentRequest
-- Generated API client NewPlatformServiceUnassignAgentRequest
-- Generated API client NewProviderConnectServiceCreateConnectAccountRequest
-- Generated API client NewProviderConnectServiceCreateConnectTaxSessionRequest
-- Generated API client NewProviderCustomerServiceStartProviderCustomerVirtualMachineRequest
-- Generated API client NewProviderNetworkServiceUpdateSmtpOutboundProviderPolicyRequest
-- Generated API client NewProviderPlanServiceCreatePlanRequest
-- Generated API client NewProviderPlanServiceUpdatePlanRequest
-- Generated API client NewProviderReviewServiceCreateProviderReviewReplyRequest
-- Generated API client NewRoadmapServiceUpdateRoadmapFeatureRequestCommentRequest
-- Generated API client NewRoadmapServiceVoteRoadmapFeatureRequestRequest
-- Generated API client NewRoleServiceCreateRoleRequest
-- Generated API client NewRoleServiceReplaceRoleForServiceAccountRequest
-- Generated API client NewRoleServiceReplaceRoleForUserRequest
-- Generated API client NewSecretServiceCreateSecretRequest
-- Generated API client NewSecretServiceUpdateSecretRequest
-- Generated API client NewServiceAccountServiceGenerateTokenRequest
-- Generated API client NewServiceAccountServiceUpdateServiceAccountRequest
-- Generated API client NewSubscriptionServiceRetryPaymentRequest
-- Generated API client NewTicketServiceAddInternalCommentRequest
-- Generated API client NewTicketServiceConfirmTicketAttachmentUploadRequest
-- Generated API client NewTicketServiceSetTicketStatusRequest
-- Generated API client NewTicketServiceUpdateTicketTemplateRequest
-- Generated API client NewTicketServiceUploadTicketAttachmentContentRequest
-- Generated API client NewUsageReportServiceBatchRecordUsageRequest
-- Generated API client NewUsageReportServiceRecordUsageRequest
-- Generated API client NewUserServiceDisableMfaRequest
-- Generated API client NewUserServiceEnrollMfaTotpRequest
-- Generated API client NewUserServiceForgotPasswordRequest
-- Generated API client NewUserServiceLoginMfaVerifyRequest
-- Generated API client NewUserServiceLoginRequest
-- Generated API client NewUserServiceLogoutRequest
-- Generated API client NewUserServiceResetPasswordRequest
-- Generated API client NewUserServiceUpdateUserRequest
-- Generated API client NewVirtualMachineServiceAttachVMFirewallRequest
-- Generated API client NewVirtualMachineServiceCreateVirtualMachineRequest
-- Generated API client NewVirtualMachineServiceDetachVMFirewallRequest
-- Generated API client NewVirtualMachineServiceDisableAdditionalIPRequest
-- Generated API client NewVirtualMachineServiceEnableBackupRequest
-- Generated API client NewVirtualMachineServiceReinstallVirtualMachineRequest
-- Generated API client NewVirtualMachineServiceRestartVirtualMachineRequest
-- Generated API client NewVirtualMachineServiceStartVirtualMachineRequest
-- Generated API client NewVirtualMachineServiceStopVirtualMachineRequest
-- Generated API client NewVirtualMachineServiceUpdateVirtualMachineRequest
-- Generated API client NewVMTemplateServiceUpdateVMTemplateRequest
-- Internal Config Defaults
-- Pkg Github Com
+- AgentStatus
+- .ResolveInboundAPIServerProxyURL
+- NewAddonServiceCreateAddonRequest
+- PlatformServiceCreatePlatformResponse
+- NewAgentServiceGenerateInstallCommandRequest
+- NewAgentServiceGeneratePeeringConfigRequest
+- NewBackupServiceRestoreBackupRequest
+- NewChatServiceChatRequest
+- NewClientProviderReviewServiceCreateClientReviewRequest
+- NewClientProviderReviewServiceUpdateClientReviewRequest
+- RoadmapServiceCreateRoadmapFeatureRequestCommentResponse
+- VMTemplateServiceCreateVMTemplateResponse
+- NewEnvironmentVariableServiceUpdateEnvironmentVariableRequest
+- CloudInitTemplateServiceUpdateCloudInitTemplateResponse
+- NewFirewallServiceCreateFirewallRuleRequest
+- CloudInitUserDataServiceCreateCloudInitUserDataResponse
+- NewGroupServiceAddServiceAccountToGroupRequest
+- NewGroupServiceAddUserToGroupRequest
+- PlatformServiceGetPlatformResponse
+- NewInviteServiceCreateInviteRequest
+- NewInviteServiceUpdateInviteRequest
+- ProviderCustomerServiceGetProviderCustomerResponse
+- NewIPAMServiceClearAllPrefixReservedIPsRequest
+- NewIPAMServiceCreateNetworkRequest
+- TicketServiceCreateTicketTemplateResponse
+- UserServiceGetUserResponse
+- OrganizationServiceDeleteOrganizationResponse
+- SSHKeyServiceDeleteSSHKeyResponse
+- UserServiceUnlinkIdentityResponse
+- VirtualMachineServiceDeleteVirtualMachineResponse
+- NewNodeServiceValidateNodeTopologyRequest
+- NewOAuth2ServiceRefreshTokenRequest
+- NewOAuth2ServiceRevokeTokenRequest
+- NewOAuth2ServiceTokenRequest
+- NewOrganizationServiceCreateOrganizationRequest
+- NewOrganizationServiceUpdateOrganizationRequest
+- NewPaymentMethodServiceAttachPaymentMethodRequest
+- format.go
+- NewPayoutConfigurationServiceUpdatePayoutConfigurationRequest
+- NewPermissionServiceAssignPermissionToRoleRequest
+- .ChatServiceChatAnonymous
+- .OrganizationServiceUpdateOrganization
+- .TicketServiceUpdateTicketTemplate
+- .VirtualMachineServiceReinstallVirtualMachine
+- gateway_region.go
+- NewProviderNetworkServiceUpdateSmtpOutboundProviderPolicyRequest
+- NewProviderPlanServiceCreatePlanRequest
+- NewProviderPlanServiceUpdatePlanRequest
+- UsageError
+- NewRoadmapServiceUpdateRoadmapFeatureRequestCommentRequest
+- NewAgentServiceUploadInboundPeeringConfigRequest
+- NewChatServiceChatAnonymousRequest
+- NewCloudInitUserDataServiceCreateCloudInitUserDataRequest
+- NewRoleServiceReplaceRoleForUserRequest
+- NewSecretServiceCreateSecretRequest
+- NewDomainServiceCreateDomainRequest
+- NewServiceAccountServiceGenerateTokenRequest
+- NewServiceAccountServiceUpdateServiceAccountRequest
+- NewExchangeRateServiceConvertCurrencyRequest
+- NewFirewallServiceUpdateFirewallRuleRequest
+- NewFirewallServiceUpdateFirewallRuleSetRequest
+- NewTicketServiceSetTicketStatusRequest
+- NewGroupServiceUpdateGroupRequest
+- NewTicketServiceUploadTicketAttachmentContentRequest
+- NewUsageReportServiceBatchRecordUsageRequest
+- NewIPAMServiceAddReservedIPRequest
+- NewUserServiceDisableMfaRequest
+- NewIPAMServiceAssignNetworkToNodeRequest
+- NewUserServiceForgotPasswordRequest
+- NewIPAMServiceUpdateNetworkRequest
+- NewUserServiceLoginRequest
+- NewUserServiceLogoutRequest
+- NewUserServiceResetPasswordRequest
+- NewLiveValidationServiceStartPlanLiveValidationRequest
+- NewNodeServiceUpdateNodeRequest
+- NewOAuth2ServiceCreateClientRequest
+- NewPlatformServiceCreatePlatformRequest
+- NewVirtualMachineServiceDisableAdditionalIPRequest
+- NewVirtualMachineServiceEnableBackupRequest
+- NewPlatformServiceUpdatePlatformRequest
+- NewVirtualMachineServiceRestartVirtualMachineRequest
+- NewProviderCustomerServiceRestartProviderCustomerVirtualMachineRequest
+- NewProviderCustomerServiceStopProviderCustomerVirtualMachineRequest
+- NewVirtualMachineServiceUpdateVirtualMachineRequest
+- NewVMTemplateServiceUpdateVMTemplateRequest
+- DefaultConfig
+- github.com/noderings/cli
+- NewProviderPlanServiceCalculatePlanPricingRequest
+- NewProviderReviewServiceUpdateProviderReviewReplyRequest
+- NewRegionServiceCreateRegionRequest
+- NewRoadmapServiceSubmitRoadmapFeatureRequestRequest
+- NewRoleServiceReplaceRoleForGroupRequest
+- NewRoleServiceUpdateRoleRequest
+- NewServiceAccountServiceCreateServiceAccountRequest
+- NewSnapshotServiceRestoreSnapshotRequest
+- NewSubscriptionServiceCancelRenewalRequest
+- NewTicketServiceCreateTicketTemplateRequest
+- NewTicketServiceSearchTicketsRequest
+- NewTicketServiceSetTicketPriorityRequest
+- NewUserServiceCompleteSSOLinkRequest
+- NewUserServiceExchangeSSOCodeRequest
+- NewUserServiceRegisterUserRequest
+- NewUserServiceResendVerificationEmailRequest
+- NewVirtualMachineServiceDisableBackupRequest
+- NewVirtualMachineServiceEnableAdditionalIPRequest
+- NewVMTemplateServiceCreateVMTemplateRequest
+- NewWebhookServiceHandleWebhookRequest
 
 ## God Nodes (most connected - your core abstractions)
 1. `Client` - 510 edges
@@ -466,930 +491,954 @@
 ## Surprising Connections (you probably didn't know these)
 - `README sign-in anchor` --references--> `Service account token`  [AMBIGUOUS]
   docs/INSTALL.md → README.md
-- `Leftover k3s re-register block` --conceptually_related_to--> `Default k3s install`  [INFERRED]
-  CHANGELOG.md → configs/default.yaml
 - `Mimir write tokens via API` --conceptually_related_to--> `Metrics credential service`  [AMBIGUOUS]
   CHANGELOG.md → internal/api/generated/openapi3.yaml
+- `Leftover k3s re-register block` --conceptually_related_to--> `Default k3s install`  [INFERRED]
+  CHANGELOG.md → configs/default.yaml
 - `Generated API path exclusion` --references--> `NodeRings API`  [INFERRED]
   .golangci.yml → internal/api/generated/openapi3.yaml
-- `1.0.7 echo VirtFusion tokens` --references--> `VirtFusion credentials`  [INFERRED]
-  CHANGELOG.md → docs/CONFIG.md
+- `Do not edit generated API` --references--> `NodeRings API`  [INFERRED]
+  CONTRIBUTING.md → internal/api/generated/openapi3.yaml
 
 ## Import Cycles
 - None detected.
 
 ## Hyperedges (group relationships)
-- **Agent registration flow** — readme_service_account_token, readme_org_id, readme_agent_ip, readme_hypervisor_driver, readme_cluster_register [EXTRACTED 1.00]
-- **Liqo offloading CRD reflection allowlists** — internal_install_liqo_provider_values_proxmox_allowlist, internal_install_liqo_provider_values_virtfusion_allowlist, internal_install_liqo_provider_values_solusvm_allowlist, internal_install_liqo_provider_values_pterodactyl_allowlist, internal_install_liqo_provider_values_kopf_skip [EXTRACTED 1.00]
 - **CI required gates** — _github_workflows_ci_test, _github_workflows_ci_lint, _github_workflows_ci_vuln [EXTRACTED 1.00]
+- **Liqo offloading CRD reflection allowlists** — internal_install_liqo_provider_values_proxmox_allowlist, internal_install_liqo_provider_values_virtfusion_allowlist, internal_install_liqo_provider_values_solusvm_allowlist, internal_install_liqo_provider_values_pterodactyl_allowlist, internal_install_liqo_provider_values_kopf_skip [EXTRACTED 1.00]
+- **Agent registration flow** — readme_service_account_token, readme_org_id, readme_agent_ip, readme_hypervisor_driver, readme_cluster_register [EXTRACTED 1.00]
 
-## Communities (441 total, 213 thin omitted)
+## Communities (461 total, 223 thin omitted)
 
-### Community 2 - "Generated API client Request"
+### Community 2 - "client.gen.go"
 Cohesion: 0.02
-Nodes (270): NewAddonServiceAddAddonToSubscriptionRequest(), NewAddonServiceAddAddonToSubscriptionRequestWithBody(), NewAddonServiceDeleteAddonRequest(), NewAddonServiceGetAddonRequest(), NewAddonServiceListAddonsRequest(), NewAgentServiceCreateAgentRequest(), NewAgentServiceCreateAgentRequestWithBody(), NewAgentServiceDeleteAgentRequest() (+262 more)
+Nodes (259): NewAddonServiceAddAddonToSubscriptionRequest(), NewAddonServiceAddAddonToSubscriptionRequestWithBody(), NewAddonServiceDeleteAddonRequest(), NewAddonServiceGetAddonRequest(), NewAddonServiceUpdateAddonRequest(), NewAddonServiceUpdateAddonRequestWithBody(), NewAgentServiceCreateAgentRequest(), NewAgentServiceCreateAgentRequestWithBody() (+251 more)
 
-### Community 4 - "Generated API client AddonServiceAddAddonToSubscriptionBody"
+### Community 4 - "types.gen.go"
 Cohesion: 0.01
-Nodes (173): AddonServiceAddAddonToSubscriptionBody, AddonServiceUpdateAddonBody, AgentServiceUploadInboundPeeringConfigBody, BackupServiceRestoreBackupBody, ClientProviderReviewServiceUpdateClientReviewBody, CloudInitTemplateServiceUpdateCloudInitTemplateBody, CloudInitUserDataServiceUpdateCloudInitUserDataBody, EnvironmentVariableServiceUpdateEnvironmentVariableBody (+165 more)
+Nodes (174): AddonServiceAddAddonToSubscriptionBody, AddonServiceUpdateAddonBody, AgentServiceUpdateAgentBody, AgentServiceUploadInboundPeeringConfigBody, BackupServiceRestoreBackupBody, ClientProviderReviewServiceUpdateClientReviewBody, CloudInitTemplateServiceUpdateCloudInitTemplateBody, CloudInitUserDataServiceUpdateCloudInitUserDataBody (+166 more)
 
-### Community 5 - "Internal Install Liqo"
+### Community 5 - "testing.T"
 Cohesion: 0.02
-Nodes (153): OAuthClient, OAuthConfig, PKCEParams, ifaceAddr, peeringInfoPeer, TestExchangeCode(), TestExchangeCodeErrors(), TestGeneratePKCE() (+145 more)
+Nodes (158): peeringInfoPeer, authedCall(), newTestClient(), TestDoWithAutoRefreshConcurrentRefreshesOnce(), TestDoWithAutoRefreshRetriesWithNewToken(), TestDoWithAutoRefreshSurfacesPostRefreshFailure(), TestDoWithAutoRefreshUnrecoverableWhenRefreshFails(), clearTokenEnv() (+150 more)
 
-### Community 6 - "Go Pkg K8s"
-Cohesion: 0.12
-Nodes (7): apiClientExtras, CalicoConfig, K3sConfig, LiqoConfig, helmDriverInstances, helmInstanceRef, helmValuesSecrets
+### Community 6 - "cluster.go"
+Cohesion: 0.11
+Nodes (4): apiClientExtras, CalicoConfig, K3sConfig, LiqoConfig
 
-### Community 7 - "Internal Cli Cluster"
+### Community 7 - "Client"
 Cohesion: 0.03
-Nodes (95): TokenRefreshFunc, agentAPIStatusFetcher, clusterRegisterOpts, APIConfig, AuthConfig, ClustersConfig, DownloadsConfig, FrontendConfig (+87 more)
+Nodes (102): TokenRefreshFunc, agentAPIStatusFetcher, clusterRegisterOpts, APIConfig, AuthConfig, ClustersConfig, DownloadsConfig, FrontendConfig (+94 more)
 
-### Community 8 - "Internal Cli Cluster ClientOption"
+### Community 8 - "github.com/spf13/cobra.Command"
+Cohesion: 0.05
+Nodes (105): TokenInfo, apiClientOption, authServerProbe, ParseError(), NewStorage(), GetTokenFromConfig(), GetTokenFromEnv(), TokenSource (+97 more)
+
+### Community 9 - "operator_upgrade.go"
 Cohesion: 0.04
-Nodes (124): apiClientOption, authServerProbe, ClusterStatus, HealthCheck, SystemInfo, ParseError(), NewStorage(), getAgentID() (+116 more)
+Nodes (76): helmDriverInstances, helmInstanceRef, helmValuesSecrets, operatorDriverSpec, operatorReleaseCandidate, OperatorUpgrade, ReusableOperator, VirtFusionOperatorInstaller (+68 more)
 
-### Community 9 - "Internal Config Constants"
+### Community 10 - "cluster_inbound_peering_test.go"
+Cohesion: 0.07
+Nodes (43): main(), buildTLSConfig(), hasScheme(), NewClient(), TestSetOrganizationIDSetsHeader(), IsProviderReviewPending(), isProviderReviewPendingText(), TestIsProviderReviewPendingWrapped() (+35 more)
+
+### Community 11 - "V1BillingType"
+Cohesion: 0.04
+Nodes (37): MarketplaceServiceGetMarketplacePlanResponse, MarketplaceServiceGetProviderResponse, MarketplaceServiceListAvailablePlansParams, MarketplaceServiceListAvailablePlansParamsFilterBillingType, MarketplaceServiceListAvailablePlansParamsFilterComputeCategory, MarketplaceServiceListAvailablePlansParamsFilterComputeType, MarketplaceServiceListAvailablePlansResponse, ProviderDashboardServiceGetDashboardSummaryResponse (+29 more)
+
+### Community 12 - "time.Time"
 Cohesion: 0.03
-Nodes (87): operatorDriverSpec, operatorReleaseCandidate, OperatorUpgrade, ProxmoxOperatorInstaller, ReusableOperator, SolusVMOperatorInstaller, VirtFusionOperatorInstaller, operatorChartEnv() (+79 more)
+Nodes (69): Protov1Status, V1Addon, V1AddonPrice, V1AddonPriceKind, V1AddonStatus, V1AddonSubscription, V1AssetCategory, V1AttachPaymentMethodResponse (+61 more)
 
-### Community 10 - "Internal Cli Cluster Config"
-Cohesion: 0.06
-Nodes (60): Config, UsageError, main(), buildTLSConfig(), hasScheme(), NewClient(), TestSetOrganizationIDSetsHeader(), authedCall() (+52 more)
+### Community 13 - "TicketServiceGetTicketResponse"
+Cohesion: 0.07
+Nodes (16): TicketServiceGetTicketResponse, TicketServiceListTicketsParams, TicketServiceListTicketsParamsFilterCaseType, TicketServiceListTicketsParamsFilterPriority, TicketServiceListTicketsParamsFilterTicketStatus, TicketServiceListTicketsResponse, V1GetTicketResponse, V1ListTicketsResponse (+8 more)
 
-### Community 11 - "Generated API client GetJSON200"
-Cohesion: 0.03
-Nodes (52): MarketplaceServiceGetMarketplacePlanResponse, MarketplaceServiceListAvailablePlansParams, MarketplaceServiceListAvailablePlansParamsFilterBillingType, MarketplaceServiceListAvailablePlansParamsFilterComputeCategory, MarketplaceServiceListAvailablePlansParamsFilterComputeType, MarketplaceServiceListAvailablePlansResponse, V1Addon, V1AddonPrice (+44 more)
-
-### Community 12 - "Generated API client GetJSON200"
-Cohesion: 0.04
-Nodes (50): Protov1Status, V1AddonStatus, V1AddonSubscription, V1AggregationType, V1AttachPaymentMethodResponse, V1Backup, V1BackupOperationStatus, V1BackupStatus (+42 more)
-
-### Community 13 - "Generated API client ProviderDashboardServiceListDashboardTicketStatistics"
-Cohesion: 0.04
-Nodes (33): ProviderDashboardServiceListDashboardTicketStatisticsParams, ProviderDashboardServiceListDashboardTicketStatisticsResponse, TicketServiceGetTicketResponse, TicketServiceListTicketsParams, TicketServiceListTicketsParamsFilterCaseType, TicketServiceListTicketsParamsFilterPriority, TicketServiceListTicketsParamsFilterTicketStatus, TicketServiceListTicketsResponse (+25 more)
-
-### Community 14 - "OpenAPI service catalog"
+### Community 14 - "NodeRings API"
 Cohesion: 0.04
 Nodes (58): Default frontend URL, Addon service, Backup service, Chat service, Client dashboard service, Client provider review service, Cloud-init template service, Cloud-init user data service (+50 more)
 
-### Community 15 - "Install tool versions"
-Cohesion: 0.07
-Nodes (32): ToolBootstrapper, VersionChecker, Client, ComponentPin, PlatformPins, ParsePlatformVersions(), TestParsePlatformVersionsNil(), ApplyPlatformPinsToConfig() (+24 more)
+### Community 15 - "PlatformPins"
+Cohesion: 0.06
+Nodes (32): ToolBootstrapper, VersionChecker, Client, ComponentPin, PlatformPins, ParsePlatformVersions(), strPtr(), TestParsePlatformVersions() (+24 more)
 
-### Community 16 - "Hypervisor CRD install"
-Cohesion: 0.07
-Nodes (49): hypervisorCRDChart, helmResourcePolicyAnnotation(), isOCIRef(), operatorChartSiblings(), AnnotateOperatorCRDsKeep(), appendOCIChartVersion(), applyCRDChartManifests(), crdChartVersion() (+41 more)
+### Community 16 - "hypervisor_crds.go"
+Cohesion: 0.13
+Nodes (34): hypervisorCRDChart, isOCIRef(), operatorChartSiblings(), AnnotateOperatorCRDsKeep(), appendOCIChartVersion(), applyCRDChartManifests(), crdBareName(), crdChartVersion() (+26 more)
 
-### Community 17 - "Internal Install Liqo APIError"
-Cohesion: 0.07
-Nodes (15): APIError, ToolRequirement, ValidationResult, Validator, applyJSONError(), applyStatusHeaders(), fillAPIErrorFromObject(), isHTTPStatusLabel() (+7 more)
+### Community 17 - "LiqoManager"
+Cohesion: 0.10
+Nodes (12): ToolRequirement, ValidationResult, Validator, LiqoManager, TestLiqoInfoIndicatesReadyRequiresClusterID(), liqoInfoIndicatesReady(), parsePeeredClusterIDsFromInfoPeerOutput(), TestParsePeeredClusterIDsFromInfoPeerOutput() (+4 more)
 
-### Community 18 - "Internal Cli Prompt"
-Cohesion: 0.07
-Nodes (44): ProxmoxInstance, proxmoxInstancesFile, SolusVMInstance, solusvmInstancesFile, VirtFusionInstance, virtfusionInstancesFile, hypervisorCredsProvided(), TestCompleteOperatorInstallFromReuseRequiresReinstallFlag() (+36 more)
-
-### Community 19 - "Ticket API client"
+### Community 18 - "prompt.go"
 Cohesion: 0.05
+Nodes (54): ProxmoxInstance, proxmoxInstancesFile, ProxmoxOperatorInstaller, SolusVMInstance, solusvmInstancesFile, SolusVMOperatorInstaller, VirtFusionInstance, virtfusionInstancesFile (+46 more)
+
+### Community 19 - "TicketServiceConfirmTicketAttachmentUploadResponse"
+Cohesion: 0.06
 Nodes (11): TicketServiceConfirmTicketAttachmentUploadResponse, TicketServiceCreateTicketAttachmentUploadResponse, TicketServiceListTicketAttachmentsResponse, TicketServiceUploadTicketAttachmentContentResponse, V1CreateTicketAttachmentUploadResponse, V1ListTicketAttachmentsResponse, V1TicketAttachment, ParseTicketServiceConfirmTicketAttachmentUploadResponse() (+3 more)
 
-### Community 20 - "Cloud Init User Data API client"
-Cohesion: 0.06
-Nodes (13): CloudInitUserDataServiceCreateCloudInitUserDataResponse, CloudInitUserDataServiceGetCloudInitUserDataResponse, CloudInitUserDataServiceListCloudInitUserDataParams, CloudInitUserDataServiceListCloudInitUserDataResponse, CloudInitUserDataServiceUpdateCloudInitUserDataResponse, V1CloudInitUserData, V1CloudInitValidationWarning, V1ListCloudInitUserDataResponse (+5 more)
+### Community 20 - "CloudInitUserDataServiceListCloudInitUserDataResponse"
+Cohesion: 0.22
+Nodes (5): CloudInitUserDataServiceListCloudInitUserDataParams, CloudInitUserDataServiceListCloudInitUserDataResponse, V1ListCloudInitUserDataResponse, NewCloudInitUserDataServiceListCloudInitUserDataRequest(), ParseCloudInitUserDataServiceListCloudInitUserDataResponse()
 
-### Community 21 - "Ticket API client TicketServiceListTicketTemplates"
-Cohesion: 0.06
-Nodes (13): TicketServiceCreateTicketTemplateResponse, TicketServiceGetTicketTemplateResponse, TicketServiceListTicketTemplatesParams, TicketServiceListTicketTemplatesResponse, TicketServiceUpdateTicketTemplateResponse, V1ListTicketTemplatesResponse, V1TicketTemplate, V1TicketTemplateVariableDefinition (+5 more)
+### Community 21 - "TicketServiceUpdateTicketTemplateResponse"
+Cohesion: 0.12
+Nodes (6): TicketServiceGetTicketTemplateResponse, TicketServiceUpdateTicketTemplateResponse, V1ListTicketTemplatesResponse, V1TicketTemplate, V1TicketTemplateVariableDefinition, ParseTicketServiceGetTicketTemplateResponse()
 
-### Community 22 - "User API client"
+### Community 22 - "UserServiceCompleteSSOLinkResponse"
 Cohesion: 0.06
 Nodes (9): UserServiceCompleteSSOLinkResponse, UserServiceExchangeSSOCodeResponse, UserServiceLoginMfaVerifyResponse, UserServiceLoginResponse, V1LoginResponse, ParseUserServiceCompleteSSOLinkResponse(), ParseUserServiceExchangeSSOCodeResponse(), ParseUserServiceLoginMfaVerifyResponse() (+1 more)
 
-### Community 23 - "Generated API client ServiceAccountServiceListServiceAccounts"
+### Community 23 - "ServiceAccountServiceCreateServiceAccountResponse"
 Cohesion: 0.06
 Nodes (12): ServiceAccountServiceCreateServiceAccountResponse, ServiceAccountServiceGetServiceAccountResponse, ServiceAccountServiceListServiceAccountsParams, ServiceAccountServiceListServiceAccountsResponse, ServiceAccountServiceUpdateServiceAccountResponse, V1ListServiceAccountsResponse, V1ServiceAccountResponse, NewServiceAccountServiceListServiceAccountsRequest() (+4 more)
 
-### Community 24 - "Generated API client IPAMServiceRemoveReservedIPWithResponse"
-Cohesion: 0.05
-Nodes (11): IPAMServiceRemoveReservedIPResponse, OrganizationServiceDeleteOrganizationResponse, SSHKeyServiceDeleteSSHKeyResponse, UserServiceUnlinkIdentityResponse, V1SuccessResponse, VirtualMachineServiceDeleteVirtualMachineResponse, ParseIPAMServiceRemoveReservedIPResponse(), ParseOrganizationServiceDeleteOrganizationResponse() (+3 more)
-
-### Community 25 - "Generated API client NodeServiceGetNodeCPUMapWithResponse"
+### Community 25 - "NodeServiceGetNodeCPUMapResponse"
 Cohesion: 0.06
-Nodes (21): NodeServiceGetNodeCPUMapResponse, NodeServiceGetNodeResponse, NodeServiceUpdateNodeBody, V1AssignableNodeView, V1BackupStorageCompression, V1CPUType, V1CreateNodeRequest, V1GetNodeCPUMapResponse (+13 more)
+Nodes (22): NodeServiceGetNodeCPUMapResponse, NodeServiceGetNodeResponse, NodeServiceUpdateNodeBody, V1AssignableNodeView, V1BackupStorageCompression, V1CPUType, V1CreateNodeRequest, V1GetNodeCPUMapResponse (+14 more)
 
-### Community 26 - "Generated API client AgentServiceUpdateAgentBody"
-Cohesion: 0.06
-Nodes (21): AgentServiceUpdateAgentBody, OrganizationServiceListOrganizationsParams, OrganizationServiceListOrganizationsResponse, PlatformServiceGetPlatformResponse, V1CreateAgentRequest, V1CreateOrganizationRequest, V1CreatePlatformRequest, V1GetPlatformResponse (+13 more)
+### Community 26 - "OrganizationServiceListOrganizationsResponse"
+Cohesion: 0.25
+Nodes (4): OrganizationServiceListOrganizationsParams, OrganizationServiceListOrganizationsResponse, NewOrganizationServiceListOrganizationsRequest(), ParseOrganizationServiceListOrganizationsResponse()
 
-### Community 27 - "CLI release notes"
+### Community 27 - "Changelog"
 Cohesion: 0.09
 Nodes (33): 1.0.0 nr CLI, 1.0.1 organization header, 1.0.10 public Harbor Liqo images, 1.0.11 required org id, 1.0.13 operator chart pins, 1.0.16 Pterodactyl install, 1.0.2 register hardening, 1.0.3 Harbor registry pin (+25 more)
 
-### Community 28 - "Firewall API client"
-Cohesion: 0.07
+### Community 28 - "FirewallServiceUpdateFirewallRuleSetResponse"
+Cohesion: 0.08
 Nodes (11): FirewallServiceGetFirewallRuleSetResponse, FirewallServiceListFirewallRuleSetsParams, FirewallServiceListFirewallRuleSetsParamsFilterAttachment, FirewallServiceListFirewallRuleSetsResponse, FirewallServiceUpdateFirewallRuleSetResponse, V1FirewallRuleSet, V1ListFirewallRuleSetsResponse, NewFirewallServiceListFirewallRuleSetsRequest() (+3 more)
 
-### Community 29 - "Agent API client"
-Cohesion: 0.07
+### Community 29 - "AgentServiceCreateAgentResponse"
+Cohesion: 0.08
 Nodes (11): AgentServiceCreateAgentResponse, AgentServiceGetAgentResponse, AgentServiceListAgentsParams, AgentServiceListAgentsParamsGatewayRegion, AgentServiceListAgentsResponse, V1GetAgentResponse, V1ListAgentsResponse, NewAgentServiceListAgentsRequest() (+3 more)
 
-### Community 30 - "Generated API client CloudInitTemplateServiceUpdateCloudInitTemplateJSONRequestBody"
-Cohesion: 0.07
-Nodes (7): ClientWithResponsesInterface, CloudInitTemplateServiceUpdateCloudInitTemplateResponse, PlatformServiceUnassignAgentResponse, VMTemplateServiceCreateVMTemplateResponse, ParseCloudInitTemplateServiceUpdateCloudInitTemplateResponse(), ParsePlatformServiceUnassignAgentResponse(), ParseVMTemplateServiceCreateVMTemplateResponse()
+### Community 31 - "vnc_gateway_image.go"
+Cohesion: 0.14
+Nodes (19): browserCommand(), OpenBrowser(), TestBrowserCommandLinuxPassesFullURLAsSingleArgument(), TestBrowserCommandPassesFullURLAsSingleArgument(), TestBrowserCommandRejectsUnsupportedPlatform(), containerdCmd(), containerdHasImage(), dockerImageExists() (+11 more)
 
-### Community 31 - "VNC gateway install"
-Cohesion: 0.08
-Nodes (22): SudoManager, browserCommand(), OpenBrowser(), TestBrowserCommandLinuxPassesFullURLAsSingleArgument(), TestBrowserCommandPassesFullURLAsSingleArgument(), TestBrowserCommandRejectsUnsupportedPlatform(), TestCLISourceHasNoHiddenPrompts(), NewSudoManager() (+14 more)
-
-### Community 32 - "Subscription API client"
-Cohesion: 0.08
+### Community 32 - "SubscriptionServiceCancelRenewalResponse"
+Cohesion: 0.09
 Nodes (7): SubscriptionServiceCancelRenewalResponse, SubscriptionServiceCancelResponse, SubscriptionServiceUndoCancelRenewalResponse, V1CancelResponse, ParseSubscriptionServiceCancelRenewalResponse(), ParseSubscriptionServiceCancelResponse(), ParseSubscriptionServiceUndoCancelRenewalResponse()
 
-### Community 33 - "Generated API client FirewallServiceListFirewallRulesWithResponse"
+### Community 33 - "FirewallServiceListFirewallRulesResponse"
 Cohesion: 0.08
 Nodes (17): FirewallServiceCreateFirewallRuleBody, FirewallServiceListFirewallRulesParams, FirewallServiceListFirewallRulesParamsDirection, FirewallServiceListFirewallRulesResponse, FirewallServiceUpdateFirewallRuleBody, V1FirewallAction, V1FirewallDirection, V1FirewallProtocol (+9 more)
 
-### Community 34 - "Provider Customer API client"
-Cohesion: 0.08
-Nodes (13): ProviderCustomerServiceGetProviderCustomerResponse, ProviderCustomerServiceListProviderCustomerAssetsParams, ProviderCustomerServiceListProviderCustomerAssetsParamsActivityStatus, ProviderCustomerServiceListProviderCustomerAssetsParamsAssetType, ProviderCustomerServiceListProviderCustomerAssetsResponse, V1GetProviderCustomerResponse, V1ListProviderCustomerAssetsResponse, V1ProviderCustomerAssetRow (+5 more)
+### Community 34 - "ProviderCustomerServiceListProviderCustomerAssetsResponse"
+Cohesion: 0.11
+Nodes (10): ProviderCustomerServiceListProviderCustomerAssetsParams, ProviderCustomerServiceListProviderCustomerAssetsParamsActivityStatus, ProviderCustomerServiceListProviderCustomerAssetsParamsAssetType, ProviderCustomerServiceListProviderCustomerAssetsResponse, V1ListProviderCustomerAssetsResponse, V1ProviderCustomerAssetRow, V1ProviderCustomerAssetType, V1ProviderCustomerRow (+2 more)
 
-### Community 35 - "Roadmap API client"
-Cohesion: 0.08
-Nodes (13): RoadmapServiceListRoadmapFeatureRequestsParams, RoadmapServiceListRoadmapFeatureRequestsParamsStatus, RoadmapServiceListRoadmapFeatureRequestsResponse, RoadmapServiceListRoadmapProductCategoriesResponse, RoadmapServiceVoteRoadmapFeatureRequestBody, V1ListRoadmapFeatureRequestsResponse, V1ListRoadmapProductCategoriesResponse, V1RoadmapFeatureRequest (+5 more)
+### Community 35 - "RoadmapServiceListRoadmapProductCategoriesResponse"
+Cohesion: 0.14
+Nodes (8): RoadmapServiceListRoadmapProductCategoriesResponse, RoadmapServiceVoteRoadmapFeatureRequestBody, V1ListRoadmapProductCategoriesResponse, V1RoadmapFeatureRequest, V1RoadmapProductCategory, V1RoadmapRequestStatus, V1RoadmapVoteType, ParseRoadmapServiceListRoadmapProductCategoriesResponse()
 
-### Community 36 - "Github Workflows"
+### Community 36 - "GoReleaser configuration"
 Cohesion: 0.11
 Nodes (25): GoReleaser action, Release workflow, goimports local prefix, github.com/noderings/cli module, Release archives, SHA256 checksums.txt, GoReleaser configuration, GitHub release noderings/cli (+17 more)
 
-### Community 37 - "Generated API client NodeServiceListNodesWithResponse"
+### Community 37 - "NodeServiceListNodesResponse"
 Cohesion: 0.09
 Nodes (11): NodeServiceListNodesParams, NodeServiceListNodesParamsServiceStatus, NodeServiceListNodesResponse, RegionServiceGetRegionResponse, V1CityCountry, V1Datacenter, V1ListNodesResponse, V1NodeWithExpandedRegion (+3 more)
 
-### Community 38 - "Internal Install Uninstall"
-Cohesion: 0.16
-Nodes (8): ClusterCleaner, isMissingAPI(), TestIsMissingAPI(), TestRemotePeeringLeftoverNamespaces(), deleteNamespaceOffloadingsIn(), forceDeleteIfStuck(), newReadableK8sClient(), remotePeeringLeftoverNamespaces()
+### Community 38 - "ClusterCleaner"
+Cohesion: 0.05
+Nodes (17): Config, Storage, Token, ClusterCleaner, CalicoInstaller, isRetryableCalicoAPIError(), TestIsRetryableCalicoAPIError(), CalicoInstaller (+9 more)
 
-### Community 39 - "Generated API client InviteServiceDeclineInvite"
-Cohesion: 0.10
-Nodes (8): InviteServiceDeclineInviteParams, InviteServiceDeclineInviteResponse, ProviderPlanServiceCalculatePlanPricingResponse, V1CalculatePlanPricingResponse, V1PricingLineItem, NewInviteServiceDeclineInviteRequest(), ParseInviteServiceDeclineInviteResponse(), ParseProviderPlanServiceCalculatePlanPricingResponse()
+### Community 39 - "InviteServiceDeclineInviteResponse"
+Cohesion: 0.23
+Nodes (4): InviteServiceDeclineInviteParams, InviteServiceDeclineInviteResponse, NewInviteServiceDeclineInviteRequest(), ParseInviteServiceDeclineInviteResponse()
 
-### Community 40 - "User API client UserServiceListUsers"
-Cohesion: 0.10
-Nodes (10): UserServiceGetUserResponse, UserServiceListUsersParams, UserServiceListUsersParamsFilterStatus, UserServiceListUsersResponse, V1GetUserResponse, V1ListUsersResponse, V1User, NewUserServiceListUsersRequest() (+2 more)
+### Community 40 - "UserServiceListUsersResponse"
+Cohesion: 0.18
+Nodes (6): UserServiceListUsersParams, UserServiceListUsersParamsFilterStatus, UserServiceListUsersResponse, V1ListUsersResponse, NewUserServiceListUsersRequest(), ParseUserServiceListUsersResponse()
 
-### Community 41 - "Generated API client EnvironmentVariableServiceCreateEnvironmentVariableJSONRequestBody"
-Cohesion: 0.11
-Nodes (5): ClientWithResponses, EnvironmentVariableServiceCreateEnvironmentVariableResponse, PlatformServiceCreatePlatformResponse, ParseEnvironmentVariableServiceCreateEnvironmentVariableResponse(), ParsePlatformServiceCreatePlatformResponse()
+### Community 42 - "oauth.go"
+Cohesion: 0.07
+Nodes (24): OAuthClient, OAuthConfig, PKCEParams, TestExchangeCode(), TestExchangeCodeErrors(), TestGeneratePKCE(), TestGenerateState(), TestInitAndStartAuthFlow() (+16 more)
 
-### Community 42 - "Internal Install Calico"
-Cohesion: 0.15
-Nodes (7): CalicoInstaller, isRetryableCalicoAPIError(), TestIsRetryableCalicoAPIError(), CalicoInstaller, minDuration(), remainingBudget(), Client
+### Community 43 - "loadPterodactylInstall"
+Cohesion: 0.14
+Nodes (27): pterodactylInstall, applyMimirSecret(), applyPanelSecret(), applyPterodactylRelease(), bytesTrim(), configurePterodactylMetrics(), existingMimirToken(), loadPterodactylInstall() (+19 more)
 
-### Community 43 - "Pterodactyl cluster install"
-Cohesion: 0.17
-Nodes (23): pterodactylInstall, applyMimirSecret(), applyPanelSecret(), applyPterodactylRelease(), bytesTrim(), configurePterodactylMetrics(), existingMimirToken(), loadPterodactylInstall() (+15 more)
-
-### Community 44 - "OAuth2 API client"
-Cohesion: 0.11
+### Community 44 - "OAuth2ServiceRefreshTokenResponse"
+Cohesion: 0.12
 Nodes (5): OAuth2ServiceRefreshTokenResponse, OAuth2ServiceTokenResponse, V1TokenResponse, ParseOAuth2ServiceRefreshTokenResponse(), ParseOAuth2ServiceTokenResponse()
 
-### Community 45 - "CLI documentation"
+### Community 45 - "Service account token"
 Cohesion: 0.13
 Nodes (19): Default API settings, Default auth settings, Default logging, API config, API URL precedence, Authentication config, Configuration, Logging config (+11 more)
 
-### Community 46 - "Metrics Credential API client"
-Cohesion: 0.11
+### Community 46 - "MetricsCredentialServiceCreateMetricsWriteCredentialResponse"
+Cohesion: 0.12
 Nodes (5): MetricsCredentialServiceCreateMetricsWriteCredentialResponse, MetricsCredentialServiceRotateMetricsWriteCredentialResponse, V1CreateMetricsWriteCredentialResponse, ParseMetricsCredentialServiceCreateMetricsWriteCredentialResponse(), ParseMetricsCredentialServiceRotateMetricsWriteCredentialResponse()
 
-### Community 47 - "Provider Network API client"
+### Community 47 - "ProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse"
 Cohesion: 0.11
-Nodes (7): ProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesParams, ProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesResponse, ProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse, V1ListVirtualMachineSmtpOutboundPoliciesResponse, V1VirtualMachineSmtpOutboundPolicyView, ParseProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesResponse(), ParseProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse()
+Nodes (8): ProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesParams, ProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesResponse, ProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse, V1ListVirtualMachineSmtpOutboundPoliciesResponse, V1VirtualMachineSmtpOutboundPolicyView, NewProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesRequest(), ParseProviderNetworkServiceListVirtualMachineSmtpOutboundPoliciesResponse(), ParseProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse()
 
-### Community 48 - "Firewall API client FirewallServiceMoveFirewallRuleJSONRequestBody"
-Cohesion: 0.11
-Nodes (4): FirewallServiceMoveFirewallRuleResponse, PaymentMethodServiceAttachPaymentMethodResponse, ParseFirewallServiceMoveFirewallRuleResponse(), ParsePaymentMethodServiceAttachPaymentMethodResponse()
-
-### Community 49 - "Payout Configuration API client"
-Cohesion: 0.12
+### Community 49 - "PayoutConfigurationServiceUpdatePayoutConfigurationResponse"
+Cohesion: 0.13
 Nodes (5): PayoutConfigurationServiceGetPayoutConfigurationResponse, PayoutConfigurationServiceUpdatePayoutConfigurationResponse, V1GetPayoutConfigurationResponse, ParsePayoutConfigurationServiceGetPayoutConfigurationResponse(), ParsePayoutConfigurationServiceUpdatePayoutConfigurationResponse()
 
-### Community 50 - "Provider Network API client ProviderNetworkServiceGetSmtpOutboundProviderPolicyWithResponse"
-Cohesion: 0.11
+### Community 50 - "ProviderNetworkServiceUpdateSmtpOutboundProviderPolicyResponse"
+Cohesion: 0.13
 Nodes (6): ProviderNetworkServiceGetSmtpOutboundProviderPolicyResponse, ProviderNetworkServiceUpdateSmtpOutboundProviderPolicyResponse, V1GetSmtpOutboundProviderPolicyResponse, V1SmtpOutboundProviderPolicy, ParseProviderNetworkServiceGetSmtpOutboundProviderPolicyResponse(), ParseProviderNetworkServiceUpdateSmtpOutboundProviderPolicyResponse()
 
-### Community 51 - "Generated API client OAuth2ServiceRevokeTokenWithResponse"
-Cohesion: 0.11
-Nodes (4): OAuth2ServiceRevokeTokenResponse, RoadmapServiceCreateRoadmapFeatureRequestCommentResponse, ParseOAuth2ServiceRevokeTokenResponse(), ParseRoadmapServiceCreateRoadmapFeatureRequestCommentResponse()
-
-### Community 52 - "Roadmap API client RoadmapServiceRemoveRoadmapFeatureRequestVoteWithResponse"
-Cohesion: 0.12
+### Community 52 - "RoadmapServiceVoteRoadmapFeatureRequestResponse"
+Cohesion: 0.13
 Nodes (5): RoadmapServiceRemoveRoadmapFeatureRequestVoteResponse, RoadmapServiceVoteRoadmapFeatureRequestResponse, V1VoteRoadmapFeatureRequestResponse, ParseRoadmapServiceRemoveRoadmapFeatureRequestVoteResponse(), ParseRoadmapServiceVoteRoadmapFeatureRequestResponse()
 
-### Community 53 - "CLI documentation Code"
+### Community 53 - "Troubleshooting"
 Cohesion: 0.14
 Nodes (17): 1.0.14 operator upgrade, 1.0.15 operator chart pin 0.1.9, Code style, Deregister, Cluster diagnostics, docs.noderings.com CLI docs, Resume after failure, Troubleshooting (+9 more)
 
-### Community 54 - "Internal Install Validator"
+### Community 54 - "SystemCheckResult"
 Cohesion: 0.19
 Nodes (6): SystemCheckResult, SystemValidator, SystemValidator, NewSystemValidator(), SystemValidator, SystemValidator
 
-### Community 55 - "Cluster CLI commands"
-Cohesion: 0.20
-Nodes (15): applyInboundAPIServerProxy(), currentCluster(), mustNotResolve(), peeringKubeconfig(), resolvesTo(), TestApplyInboundAPIServerProxyAlwaysOnPublicAddress(), TestApplyInboundAPIServerProxyErrors(), TestApplyInboundAPIServerProxySetsProxyURL() (+7 more)
+### Community 55 - "ProviderDashboardServiceListDashboardTicketStatisticsResponse"
+Cohesion: 0.10
+Nodes (15): ProviderDashboardServiceListDashboardTicketStatisticsParams, ProviderDashboardServiceListDashboardTicketStatisticsResponse, TicketServiceSetTicketPriorityBody, TicketServiceSetTicketStatusBody, V1CaseType, V1DashboardTicketStatisticsByCaseType, V1DashboardTicketStatisticsByPriority, V1DashboardTicketStatisticsByStatus (+7 more)
 
-### Community 57 - "Github Workflows Enabled"
+### Community 57 - "NodeRings CLI"
 Cohesion: 0.17
 Nodes (14): CI workflow, CI lint job, CI test job, CI govulncheck job, golangci-lint configuration, Enabled linters, Generated API path exclusion, Test file linter exclusions (+6 more)
 
-### Community 58 - "Marketplace API client"
+### Community 58 - "MarketplaceServiceListAvailableAddonsResponse"
 Cohesion: 0.15
 Nodes (7): MarketplaceServiceListAvailableAddonsParams, MarketplaceServiceListAvailableAddonsParamsFilterAddonType, MarketplaceServiceListAvailableAddonsParamsFilterBillingType, MarketplaceServiceListAvailableAddonsResponse, V1ListAvailableAddonsResponse, NewMarketplaceServiceListAvailableAddonsRequest(), ParseMarketplaceServiceListAvailableAddonsResponse()
 
-### Community 59 - "Generated API client PayoutInvoiceServiceGetPayoutInvoiceWithResponse"
-Cohesion: 0.13
-Nodes (8): PayoutInvoiceServiceGetPayoutInvoiceResponse, V1GetInvoiceResponse, V1GetPayoutInvoiceResponse, V1Invoice, V1InvoiceLine, V1InvoiceParty, V1InvoiceStatus, ParsePayoutInvoiceServiceGetPayoutInvoiceResponse()
+### Community 59 - "PayoutInvoiceServiceGetPayoutInvoiceResponse"
+Cohesion: 0.28
+Nodes (3): PayoutInvoiceServiceGetPayoutInvoiceResponse, V1GetPayoutInvoiceResponse, ParsePayoutInvoiceServiceGetPayoutInvoiceResponse()
 
-### Community 60 - "Plan API client"
+### Community 60 - "PlanServiceListPlansResponse"
 Cohesion: 0.14
 Nodes (7): PlanServiceListPlansParams, PlanServiceListPlansParamsAssetType, PlanServiceListPlansParamsBillingType, PlanServiceListPlansParamsEndUser, PlanServiceListPlansResponse, V1ListPlansResponse, ParsePlanServiceListPlansResponse()
 
-### Community 61 - "Provider Customer API client ProviderCustomerServiceStopProviderCustomerVirtualMachineWithResponse"
-Cohesion: 0.14
-Nodes (6): ProviderCustomerServiceStopProviderCustomerVirtualMachineResponse, V1OperationStatus, V1ReinstallStatus, V1VirtualMachine, V1VirtualMachineBandwidthQuota, ParseProviderCustomerServiceStopProviderCustomerVirtualMachineResponse()
-
-### Community 62 - "Liqo install"
+### Community 62 - "Default CLI config"
 Cohesion: 0.23
 Nodes (12): 1.0.12 Liqo inbound proxy, Default Calico, Default cluster id, Default CLI config, Default k3s install, Default Liqo install, Kopf annotation reflection skip, Liqo provider values overlay (+4 more)
 
-### Community 63 - "Internal Verify Liqo"
-Cohesion: 0.25
-Nodes (6): runLiqoctlJSON(), safeLiqoctlVerb(), skippedSection(), kubeClient, SectionResult, Verifier
-
-### Community 64 - "Internal Auth Storage"
+### Community 63 - "Verifier"
 Cohesion: 0.23
-Nodes (13): TokenInfo, clearTokenEnv(), fallbackStorage(), TestGetTokenFromConfig(), TestGetTokenFromEnvPriorityAndWhitespace(), TestLoadTokenInfoPriority(), TestStorageFileRoundTripAndDelete(), TestStorageLoadErrors() (+5 more)
+Nodes (8): runLiqoctlJSON(), safeLiqoctlVerb(), New(), skippedSection(), AgentStatusFetcher, kubeClient, SectionResult, Verifier
 
-### Community 65 - "Addon API client"
-Cohesion: 0.16
-Nodes (6): AddonServiceListAddonsParams, AddonServiceListAddonsParamsAddonType, AddonServiceListAddonsParamsBillingType, AddonServiceListAddonsResponse, V1ListAddonsResponse, ParseAddonServiceListAddonsResponse()
+### Community 64 - "noopLogger"
+Cohesion: 0.11
+Nodes (10): noopLogger, SudoManager, cachedReadableKubeconfigPath(), copyKubeconfigWithSudo(), isReadableFile(), kubeconfigCandidates(), refreshK3sKubeconfigCacheIfStale(), TestIsReadableFile() (+2 more)
 
-### Community 66 - "Addon API client AddonServiceListAddonSubscriptionsParams"
+### Community 65 - "AddonServiceListAddonsResponse"
+Cohesion: 0.15
+Nodes (7): AddonServiceListAddonsParams, AddonServiceListAddonsParamsAddonType, AddonServiceListAddonsParamsBillingType, AddonServiceListAddonsResponse, V1ListAddonsResponse, NewAddonServiceListAddonsRequest(), ParseAddonServiceListAddonsResponse()
+
+### Community 66 - "AddonServiceListAddonSubscriptionsResponse"
 Cohesion: 0.18
 Nodes (6): AddonServiceListAddonSubscriptionsParams, AddonServiceListAddonSubscriptionsParamsAddonStatus, AddonServiceListAddonSubscriptionsResponse, V1ListAddonSubscriptionsResponse, NewAddonServiceListAddonSubscriptionsRequest(), ParseAddonServiceListAddonSubscriptionsResponse()
 
-### Community 67 - "Group API client"
+### Community 67 - "GroupServiceListGroupsResponse"
 Cohesion: 0.18
 Nodes (6): GroupServiceListGroupsParams, GroupServiceListGroupsParamsFilterStatus, GroupServiceListGroupsResponse, V1ListGroupsResponse, NewGroupServiceListGroupsRequest(), ParseGroupServiceListGroupsResponse()
 
-### Community 68 - "Instant App API client"
+### Community 68 - "InstantAppServiceListInstantAppsResponse"
 Cohesion: 0.18
 Nodes (6): InstantAppServiceListInstantAppsParams, InstantAppServiceListInstantAppsParamsDistro, InstantAppServiceListInstantAppsResponse, V1ListInstantAppsResponse, NewInstantAppServiceListInstantAppsRequest(), ParseInstantAppServiceListInstantAppsResponse()
 
-### Community 69 - "Invoice API client"
-Cohesion: 0.18
-Nodes (6): InvoiceServiceListInvoicesParams, InvoiceServiceListInvoicesParamsStatus, InvoiceServiceListInvoicesResponse, V1ListInvoicesResponse, NewInvoiceServiceListInvoicesRequest(), ParseInvoiceServiceListInvoicesResponse()
+### Community 69 - "InvoiceServiceListInvoicesResponse"
+Cohesion: 0.19
+Nodes (5): InvoiceServiceListInvoicesParams, InvoiceServiceListInvoicesParamsStatus, InvoiceServiceListInvoicesResponse, V1ListInvoicesResponse, ParseInvoiceServiceListInvoicesResponse()
 
-### Community 70 - "Payment API client"
+### Community 70 - "PaymentServiceListPaymentsResponse"
 Cohesion: 0.18
 Nodes (6): PaymentServiceListPaymentsParams, PaymentServiceListPaymentsParamsStatus, PaymentServiceListPaymentsResponse, V1ListPaymentsResponse, NewPaymentServiceListPaymentsRequest(), ParsePaymentServiceListPaymentsResponse()
 
-### Community 71 - "Payout Invoice API client"
+### Community 71 - "PayoutInvoiceServiceListPayoutInvoicesResponse"
 Cohesion: 0.18
 Nodes (6): PayoutInvoiceServiceListPayoutInvoicesParams, PayoutInvoiceServiceListPayoutInvoicesParamsStatus, PayoutInvoiceServiceListPayoutInvoicesResponse, V1ListPayoutInvoicesResponse, NewPayoutInvoiceServiceListPayoutInvoicesRequest(), ParsePayoutInvoiceServiceListPayoutInvoicesResponse()
 
-### Community 72 - "Platform API client"
+### Community 72 - "PlatformServiceListPlatformsResponse"
 Cohesion: 0.18
 Nodes (6): PlatformServiceListPlatformsParams, PlatformServiceListPlatformsParamsServiceStatus, PlatformServiceListPlatformsResponse, V1ListPlatformsResponse, NewPlatformServiceListPlatformsRequest(), ParsePlatformServiceListPlatformsResponse()
 
-### Community 73 - "Provider Customer API client ProviderCustomerServiceListProviderCustomers"
+### Community 73 - "ProviderCustomerServiceListProviderCustomersResponse"
 Cohesion: 0.18
 Nodes (6): ProviderCustomerServiceListProviderCustomersParams, ProviderCustomerServiceListProviderCustomersParamsActivityFilter, ProviderCustomerServiceListProviderCustomersResponse, V1ListProviderCustomersResponse, NewProviderCustomerServiceListProviderCustomersRequest(), ParseProviderCustomerServiceListProviderCustomersResponse()
 
-### Community 74 - "Snapshot API client"
+### Community 74 - "SnapshotServiceListSnapshotsResponse"
 Cohesion: 0.18
 Nodes (6): SnapshotServiceListSnapshotsParams, SnapshotServiceListSnapshotsParamsStatus, SnapshotServiceListSnapshotsResponse, V1ListSnapshotsResponse, NewSnapshotServiceListSnapshotsRequest(), ParseSnapshotServiceListSnapshotsResponse()
 
-### Community 75 - "Virtual Machine API client"
+### Community 75 - "VirtualMachineServiceListVirtualMachinesResponse"
 Cohesion: 0.18
 Nodes (6): V1ListVirtualMachinesResponse, VirtualMachineServiceListVirtualMachinesParams, VirtualMachineServiceListVirtualMachinesParamsFilterOperationStatus, VirtualMachineServiceListVirtualMachinesResponse, NewVirtualMachineServiceListVirtualMachinesRequest(), ParseVirtualMachineServiceListVirtualMachinesResponse()
 
-### Community 76 - "Marketplace API client MarketplaceServiceListProvidersWithResponse"
-Cohesion: 0.16
-Nodes (6): MarketplaceServiceListProvidersParams, MarketplaceServiceListProvidersParamsFilterBillingType, MarketplaceServiceListProvidersParamsPlanPriceSort, MarketplaceServiceListProvidersResponse, V1ListProvidersResponse, ParseMarketplaceServiceListProvidersResponse()
+### Community 76 - "MarketplaceServiceListProvidersResponse"
+Cohesion: 0.15
+Nodes (7): MarketplaceServiceListProvidersParams, MarketplaceServiceListProvidersParamsFilterBillingType, MarketplaceServiceListProvidersParamsPlanPriceSort, MarketplaceServiceListProvidersResponse, V1ListProvidersResponse, NewMarketplaceServiceListProvidersRequest(), ParseMarketplaceServiceListProvidersResponse()
 
-### Community 77 - "Provider Review API client"
-Cohesion: 0.16
-Nodes (7): ProviderReviewServiceListProviderReviewsParams, ProviderReviewServiceListProviderReviewsResponse, V1CreateProviderReviewReplyResponse, V1ListProviderReviewsResponse, V1ProviderReviewListItem, V1ProviderReviewStarSummary, ParseProviderReviewServiceListProviderReviewsResponse()
+### Community 77 - "ProviderReviewServiceListProviderReviewsResponse"
+Cohesion: 0.25
+Nodes (4): ProviderReviewServiceListProviderReviewsParams, ProviderReviewServiceListProviderReviewsResponse, NewProviderReviewServiceListProviderReviewsRequest(), ParseProviderReviewServiceListProviderReviewsResponse()
 
-### Community 78 - "Live Validation API client"
+### Community 78 - "LiveValidationServiceListPlanLiveValidationBenchmarksResponse"
 Cohesion: 0.20
 Nodes (6): LiveValidationServiceListPlanLiveValidationBenchmarksParams, LiveValidationServiceListPlanLiveValidationBenchmarksResponse, V1ListPlanLiveValidationBenchmarksResponse, V1PlanLiveValidationBenchmarkView, NewLiveValidationServiceListPlanLiveValidationBenchmarksRequest(), ParseLiveValidationServiceListPlanLiveValidationBenchmarksResponse()
 
-### Community 79 - "Provider Dashboard API client"
+### Community 79 - "ProviderDashboardServiceGetDashboardAssetSalesTimeseriesResponse"
 Cohesion: 0.20
 Nodes (6): ProviderDashboardServiceGetDashboardAssetSalesTimeseriesParams, ProviderDashboardServiceGetDashboardAssetSalesTimeseriesResponse, V1DashboardAssetSalesDayBucket, V1GetDashboardAssetSalesTimeseriesResponse, NewProviderDashboardServiceGetDashboardAssetSalesTimeseriesRequest(), ParseProviderDashboardServiceGetDashboardAssetSalesTimeseriesResponse()
 
-### Community 80 - "Provider Dashboard API client ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseries"
+### Community 80 - "ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesResponse"
 Cohesion: 0.20
 Nodes (6): ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesParams, ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesResponse, V1DashboardCustomerAcquisitionDayBucket, V1GetDashboardCustomerAcquisitionTimeseriesResponse, NewProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesRequest(), ParseProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesResponse()
 
-### Community 81 - "Provider Dashboard API client ProviderDashboardServiceListDashboardInfrastructure"
+### Community 81 - "ProviderDashboardServiceListDashboardInfrastructureResponse"
 Cohesion: 0.20
 Nodes (6): ProviderDashboardServiceListDashboardInfrastructureParams, ProviderDashboardServiceListDashboardInfrastructureResponse, V1ListDashboardInfrastructureResponse, V1ProviderDashboardNodeRollup, NewProviderDashboardServiceListDashboardInfrastructureRequest(), ParseProviderDashboardServiceListDashboardInfrastructureResponse()
 
-### Community 82 - "Region API client"
+### Community 82 - "RegionServiceListDatacentersResponse"
 Cohesion: 0.20
 Nodes (6): RegionServiceListDatacentersParams, RegionServiceListDatacentersResponse, V1DatacenterInfo, V1ListDatacentersResponse, NewRegionServiceListDatacentersRequest(), ParseRegionServiceListDatacentersResponse()
 
-### Community 83 - "Provider Dashboard API client ProviderDashboardServiceListDashboardIpamAssignmentsWithResponse"
-Cohesion: 0.18
-Nodes (6): ProviderDashboardServiceListDashboardIpamAssignmentsParams, ProviderDashboardServiceListDashboardIpamAssignmentsParamsIpFamily, ProviderDashboardServiceListDashboardIpamAssignmentsResponse, V1DashboardIpamAssignmentRow, V1ListDashboardIpamAssignmentsResponse, ParseProviderDashboardServiceListDashboardIpamAssignmentsResponse()
+### Community 83 - "ProviderDashboardServiceListDashboardIpamAssignmentsResponse"
+Cohesion: 0.17
+Nodes (7): ProviderDashboardServiceListDashboardIpamAssignmentsParams, ProviderDashboardServiceListDashboardIpamAssignmentsParamsIpFamily, ProviderDashboardServiceListDashboardIpamAssignmentsResponse, V1DashboardIpamAssignmentRow, V1ListDashboardIpamAssignmentsResponse, NewProviderDashboardServiceListDashboardIpamAssignmentsRequest(), ParseProviderDashboardServiceListDashboardIpamAssignmentsResponse()
 
-### Community 84 - "Internal K8s Client"
-Cohesion: 0.22
-Nodes (7): defaultKubeconfigCandidates(), fileExistsAndReadable(), Client, NewClient(), NewClientFromConfig(), waitForAPI(), fakeKubeClient
+### Community 84 - "Client"
+Cohesion: 0.27
+Nodes (3): Client, NewClientFromConfig(), fakeKubeClient
 
-### Community 86 - "Agent API client AgentServiceGeneratePeeringConfigJSONRequestBody"
-Cohesion: 0.21
+### Community 86 - "AgentServiceGeneratePeeringConfigResponse"
+Cohesion: 0.24
 Nodes (3): AgentServiceGeneratePeeringConfigResponse, V1GeneratePeeringConfigResponse, ParseAgentServiceGeneratePeeringConfigResponse()
 
-### Community 87 - "Agent API client AgentServiceUpdateAgentJSONRequestBody"
-Cohesion: 0.21
+### Community 87 - "AgentServiceUpdateAgentResponse"
+Cohesion: 0.23
 Nodes (3): AgentServiceUpdateAgentResponse, V1UpdateAgentResponse, ParseAgentServiceUpdateAgentResponse()
 
-### Community 88 - "Client Provider Review API client"
-Cohesion: 0.21
+### Community 88 - "ClientProviderReviewServiceCreateClientReviewResponse"
+Cohesion: 0.23
 Nodes (3): ClientProviderReviewServiceCreateClientReviewResponse, V1CreateClientReviewResponse, ParseClientProviderReviewServiceCreateClientReviewResponse()
 
-### Community 89 - "Client Provider Review API client ClientProviderReviewServiceUpdateClientReviewJSONRequestBody"
-Cohesion: 0.21
+### Community 89 - "ClientProviderReviewServiceUpdateClientReviewResponse"
+Cohesion: 0.23
 Nodes (3): ClientProviderReviewServiceUpdateClientReviewResponse, V1UpdateClientReviewResponse, ParseClientProviderReviewServiceUpdateClientReviewResponse()
 
-### Community 91 - "Addon API client AddonServiceRemoveAddonParams"
+### Community 91 - "AddonServiceRemoveAddonResponse"
 Cohesion: 0.22
 Nodes (5): AddonServiceRemoveAddonParams, AddonServiceRemoveAddonResponse, V1RemoveAddonResponse, NewAddonServiceRemoveAddonRequest(), ParseAddonServiceRemoveAddonResponse()
 
-### Community 92 - "Backup API client"
-Cohesion: 0.19
-Nodes (5): BackupServiceListBackupsParams, BackupServiceListBackupsParamsStatus, BackupServiceListBackupsResponse, V1ListBackupsResponse, ParseBackupServiceListBackupsResponse()
+### Community 92 - "BackupServiceListBackupsResponse"
+Cohesion: 0.18
+Nodes (6): BackupServiceListBackupsParams, BackupServiceListBackupsParamsStatus, BackupServiceListBackupsResponse, V1ListBackupsResponse, NewBackupServiceListBackupsRequest(), ParseBackupServiceListBackupsResponse()
 
-### Community 93 - "Client Provider Review API client ClientProviderReviewServiceListClientProviderReviewAssets"
+### Community 93 - "ClientProviderReviewServiceListClientProviderReviewAssetsResponse"
 Cohesion: 0.22
 Nodes (5): ClientProviderReviewServiceListClientProviderReviewAssetsParams, ClientProviderReviewServiceListClientProviderReviewAssetsResponse, V1ListClientProviderReviewAssetsResponse, NewClientProviderReviewServiceListClientProviderReviewAssetsRequest(), ParseClientProviderReviewServiceListClientProviderReviewAssetsResponse()
 
-### Community 94 - "Cloud Init Template API client"
+### Community 94 - "CloudInitTemplateServiceListCloudInitTemplatesResponse"
 Cohesion: 0.22
 Nodes (5): CloudInitTemplateServiceListCloudInitTemplatesParams, CloudInitTemplateServiceListCloudInitTemplatesResponse, V1ListCloudInitTemplatesResponse, NewCloudInitTemplateServiceListCloudInitTemplatesRequest(), ParseCloudInitTemplateServiceListCloudInitTemplatesResponse()
 
-### Community 95 - "Credit API client"
-Cohesion: 0.21
-Nodes (5): CreditServiceListCreditLedgerEntriesParams, CreditServiceListCreditLedgerEntriesParamsEntryType, CreditServiceListCreditLedgerEntriesResponse, NewCreditServiceListCreditLedgerEntriesRequest(), ParseCreditServiceListCreditLedgerEntriesResponse()
+### Community 95 - "CreditServiceListCreditLedgerEntriesResponse"
+Cohesion: 0.18
+Nodes (6): CreditServiceListCreditLedgerEntriesParams, CreditServiceListCreditLedgerEntriesParamsEntryType, CreditServiceListCreditLedgerEntriesResponse, V1CreditLedgerEntryProto, V1ListCreditLedgerEntriesResponse, ParseCreditServiceListCreditLedgerEntriesResponse()
 
-### Community 96 - "Environment Variable API client"
+### Community 96 - "EnvironmentVariableServiceListEnvironmentVariablesResponse"
 Cohesion: 0.22
 Nodes (5): EnvironmentVariableServiceListEnvironmentVariablesParams, EnvironmentVariableServiceListEnvironmentVariablesResponse, V1ListEnvironmentVariablesResponse, NewEnvironmentVariableServiceListEnvironmentVariablesRequest(), ParseEnvironmentVariableServiceListEnvironmentVariablesResponse()
 
-### Community 97 - "Firewall API client FirewallServiceGetFirewallRule"
+### Community 97 - "FirewallServiceGetFirewallRuleResponse"
 Cohesion: 0.21
 Nodes (5): FirewallServiceGetFirewallRuleParams, FirewallServiceGetFirewallRuleParamsDirection, FirewallServiceGetFirewallRuleResponse, NewFirewallServiceGetFirewallRuleRequest(), ParseFirewallServiceGetFirewallRuleResponse()
 
-### Community 98 - "Firewall API client FirewallServiceListFirewallAddressGroups"
+### Community 98 - "FirewallServiceListFirewallAddressGroupsResponse"
 Cohesion: 0.22
 Nodes (5): FirewallServiceListFirewallAddressGroupsParams, FirewallServiceListFirewallAddressGroupsResponse, V1ListFirewallAddressGroupsResponse, NewFirewallServiceListFirewallAddressGroupsRequest(), ParseFirewallServiceListFirewallAddressGroupsResponse()
 
-### Community 99 - "Invite API client"
+### Community 99 - "InviteServiceListInvitesResponse"
 Cohesion: 0.22
 Nodes (5): InviteServiceListInvitesParams, InviteServiceListInvitesResponse, V1ListInvitesResponse, NewInviteServiceListInvitesRequest(), ParseInviteServiceListInvitesResponse()
 
-### Community 100 - "Invite API client InviteServiceListMyInvites"
+### Community 100 - "InviteServiceListMyInvitesResponse"
 Cohesion: 0.22
 Nodes (5): InviteServiceListMyInvitesParams, InviteServiceListMyInvitesResponse, V1ListMyInvitesResponse, NewInviteServiceListMyInvitesRequest(), ParseInviteServiceListMyInvitesResponse()
 
-### Community 101 - "IPAM API client"
+### Community 101 - "IPAMServiceListAllocationsResponse"
 Cohesion: 0.22
 Nodes (5): IPAMServiceListAllocationsParams, IPAMServiceListAllocationsResponse, V1ListAllocationsResponse, NewIPAMServiceListAllocationsRequest(), ParseIPAMServiceListAllocationsResponse()
 
-### Community 102 - "IPAM API client IPAMServiceListNetworks"
+### Community 102 - "IPAMServiceListNetworksResponse"
 Cohesion: 0.22
 Nodes (5): IPAMServiceListNetworksParams, IPAMServiceListNetworksResponse, V1ListNetworksResponse, NewIPAMServiceListNetworksRequest(), ParseIPAMServiceListNetworksResponse()
 
-### Community 103 - "Live Validation API client LiveValidationServiceGetPlanLiveValidation"
+### Community 103 - "LiveValidationServiceGetPlanLiveValidationResponse"
 Cohesion: 0.22
 Nodes (5): LiveValidationServiceGetPlanLiveValidationParams, LiveValidationServiceGetPlanLiveValidationResponse, V1GetPlanLiveValidationResponse, NewLiveValidationServiceGetPlanLiveValidationRequest(), ParseLiveValidationServiceGetPlanLiveValidationResponse()
 
-### Community 104 - "Live Validation API client LiveValidationServiceListPlanLiveValidations"
+### Community 104 - "LiveValidationServiceListPlanLiveValidationsResponse"
 Cohesion: 0.22
 Nodes (5): LiveValidationServiceListPlanLiveValidationsParams, LiveValidationServiceListPlanLiveValidationsResponse, V1ListPlanLiveValidationsResponse, NewLiveValidationServiceListPlanLiveValidationsRequest(), ParseLiveValidationServiceListPlanLiveValidationsResponse()
 
-### Community 106 - "Marketplace API client MarketplaceServiceListMarketplaceProviderDirectory"
+### Community 105 - "ManualPayoutServiceCreateManualPayoutResponse"
+Cohesion: 0.12
+Nodes (7): ManualPayoutServiceCreateManualPayoutResponse, ManualPayoutServiceGetManualPayoutResponse, V1CreateManualPayoutResponse, V1GetManualPayoutResponse, V1ManualPayout, ParseManualPayoutServiceCreateManualPayoutResponse(), ParseManualPayoutServiceGetManualPayoutResponse()
+
+### Community 106 - "MarketplaceServiceListMarketplaceProviderDirectoryResponse"
 Cohesion: 0.22
 Nodes (5): MarketplaceServiceListMarketplaceProviderDirectoryParams, MarketplaceServiceListMarketplaceProviderDirectoryResponse, V1ListMarketplaceProviderDirectoryResponse, NewMarketplaceServiceListMarketplaceProviderDirectoryRequest(), ParseMarketplaceServiceListMarketplaceProviderDirectoryResponse()
 
-### Community 107 - "Metric API client"
+### Community 107 - "MetricServiceListMetricsResponse"
 Cohesion: 0.22
 Nodes (5): MetricServiceListMetricsParams, MetricServiceListMetricsResponse, V1ListMetricsResponse, NewMetricServiceListMetricsRequest(), ParseMetricServiceListMetricsResponse()
 
-### Community 108 - "Payout Invoice API client PayoutInvoiceServiceGetProviderRevenue"
+### Community 108 - "PayoutInvoiceServiceGetProviderRevenueResponse"
 Cohesion: 0.22
 Nodes (5): PayoutInvoiceServiceGetProviderRevenueParams, PayoutInvoiceServiceGetProviderRevenueResponse, V1GetProviderRevenueResponse, NewPayoutInvoiceServiceGetProviderRevenueRequest(), ParsePayoutInvoiceServiceGetProviderRevenueResponse()
 
-### Community 109 - "Permission API client"
+### Community 109 - "PermissionServiceListEffectivePermissionsResponse"
 Cohesion: 0.22
 Nodes (5): PermissionServiceListEffectivePermissionsParams, PermissionServiceListEffectivePermissionsResponse, V1ListEffectivePermissionsResponse, NewPermissionServiceListEffectivePermissionsRequest(), ParsePermissionServiceListEffectivePermissionsResponse()
 
-### Community 110 - "Permission API client PermissionServiceListPermissions"
+### Community 110 - "PermissionServiceListPermissionsResponse"
 Cohesion: 0.22
 Nodes (5): PermissionServiceListPermissionsParams, PermissionServiceListPermissionsResponse, V1ListPermissionsResponse, NewPermissionServiceListPermissionsRequest(), ParsePermissionServiceListPermissionsResponse()
 
-### Community 111 - "Preflight API client"
-Cohesion: 0.22
-Nodes (5): PreflightServiceListPreflightChecksParams, PreflightServiceListPreflightChecksResponse, V1ListPreflightChecksResponse, NewPreflightServiceListPreflightChecksRequest(), ParsePreflightServiceListPreflightChecksResponse()
+### Community 111 - "PreflightServiceListPreflightChecksResponse"
+Cohesion: 0.16
+Nodes (10): PreflightServiceListPreflightChecksParams, PreflightServiceListPreflightChecksResponse, V1ListPreflightChecksResponse, V1PlanPreflightView, V1PreflightAgentView, V1PreflightCheckView, V1PreflightInfrastructureView, V1PreflightNodeView (+2 more)
 
-### Community 112 - "Provider Dashboard API client ProviderDashboardServiceListDashboardPlanSubscriptionStats"
+### Community 112 - "ProviderDashboardServiceListDashboardPlanSubscriptionStatsResponse"
 Cohesion: 0.22
 Nodes (5): ProviderDashboardServiceListDashboardPlanSubscriptionStatsParams, ProviderDashboardServiceListDashboardPlanSubscriptionStatsResponse, V1ListDashboardPlanSubscriptionStatsResponse, NewProviderDashboardServiceListDashboardPlanSubscriptionStatsRequest(), ParseProviderDashboardServiceListDashboardPlanSubscriptionStatsResponse()
 
-### Community 113 - "Region API client RegionServiceListCountriesCities"
+### Community 113 - "RegionServiceListCountriesCitiesResponse"
 Cohesion: 0.22
 Nodes (5): RegionServiceListCountriesCitiesParams, RegionServiceListCountriesCitiesResponse, V1ListCountriesCitiesResponse, NewRegionServiceListCountriesCitiesRequest(), ParseRegionServiceListCountriesCitiesResponse()
 
-### Community 114 - "Region API client RegionServiceListRegions"
+### Community 114 - "RegionServiceListRegionsResponse"
 Cohesion: 0.22
 Nodes (5): RegionServiceListRegionsParams, RegionServiceListRegionsResponse, V1ListRegionsResponse, NewRegionServiceListRegionsRequest(), ParseRegionServiceListRegionsResponse()
 
-### Community 115 - "Roadmap API client RoadmapServiceListRoadmapFeatureRequestComments"
+### Community 115 - "RoadmapServiceListRoadmapFeatureRequestCommentsResponse"
 Cohesion: 0.22
 Nodes (5): RoadmapServiceListRoadmapFeatureRequestCommentsParams, RoadmapServiceListRoadmapFeatureRequestCommentsResponse, V1ListRoadmapFeatureRequestCommentsResponse, NewRoadmapServiceListRoadmapFeatureRequestCommentsRequest(), ParseRoadmapServiceListRoadmapFeatureRequestCommentsResponse()
 
-### Community 116 - "Role API client"
+### Community 116 - "RoleServiceListRolesResponse"
 Cohesion: 0.22
 Nodes (5): RoleServiceListRolesParams, RoleServiceListRolesResponse, V1ListRolesResponse, NewRoleServiceListRolesRequest(), ParseRoleServiceListRolesResponse()
 
-### Community 117 - "Secret API client"
+### Community 117 - "SecretServiceListSecretsResponse"
 Cohesion: 0.22
 Nodes (5): SecretServiceListSecretsParams, SecretServiceListSecretsResponse, V1ListSecretsResponse, NewSecretServiceListSecretsRequest(), ParseSecretServiceListSecretsResponse()
 
-### Community 118 - "SSHKey API client"
+### Community 118 - "SSHKeyServiceListSSHKeysResponse"
 Cohesion: 0.22
 Nodes (5): SSHKeyServiceListSSHKeysParams, SSHKeyServiceListSSHKeysResponse, V1ListSSHKeysResponse, NewSSHKeyServiceListSSHKeysRequest(), ParseSSHKeyServiceListSSHKeysResponse()
 
-### Community 119 - "Subscription API client SubscriptionServiceListSubscriptions"
+### Community 119 - "SubscriptionServiceListSubscriptionsResponse"
 Cohesion: 0.22
 Nodes (5): SubscriptionServiceListSubscriptionsParams, SubscriptionServiceListSubscriptionsResponse, V1ListSubscriptionsResponse, NewSubscriptionServiceListSubscriptionsRequest(), ParseSubscriptionServiceListSubscriptionsResponse()
 
-### Community 120 - "VMTemplate API client"
+### Community 120 - "VMTemplateServiceListVMTemplatesResponse"
 Cohesion: 0.22
 Nodes (5): V1ListVMTemplatesResponse, VMTemplateServiceListVMTemplatesParams, VMTemplateServiceListVMTemplatesResponse, NewVMTemplateServiceListVMTemplatesRequest(), ParseVMTemplateServiceListVMTemplatesResponse()
 
-### Community 121 - "Generated API client ClientDashboardServiceGetClientDashboardBillingResponse"
-Cohesion: 0.18
+### Community 121 - "ClientDashboardServiceGetClientDashboardBillingResponse"
+Cohesion: 0.20
 Nodes (6): ClientDashboardServiceGetClientDashboardBillingResponse, V1ClientDashboardSpendBucket, V1ClientDashboardSpendItem, V1ClientDashboardUsageRollup, V1GetClientDashboardBillingResponse, ParseClientDashboardServiceGetClientDashboardBillingResponse()
 
-### Community 122 - "Group API client GroupServiceUpdateGroupWithBodyWithResponse"
-Cohesion: 0.21
+### Community 122 - "GroupServiceUpdateGroupResponse"
+Cohesion: 0.23
 Nodes (3): GroupServiceUpdateGroupResponse, V1UpdateGroupResponse, ParseGroupServiceUpdateGroupResponse()
 
-### Community 123 - "Live Validation API client LiveValidationServiceStartPlanLiveValidationWithBodyWithResponse"
-Cohesion: 0.21
+### Community 123 - "LiveValidationServiceStartPlanLiveValidationResponse"
+Cohesion: 0.23
 Nodes (3): LiveValidationServiceStartPlanLiveValidationResponse, V1StartPlanLiveValidationResponse, ParseLiveValidationServiceStartPlanLiveValidationResponse()
 
-### Community 124 - "Node Placement API client"
-Cohesion: 0.21
+### Community 124 - "NodePlacementServiceUpdateNodePlacementPolicyResponse"
+Cohesion: 0.23
 Nodes (3): NodePlacementServiceUpdateNodePlacementPolicyResponse, V1UpdateNodePlacementPolicyResponse, ParseNodePlacementServiceUpdateNodePlacementPolicyResponse()
 
-### Community 125 - "Node API client"
-Cohesion: 0.21
+### Community 125 - "NodeServiceUpdateNodeResponse"
+Cohesion: 0.23
 Nodes (3): NodeServiceUpdateNodeResponse, V1UpdateNodeResponse, ParseNodeServiceUpdateNodeResponse()
 
-### Community 126 - "OAuth2 API client OAuth2ServiceCreateClientWithBodyWithResponse"
-Cohesion: 0.21
+### Community 126 - "OAuth2ServiceCreateClientResponse"
+Cohesion: 0.24
 Nodes (3): OAuth2ServiceCreateClientResponse, V1CreateOAuth2ClientResponse, ParseOAuth2ServiceCreateClientResponse()
 
-### Community 127 - "Plan API client PlanServiceSubscribeWithResponse"
+### Community 127 - "PlanServiceSubscribeResponse"
 Cohesion: 0.19
 Nodes (5): PlanServiceSubscribeParams, PlanServiceSubscribeParamsBillingPeriod, PlanServiceSubscribeResponse, V1SubscribeResponse, ParsePlanServiceSubscribeResponse()
 
-### Community 128 - "Generated API client ProviderOnboardingServiceGetProviderOnboardingChecklistWithResponse"
-Cohesion: 0.19
-Nodes (5): ProviderOnboardingServiceGetProviderOnboardingChecklistResponse, V1GetProviderOnboardingChecklistResponse, V1ProviderOnboardingStep, V1ProviderOnboardingStepCode, ParseProviderOnboardingServiceGetProviderOnboardingChecklistResponse()
-
-### Community 129 - "Refund API client"
+### Community 129 - "RefundServiceListRefundsResponse"
 Cohesion: 0.19
 Nodes (5): RefundServiceListRefundsParams, RefundServiceListRefundsParamsStatus, RefundServiceListRefundsResponse, V1ListRefundsResponse, ParseRefundServiceListRefundsResponse()
 
-### Community 130 - "Roadmap API client RoadmapServiceUpdateRoadmapFeatureRequestCommentWithBodyWithResponse"
-Cohesion: 0.21
+### Community 130 - "RoadmapServiceUpdateRoadmapFeatureRequestCommentResponse"
+Cohesion: 0.24
 Nodes (3): RoadmapServiceUpdateRoadmapFeatureRequestCommentResponse, V1UpdateRoadmapFeatureRequestCommentResponse, ParseRoadmapServiceUpdateRoadmapFeatureRequestCommentResponse()
 
-### Community 131 - "Ticket API client TicketServiceCreateTicketWithBodyWithResponse"
-Cohesion: 0.21
+### Community 131 - "TicketServiceCreateTicketResponse"
+Cohesion: 0.23
 Nodes (3): TicketServiceCreateTicketResponse, V1CreateTicketResponse, ParseTicketServiceCreateTicketResponse()
 
-### Community 132 - "Usage Report API client"
-Cohesion: 0.19
-Nodes (5): UsageReportServiceListUsageRecordsParams, UsageReportServiceListUsageRecordsParamsUsageRecordStatus, UsageReportServiceListUsageRecordsResponse, V1ListUsageRecordsResponse, ParseUsageReportServiceListUsageRecordsResponse()
+### Community 132 - "UsageReportServiceListUsageRecordsResponse"
+Cohesion: 0.18
+Nodes (6): UsageReportServiceListUsageRecordsParams, UsageReportServiceListUsageRecordsParamsUsageRecordStatus, UsageReportServiceListUsageRecordsResponse, V1ListUsageRecordsResponse, NewUsageReportServiceListUsageRecordsRequest(), ParseUsageReportServiceListUsageRecordsResponse()
 
-### Community 133 - "User API client UserServiceVerifyMfaEnrollmentWithBodyWithResponse"
-Cohesion: 0.21
+### Community 133 - "UserServiceVerifyMfaEnrollmentResponse"
+Cohesion: 0.24
 Nodes (3): UserServiceVerifyMfaEnrollmentResponse, V1VerifyMfaEnrollmentResponse, ParseUserServiceVerifyMfaEnrollmentResponse()
 
-### Community 134 - "Virtual Machine API client VirtualMachineServiceEnableAdditionalIPWithResponse"
-Cohesion: 0.19
+### Community 134 - "VirtualMachineServiceEnableAdditionalIPResponse"
+Cohesion: 0.21
 Nodes (4): V1AdditionalIPAddress, V1EnableAdditionalIPResponse, VirtualMachineServiceEnableAdditionalIPResponse, ParseVirtualMachineServiceEnableAdditionalIPResponse()
 
-### Community 135 - "VMTemplate API client VMTemplateServiceUpdateVMTemplateWithBodyWithResponse"
-Cohesion: 0.21
+### Community 135 - "VMTemplateServiceUpdateVMTemplateResponse"
+Cohesion: 0.23
 Nodes (3): V1UpdateVMTemplateResponse, VMTemplateServiceUpdateVMTemplateResponse, ParseVMTemplateServiceUpdateVMTemplateResponse()
 
-### Community 136 - "Addon API client AddonServiceAddAddonToSubscriptionJSONRequestBody"
-Cohesion: 0.21
+### Community 136 - "AddonServiceAddAddonToSubscriptionResponse"
+Cohesion: 0.24
 Nodes (3): AddonServiceAddAddonToSubscriptionResponse, V1AddAddonToSubscriptionResponse, ParseAddonServiceAddAddonToSubscriptionResponse()
 
-### Community 137 - "Agent API client AgentServiceGenerateInstallCommandJSONRequestBody"
-Cohesion: 0.21
+### Community 137 - "AgentServiceGenerateInstallCommandResponse"
+Cohesion: 0.23
 Nodes (3): AgentServiceGenerateInstallCommandResponse, V1GenerateInstallCommandResponse, ParseAgentServiceGenerateInstallCommandResponse()
 
-### Community 138 - "Agent API client AgentServiceUploadInboundPeeringConfigJSONRequestBody"
-Cohesion: 0.21
-Nodes (3): AgentServiceUploadInboundPeeringConfigResponse, V1UploadInboundPeeringConfigResponse, ParseAgentServiceUploadInboundPeeringConfigResponse()
+### Community 138 - "AgentServiceUploadInboundPeeringConfigResponse"
+Cohesion: 0.19
+Nodes (4): AgentServiceUploadInboundPeeringConfigResponse, V1InboundPeeringState, V1UploadInboundPeeringConfigResponse, ParseAgentServiceUploadInboundPeeringConfigResponse()
 
-### Community 141 - "Credit API client CreditServicePurchaseCreditsJSONRequestBody"
-Cohesion: 0.21
+### Community 139 - "APIError"
+Cohesion: 0.17
+Nodes (6): APIError, applyJSONError(), applyStatusHeaders(), fillAPIErrorFromObject(), isHTTPStatusLabel(), normalizeRPCCode()
+
+### Community 141 - "CreditServicePurchaseCreditsResponse"
+Cohesion: 0.23
 Nodes (3): CreditServicePurchaseCreditsResponse, V1PurchaseCreditsResponse, ParseCreditServicePurchaseCreditsResponse()
 
-### Community 143 - "Exchange Rate API client"
-Cohesion: 0.21
+### Community 143 - "ExchangeRateServiceConvertCurrencyResponse"
+Cohesion: 0.24
 Nodes (3): ExchangeRateServiceConvertCurrencyResponse, V1ConvertCurrencyResponse, ParseExchangeRateServiceConvertCurrencyResponse()
 
-### Community 146 - "Firewall API client FirewallServiceDeleteFirewallRuleSet"
+### Community 146 - "FirewallServiceDeleteFirewallRuleSetResponse"
 Cohesion: 0.23
 Nodes (4): FirewallServiceDeleteFirewallRuleSetParams, FirewallServiceDeleteFirewallRuleSetResponse, NewFirewallServiceDeleteFirewallRuleSetRequest(), ParseFirewallServiceDeleteFirewallRuleSetResponse()
 
-### Community 147 - "Group API client GroupServiceRemoveUserFromGroup"
-Cohesion: 0.23
-Nodes (4): GroupServiceRemoveUserFromGroupParams, GroupServiceRemoveUserFromGroupResponse, NewGroupServiceRemoveUserFromGroupRequest(), ParseGroupServiceRemoveUserFromGroupResponse()
+### Community 147 - "GroupServiceRemoveUserFromGroupResponse"
+Cohesion: 0.24
+Nodes (3): GroupServiceRemoveUserFromGroupParams, GroupServiceRemoveUserFromGroupResponse, ParseGroupServiceRemoveUserFromGroupResponse()
 
-### Community 148 - "Invite API client InviteServiceAcceptInvite"
-Cohesion: 0.23
-Nodes (4): InviteServiceAcceptInviteParams, InviteServiceAcceptInviteResponse, NewInviteServiceAcceptInviteRequest(), ParseInviteServiceAcceptInviteResponse()
+### Community 148 - "InviteServiceAcceptInviteResponse"
+Cohesion: 0.24
+Nodes (3): InviteServiceAcceptInviteParams, InviteServiceAcceptInviteResponse, ParseInviteServiceAcceptInviteResponse()
 
-### Community 149 - "IPAM API client IPAMServiceRemoveReservedPrefix"
-Cohesion: 0.23
-Nodes (4): IPAMServiceRemoveReservedPrefixParams, IPAMServiceRemoveReservedPrefixResponse, NewIPAMServiceRemoveReservedPrefixRequest(), ParseIPAMServiceRemoveReservedPrefixResponse()
+### Community 149 - "IPAMServiceRemoveReservedPrefixResponse"
+Cohesion: 0.24
+Nodes (3): IPAMServiceRemoveReservedPrefixParams, IPAMServiceRemoveReservedPrefixResponse, ParseIPAMServiceRemoveReservedPrefixResponse()
 
-### Community 150 - "Live Validation API client LiveValidationServiceDeletePlanLiveValidation"
+### Community 150 - "LiveValidationServiceDeletePlanLiveValidationResponse"
 Cohesion: 0.23
 Nodes (4): LiveValidationServiceDeletePlanLiveValidationParams, LiveValidationServiceDeletePlanLiveValidationResponse, NewLiveValidationServiceDeletePlanLiveValidationRequest(), ParseLiveValidationServiceDeletePlanLiveValidationResponse()
 
-### Community 151 - "Client Dashboard API client"
-Cohesion: 0.20
+### Community 151 - "ClientDashboardServiceGetClientDashboardSummaryResponse"
+Cohesion: 0.22
 Nodes (5): ClientDashboardServiceGetClientDashboardSummaryResponse, V1ClientDashboardSpendingWindow, V1ClientDashboardVirtualMachinesSummary, V1GetClientDashboardSummaryResponse, ParseClientDashboardServiceGetClientDashboardSummaryResponse()
 
-### Community 153 - "Instant App API client InstantAppServiceGetInstantApp2WithResponse"
-Cohesion: 0.21
-Nodes (4): InstantAppServiceGetInstantApp2Params, InstantAppServiceGetInstantApp2Response, V1InstantApp, ParseInstantAppServiceGetInstantApp2Response()
+### Community 153 - "InstantAppServiceGetInstantApp2Response"
+Cohesion: 0.11
+Nodes (11): InstantAppServiceGetInstantApp2Params, InstantAppServiceGetInstantApp2Response, V1CreateVirtualMachineRequest, V1CreateVMTemplateRequest, V1DashboardVirtualMachineRow, V1Distro, V1InstantApp, V1ListDashboardVirtualMachinesResponse (+3 more)
 
-### Community 158 - "IPAM API client IPAMServiceUpdateNetworkWithResponse"
-Cohesion: 0.21
+### Community 158 - "IPAMServiceUpdateNetworkResponse"
+Cohesion: 0.23
 Nodes (3): IPAMServiceUpdateNetworkResponse, V1UpdateNetworkResponse, ParseIPAMServiceUpdateNetworkResponse()
 
-### Community 159 - "IPAM API client IPAMServiceUpdatePrefixWithResponse"
-Cohesion: 0.21
+### Community 159 - "IPAMServiceUpdatePrefixResponse"
+Cohesion: 0.23
 Nodes (3): IPAMServiceUpdatePrefixResponse, V1UpdatePrefixResponse, ParseIPAMServiceUpdatePrefixResponse()
 
-### Community 160 - "Metadata API client"
-Cohesion: 0.20
+### Community 160 - "MetadataServiceHealthCheckResponse"
+Cohesion: 0.22
 Nodes (4): MetadataServiceHealthCheckResponse, V1HealthCheckResponse, V1ServingStatus, ParseMetadataServiceHealthCheckResponse()
 
-### Community 161 - "Metrics Credential API client MetricsCredentialServiceListMetricsWriteCredentialsWithResponse"
-Cohesion: 0.21
-Nodes (5): MetricsCredentialServiceListMetricsWriteCredentialsParams, MetricsCredentialServiceListMetricsWriteCredentialsResponse, V1ListMetricsWriteCredentialsResponse, V1MetricsWriteCredential, ParseMetricsCredentialServiceListMetricsWriteCredentialsResponse()
+### Community 161 - "MetricsCredentialServiceListMetricsWriteCredentialsResponse"
+Cohesion: 0.25
+Nodes (4): MetricsCredentialServiceListMetricsWriteCredentialsParams, MetricsCredentialServiceListMetricsWriteCredentialsResponse, NewMetricsCredentialServiceListMetricsWriteCredentialsRequest(), ParseMetricsCredentialServiceListMetricsWriteCredentialsResponse()
 
-### Community 162 - "OAuth2 API client OAuth2ServiceListClientsWithResponse"
-Cohesion: 0.21
-Nodes (5): OAuth2ServiceListClientsParams, OAuth2ServiceListClientsResponse, V1ListOAuth2ClientsResponse, V1OAuth2Client, ParseOAuth2ServiceListClientsResponse()
+### Community 162 - "OAuth2ServiceListClientsResponse"
+Cohesion: 0.20
+Nodes (6): OAuth2ServiceListClientsParams, OAuth2ServiceListClientsResponse, V1ListOAuth2ClientsResponse, V1OAuth2Client, NewOAuth2ServiceListClientsRequest(), ParseOAuth2ServiceListClientsResponse()
 
-### Community 164 - "Organization API client OrganizationServiceUpdateOrganizationWithResponse"
-Cohesion: 0.21
-Nodes (3): OrganizationServiceUpdateOrganizationResponse, V1UpdateOrganizationResponse, ParseOrganizationServiceUpdateOrganizationResponse()
-
-### Community 165 - "Payment Method API client"
-Cohesion: 0.21
+### Community 165 - "PaymentMethodServiceSetDefaultPaymentMethodResponse"
+Cohesion: 0.23
 Nodes (3): PaymentMethodServiceSetDefaultPaymentMethodResponse, V1SetDefaultPaymentMethodResponse, ParsePaymentMethodServiceSetDefaultPaymentMethodResponse()
 
-### Community 166 - "Platform API client PlatformServiceUpdatePlatformWithResponse"
-Cohesion: 0.21
+### Community 166 - "PlatformServiceUpdatePlatformResponse"
+Cohesion: 0.24
 Nodes (3): PlatformServiceUpdatePlatformResponse, V1UpdatePlatformResponse, ParsePlatformServiceUpdatePlatformResponse()
 
-### Community 167 - "Provider Connect API client"
-Cohesion: 0.21
-Nodes (3): ProviderConnectServiceCreateConnectAccountResponse, V1CreateConnectAccountResponse, ParseProviderConnectServiceCreateConnectAccountResponse()
+### Community 167 - "ProviderConnectServiceCreateConnectAccountResponse"
+Cohesion: 0.12
+Nodes (7): ProviderConnectServiceCreateConnectAccountResponse, ProviderConnectServiceGetConnectAccountResponse, V1ConnectAccount, V1CreateConnectAccountResponse, V1GetConnectAccountResponse, ParseProviderConnectServiceCreateConnectAccountResponse(), ParseProviderConnectServiceGetConnectAccountResponse()
 
-### Community 168 - "Provider Connect API client ProviderConnectServiceCreateConnectTaxSessionWithResponse"
-Cohesion: 0.21
+### Community 168 - "ProviderConnectServiceCreateConnectTaxSessionResponse"
+Cohesion: 0.24
 Nodes (3): ProviderConnectServiceCreateConnectTaxSessionResponse, V1CreateConnectTaxSessionResponse, ParseProviderConnectServiceCreateConnectTaxSessionResponse()
 
-### Community 170 - "Provider Review API client ProviderReviewServiceUpdateProviderReviewReplyWithResponse"
-Cohesion: 0.21
+### Community 170 - "ProviderReviewServiceUpdateProviderReviewReplyResponse"
+Cohesion: 0.23
 Nodes (3): ProviderReviewServiceUpdateProviderReviewReplyResponse, V1UpdateProviderReviewReplyResponse, ParseProviderReviewServiceUpdateProviderReviewReplyResponse()
 
-### Community 171 - "Roadmap API client RoadmapServiceSubmitRoadmapFeatureRequestWithResponse"
-Cohesion: 0.21
+### Community 171 - "RoadmapServiceSubmitRoadmapFeatureRequestResponse"
+Cohesion: 0.23
 Nodes (3): RoadmapServiceSubmitRoadmapFeatureRequestResponse, V1SubmitRoadmapFeatureRequestResponse, ParseRoadmapServiceSubmitRoadmapFeatureRequestResponse()
 
-### Community 173 - "Role API client RoleServiceUpdateRoleWithResponse"
-Cohesion: 0.21
+### Community 173 - "RoleServiceUpdateRoleResponse"
+Cohesion: 0.23
 Nodes (3): RoleServiceUpdateRoleResponse, V1UpdateRoleResponse, ParseRoleServiceUpdateRoleResponse()
 
-### Community 175 - "Account API client"
-Cohesion: 0.21
+### Community 175 - "ServiceAccountServiceGenerateTokenResponse"
+Cohesion: 0.24
 Nodes (3): ServiceAccountServiceGenerateTokenResponse, V1GenerateServiceAccountTokenResponse, ParseServiceAccountServiceGenerateTokenResponse()
 
-### Community 176 - "Account API client ServiceAccountServiceListTokensWithResponse"
-Cohesion: 0.21
-Nodes (5): ServiceAccountServiceListTokensParams, ServiceAccountServiceListTokensResponse, V1ListServiceAccountTokensResponse, V1ServiceAccountTokenInfo, ParseServiceAccountServiceListTokensResponse()
+### Community 176 - "ServiceAccountServiceListTokensResponse"
+Cohesion: 0.25
+Nodes (4): ServiceAccountServiceListTokensParams, ServiceAccountServiceListTokensResponse, NewServiceAccountServiceListTokensRequest(), ParseServiceAccountServiceListTokensResponse()
 
-### Community 177 - "Subscription API client SubscriptionServiceRetryPaymentWithResponse"
-Cohesion: 0.21
+### Community 177 - "SubscriptionServiceRetryPaymentResponse"
+Cohesion: 0.23
 Nodes (3): SubscriptionServiceRetryPaymentResponse, V1RetryPaymentResponse, ParseSubscriptionServiceRetryPaymentResponse()
 
-### Community 180 - "Usage Report API client UsageReportServiceBatchRecordUsageWithResponse"
-Cohesion: 0.21
+### Community 180 - "UsageReportServiceBatchRecordUsageResponse"
+Cohesion: 0.24
 Nodes (3): UsageReportServiceBatchRecordUsageResponse, V1BatchRecordUsageResponse, ParseUsageReportServiceBatchRecordUsageResponse()
 
-### Community 181 - "Usage Report API client UsageReportServiceRecordUsageWithResponse"
-Cohesion: 0.21
+### Community 181 - "UsageReportServiceRecordUsageResponse"
+Cohesion: 0.24
 Nodes (3): UsageReportServiceRecordUsageResponse, V1RecordUsageResponse, ParseUsageReportServiceRecordUsageResponse()
 
-### Community 182 - "User API client UserServiceEnrollMfaTotpWithResponse"
-Cohesion: 0.21
+### Community 182 - "UserServiceEnrollMfaTotpResponse"
+Cohesion: 0.23
 Nodes (3): UserServiceEnrollMfaTotpResponse, V1EnrollMfaTotpResponse, ParseUserServiceEnrollMfaTotpResponse()
 
-### Community 183 - "User API client UserServiceRegenerateMfaBackupCodesWithResponse"
-Cohesion: 0.21
+### Community 183 - "UserServiceRegenerateMfaBackupCodesResponse"
+Cohesion: 0.23
 Nodes (3): UserServiceRegenerateMfaBackupCodesResponse, V1RegenerateMfaBackupCodesResponse, ParseUserServiceRegenerateMfaBackupCodesResponse()
 
-### Community 187 - "User API client UserServiceUpdateUserWithResponse"
-Cohesion: 0.21
+### Community 187 - "UserServiceUpdateUserResponse"
+Cohesion: 0.23
 Nodes (3): UserServiceUpdateUserResponse, V1UpdateUserResponse, ParseUserServiceUpdateUserResponse()
 
-### Community 192 - "Webhook API client"
-Cohesion: 0.21
+### Community 192 - "WebhookServiceHandleWebhookResponse"
+Cohesion: 0.23
 Nodes (3): V1HandleWebhookResponse, WebhookServiceHandleWebhookResponse, ParseWebhookServiceHandleWebhookResponse()
 
-### Community 193 - "Install verification"
-Cohesion: 0.24
-Nodes (6): FormatText(), statusMark(), unicodeGlyphs(), Report, Check, Status
+### Community 193 - "Report"
+Cohesion: 0.36
+Nodes (3): Report, Check, Status
 
-### Community 199 - "CLI configuration"
+### Community 196 - "ChatServiceChatAnonymousResponse"
+Cohesion: 0.20
+Nodes (5): ChatServiceChatAnonymousResponse, V1ChatMessage, V1ChatResponse, V1FunctionCall, V1FunctionResult
+
+### Community 199 - "applyMothershipProfile"
 Cohesion: 0.22
 Nodes (7): Loader, apiTLSInsecureOverriddenByEnv(), apiURLOverriddenByEnv(), applyMothershipProfile(), frontendURLOverriddenByEnv(), TestApplyMothershipProfile(), TestApplyMothershipProfileRespectsNRAPIURL()
 
-### Community 203 - "Chat API client ChatServiceListConversationsResponse"
-Cohesion: 0.22
+### Community 203 - "ChatServiceListConversationsResponse"
+Cohesion: 0.24
 Nodes (4): ChatServiceListConversationsResponse, V1ConversationInfo, V1ListConversationsResponse, ParseChatServiceListConversationsResponse()
 
-### Community 204 - "Instant App API client InstantAppServiceGetInstantApp"
+### Community 204 - "InstantAppServiceGetInstantAppResponse"
 Cohesion: 0.25
 Nodes (4): InstantAppServiceGetInstantAppParams, InstantAppServiceGetInstantAppResponse, NewInstantAppServiceGetInstantAppRequest(), ParseInstantAppServiceGetInstantAppResponse()
 
-### Community 205 - "IPAM API client IPAMServiceListPrefixes"
+### Community 205 - "IPAMServiceListPrefixesResponse"
 Cohesion: 0.25
 Nodes (4): IPAMServiceListPrefixesParams, IPAMServiceListPrefixesResponse, NewIPAMServiceListPrefixesRequest(), ParseIPAMServiceListPrefixesResponse()
 
-### Community 206 - "Provider Dashboard API client ProviderDashboardServiceGetDashboardBillingSales"
+### Community 206 - "ProviderDashboardServiceGetDashboardBillingSalesResponse"
 Cohesion: 0.25
 Nodes (4): ProviderDashboardServiceGetDashboardBillingSalesParams, ProviderDashboardServiceGetDashboardBillingSalesResponse, NewProviderDashboardServiceGetDashboardBillingSalesRequest(), ParseProviderDashboardServiceGetDashboardBillingSalesResponse()
 
-### Community 207 - "Provider Dashboard API client ProviderDashboardServiceListDashboardAddonCatalogStats"
-Cohesion: 0.25
-Nodes (4): ProviderDashboardServiceListDashboardAddonCatalogStatsParams, ProviderDashboardServiceListDashboardAddonCatalogStatsResponse, NewProviderDashboardServiceListDashboardAddonCatalogStatsRequest(), ParseProviderDashboardServiceListDashboardAddonCatalogStatsResponse()
+### Community 207 - "ProviderDashboardServiceListDashboardAddonCatalogStatsResponse"
+Cohesion: 0.22
+Nodes (5): ProviderDashboardServiceListDashboardAddonCatalogStatsParams, ProviderDashboardServiceListDashboardAddonCatalogStatsResponse, V1ListDashboardAddonCatalogStatsResponse, NewProviderDashboardServiceListDashboardAddonCatalogStatsRequest(), ParseProviderDashboardServiceListDashboardAddonCatalogStatsResponse()
 
-### Community 208 - "Provider Dashboard API client ProviderDashboardServiceListDashboardVirtualMachines"
+### Community 208 - "ProviderDashboardServiceListDashboardVirtualMachinesResponse"
 Cohesion: 0.25
 Nodes (4): ProviderDashboardServiceListDashboardVirtualMachinesParams, ProviderDashboardServiceListDashboardVirtualMachinesResponse, NewProviderDashboardServiceListDashboardVirtualMachinesRequest(), ParseProviderDashboardServiceListDashboardVirtualMachinesResponse()
 
-### Community 209 - "Provider Plan API client ProviderPlanServiceListAssignableNodesForPlan"
+### Community 209 - "ProviderPlanServiceListAssignableNodesForPlanResponse"
 Cohesion: 0.25
 Nodes (4): ProviderPlanServiceListAssignableNodesForPlanParams, ProviderPlanServiceListAssignableNodesForPlanResponse, NewProviderPlanServiceListAssignableNodesForPlanRequest(), ParseProviderPlanServiceListAssignableNodesForPlanResponse()
 
-### Community 210 - "Firewall API client FirewallServiceGetFirewallAddressGroupWithResponse"
-Cohesion: 0.22
+### Community 210 - "FirewallServiceGetFirewallAddressGroupResponse"
+Cohesion: 0.24
 Nodes (3): FirewallServiceGetFirewallAddressGroupResponse, V1FirewallAddressGroup, ParseFirewallServiceGetFirewallAddressGroupResponse()
 
-### Community 213 - "Group API client GroupServiceGetGroupWithResponse"
-Cohesion: 0.22
-Nodes (4): GroupServiceGetGroupResponse, V1GetGroupResponse, V1Group, ParseGroupServiceGetGroupResponse()
+### Community 213 - "GroupServiceGetGroupResponse"
+Cohesion: 0.28
+Nodes (3): GroupServiceGetGroupResponse, V1GetGroupResponse, ParseGroupServiceGetGroupResponse()
 
-### Community 219 - "IPAM API client IPAMServiceListAvailableIPsWithResponse"
+### Community 219 - "IPAMServiceListAvailableIPsResponse"
+Cohesion: 0.22
+Nodes (5): IPAMServiceListAvailableIPsParams, IPAMServiceListAvailableIPsResponse, V1ListAvailableIPsResponse, NewIPAMServiceListAvailableIPsRequest(), ParseIPAMServiceListAvailableIPsResponse()
+
+### Community 220 - "LiveValidationServiceListEligibleNodesForPlanResponse"
 Cohesion: 0.24
-Nodes (4): IPAMServiceListAvailableIPsParams, IPAMServiceListAvailableIPsResponse, V1ListAvailableIPsResponse, ParseIPAMServiceListAvailableIPsResponse()
-
-### Community 220 - "Live Validation API client LiveValidationServiceListEligibleNodesForPlanWithResponse"
-Cohesion: 0.22
 Nodes (4): LiveValidationServiceListEligibleNodesForPlanResponse, V1ListEligibleNodesForPlanResponse, V1PlanLiveValidationNodeView, ParseLiveValidationServiceListEligibleNodesForPlanResponse()
 
-### Community 221 - "Marketplace API client MarketplaceServiceListAvailableRegionsWithResponse"
-Cohesion: 0.22
+### Community 221 - "MarketplaceServiceListAvailableRegionsResponse"
+Cohesion: 0.24
 Nodes (4): MarketplaceServiceListAvailableRegionsResponse, V1ListAvailableRegionsResponse, V1RegionLocation, ParseMarketplaceServiceListAvailableRegionsResponse()
 
-### Community 222 - "Metadata API client MetadataServiceGetPlatformVersionsWithResponse"
-Cohesion: 0.22
+### Community 222 - "MetadataServiceGetPlatformVersionsResponse"
+Cohesion: 0.24
 Nodes (4): MetadataServiceGetPlatformVersionsResponse, V1ComponentVersion, ParseMetadataServiceGetPlatformVersionsResponse(), V1PlatformVersions
 
-### Community 224 - "Metric API client MetricServiceGetMetricWithResponse"
+### Community 224 - "MetricServiceGetMetricResponse"
 Cohesion: 0.24
 Nodes (4): MetricServiceGetMetricParams, MetricServiceGetMetricResponse, V1GetMetricResponse, ParseMetricServiceGetMetricResponse()
 
-### Community 227 - "OAuth2 API client OAuth2ServiceAuthorizeWithResponse"
-Cohesion: 0.24
-Nodes (4): OAuth2ServiceAuthorizeParams, OAuth2ServiceAuthorizeResponse, V1AuthorizeResponse, ParseOAuth2ServiceAuthorizeResponse()
-
-### Community 228 - "Payment Method API client PaymentMethodServiceListPaymentMethodsWithResponse"
-Cohesion: 0.24
-Nodes (4): PaymentMethodServiceListPaymentMethodsParams, PaymentMethodServiceListPaymentMethodsResponse, V1ListPaymentMethodsResponse, ParsePaymentMethodServiceListPaymentMethodsResponse()
-
-### Community 231 - "Provider Connect API client ProviderConnectServiceGetConnectAccountWithResponse"
+### Community 227 - "OAuth2ServiceAuthorizeResponse"
 Cohesion: 0.22
-Nodes (4): ProviderConnectServiceGetConnectAccountResponse, V1ConnectAccount, V1GetConnectAccountResponse, ParseProviderConnectServiceGetConnectAccountResponse()
+Nodes (5): OAuth2ServiceAuthorizeParams, OAuth2ServiceAuthorizeResponse, V1AuthorizeResponse, NewOAuth2ServiceAuthorizeRequest(), ParseOAuth2ServiceAuthorizeResponse()
 
-### Community 234 - "Provider Dashboard API client ProviderDashboardServiceListDashboardIpamWithResponse"
-Cohesion: 0.24
-Nodes (4): ProviderDashboardServiceListDashboardIpamParams, ProviderDashboardServiceListDashboardIpamResponse, V1ListDashboardIpamResponse, ParseProviderDashboardServiceListDashboardIpamResponse()
-
-### Community 238 - "Roadmap API client RoadmapServiceGetRoadmapStatsWithResponse"
+### Community 228 - "PaymentMethodServiceListPaymentMethodsResponse"
 Cohesion: 0.22
+Nodes (5): PaymentMethodServiceListPaymentMethodsParams, PaymentMethodServiceListPaymentMethodsResponse, V1ListPaymentMethodsResponse, NewPaymentMethodServiceListPaymentMethodsRequest(), ParsePaymentMethodServiceListPaymentMethodsResponse()
+
+### Community 234 - "ProviderDashboardServiceListDashboardIpamResponse"
+Cohesion: 0.22
+Nodes (5): ProviderDashboardServiceListDashboardIpamParams, ProviderDashboardServiceListDashboardIpamResponse, V1ListDashboardIpamResponse, NewProviderDashboardServiceListDashboardIpamRequest(), ParseProviderDashboardServiceListDashboardIpamResponse()
+
+### Community 238 - "RoadmapServiceGetRoadmapStatsResponse"
+Cohesion: 0.24
 Nodes (4): RoadmapServiceGetRoadmapStatsResponse, V1GetRoadmapStatsResponse, V1RoadmapProductStats, ParseRoadmapServiceGetRoadmapStatsResponse()
 
-### Community 246 - "Usage Report API client UsageReportServiceGetUsageReportWithResponse"
-Cohesion: 0.24
-Nodes (4): UsageReportServiceGetUsageReportParams, UsageReportServiceGetUsageReportResponse, V1GetUsageReportResponse, ParseUsageReportServiceGetUsageReportResponse()
+### Community 239 - "ClientWithResponses"
+Cohesion: 0.12
+Nodes (5): ClientWithResponses, RoleServiceReplaceRoleForGroupResponse, RoleServiceReplaceRoleForServiceAccountResponse, ParseRoleServiceReplaceRoleForGroupResponse(), ParseRoleServiceReplaceRoleForServiceAccountResponse()
 
-### Community 250 - "User API client UserServiceGetActiveSessionsWithResponse"
-Cohesion: 0.22
+### Community 240 - "RoadmapServiceListRoadmapFeatureRequestsResponse"
+Cohesion: 0.18
+Nodes (6): RoadmapServiceListRoadmapFeatureRequestsParams, RoadmapServiceListRoadmapFeatureRequestsParamsStatus, RoadmapServiceListRoadmapFeatureRequestsResponse, V1ListRoadmapFeatureRequestsResponse, NewRoadmapServiceListRoadmapFeatureRequestsRequest(), ParseRoadmapServiceListRoadmapFeatureRequestsResponse()
+
+### Community 246 - "UsageReportServiceGetUsageReportResponse"
+Cohesion: 0.17
+Nodes (7): UsageReportServiceGetUsageReportParams, UsageReportServiceGetUsageReportResponse, V1AggregationType, V1GetUsageReportResponse, V1UsageAggregate, NewUsageReportServiceGetUsageReportRequest(), ParseUsageReportServiceGetUsageReportResponse()
+
+### Community 250 - "UserServiceGetActiveSessionsResponse"
+Cohesion: 0.24
 Nodes (4): UserServiceGetActiveSessionsResponse, V1GetActiveSessionsResponse, V1SessionInfo, ParseUserServiceGetActiveSessionsResponse()
 
-### Community 251 - "User API client UserServiceListLinkedIdentitiesWithResponse"
-Cohesion: 0.22
-Nodes (4): UserServiceListLinkedIdentitiesResponse, V1LinkedIdentity, V1ListLinkedIdentitiesResponse, ParseUserServiceListLinkedIdentitiesResponse()
+### Community 258 - "V1VirtualMachine"
+Cohesion: 0.18
+Nodes (5): V1OperationStatus, V1ReinstallStatus, V1VirtualMachine, V1VirtualMachineBandwidthQuota, VirtualMachineServiceReinstallVirtualMachineResponse
 
-### Community 261 - "VMTemplate API client VMTemplateServiceGetVMTemplateWithResponse"
-Cohesion: 0.22
-Nodes (4): V1GetVMTemplateResponse, V1VMTemplate, VMTemplateServiceGetVMTemplateResponse, ParseVMTemplateServiceGetVMTemplateResponse()
+### Community 261 - "VMTemplateServiceGetVMTemplateResponse"
+Cohesion: 0.28
+Nodes (3): V1GetVMTemplateResponse, VMTemplateServiceGetVMTemplateResponse, ParseVMTemplateServiceGetVMTemplateResponse()
 
-### Community 262 - "Internal Install Pterodactyl"
-Cohesion: 0.31
-Nodes (10): catalogRuleCovered(), catalogVerbsCover(), ensureCatalogClusterRoles(), ensureCatalogRole(), EnsurePterodactylLiqoRBAC(), localCatalogRules(), mergeCatalogRules(), remoteCatalogRules() (+2 more)
+### Community 262 - "NewManager"
+Cohesion: 0.07
+Nodes (31): HealthCheck, SystemInfo, boolMessage(), boolStatus(), checkDaemonSet(), Collector, SummarizeHealth(), summarizePeering() (+23 more)
 
-### Community 263 - "Backup API client BackupServiceGetBackupResponse"
-Cohesion: 0.24
+### Community 263 - "BackupServiceGetBackupResponse"
+Cohesion: 0.28
 Nodes (3): BackupServiceGetBackupResponse, V1GetBackupResponse, ParseBackupServiceGetBackupResponse()
 
-### Community 264 - "Chat API client ChatServiceGetConversationHistoryResponse"
-Cohesion: 0.24
+### Community 264 - "ChatServiceGetConversationHistoryResponse"
+Cohesion: 0.28
 Nodes (3): ChatServiceGetConversationHistoryResponse, V1GetConversationHistoryResponse, ParseChatServiceGetConversationHistoryResponse()
 
-### Community 265 - "Client Provider Review API client ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse"
-Cohesion: 0.24
-Nodes (3): ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse, V1GetClientReviewForVirtualMachineResponse, ParseClientProviderReviewServiceGetClientReviewForVirtualMachineResponse()
+### Community 265 - "ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse"
+Cohesion: 0.22
+Nodes (5): ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse, V1ClientProviderReview, V1ClientProviderReviewAssetItem, V1GetClientReviewForVirtualMachineResponse, ParseClientProviderReviewServiceGetClientReviewForVirtualMachineResponse()
 
-### Community 266 - "Credit API client CreditServiceGetCreditBalanceWithResponse"
-Cohesion: 0.24
+### Community 266 - "CreditServiceGetCreditBalanceResponse"
+Cohesion: 0.28
 Nodes (3): CreditServiceGetCreditBalanceResponse, V1GetCreditBalanceResponse, ParseCreditServiceGetCreditBalanceResponse()
 
-### Community 267 - "Exchange Rate API client ExchangeRateServiceGetAllExchangeRatesWithResponse"
-Cohesion: 0.24
+### Community 267 - "ExchangeRateServiceGetAllExchangeRatesResponse"
+Cohesion: 0.28
 Nodes (3): ExchangeRateServiceGetAllExchangeRatesResponse, V1GetAllExchangeRatesResponse, ParseExchangeRateServiceGetAllExchangeRatesResponse()
 
-### Community 268 - "Exchange Rate API client ExchangeRateServiceGetExchangeRateWithResponse"
-Cohesion: 0.24
+### Community 268 - "ExchangeRateServiceGetExchangeRateResponse"
+Cohesion: 0.28
 Nodes (3): ExchangeRateServiceGetExchangeRateResponse, V1GetExchangeRateResponse, ParseExchangeRateServiceGetExchangeRateResponse()
 
-### Community 269 - "Exchange Rate API client ExchangeRateServiceListSupportedCurrenciesWithResponse"
-Cohesion: 0.24
+### Community 269 - "ExchangeRateServiceListSupportedCurrenciesResponse"
+Cohesion: 0.28
 Nodes (3): ExchangeRateServiceListSupportedCurrenciesResponse, V1ListSupportedCurrenciesResponse, ParseExchangeRateServiceListSupportedCurrenciesResponse()
 
-### Community 270 - "Group Remove API client"
-Cohesion: 0.24
-Nodes (3): GroupServiceRemoveServiceAccountFromGroupParams, GroupServiceRemoveServiceAccountFromGroupResponse, ParseGroupServiceRemoveServiceAccountFromGroupResponse()
+### Community 270 - "GroupServiceRemoveServiceAccountFromGroupResponse"
+Cohesion: 0.23
+Nodes (4): GroupServiceRemoveServiceAccountFromGroupParams, GroupServiceRemoveServiceAccountFromGroupResponse, NewGroupServiceRemoveServiceAccountFromGroupRequest(), ParseGroupServiceRemoveServiceAccountFromGroupResponse()
 
-### Community 271 - "IPAM API client IPAMServiceGetNetworkWithResponse"
-Cohesion: 0.24
+### Community 271 - "IPAMServiceGetNetworkResponse"
+Cohesion: 0.28
 Nodes (3): IPAMServiceGetNetworkResponse, V1GetNetworkResponse, ParseIPAMServiceGetNetworkResponse()
 
-### Community 272 - "IPAM API client IPAMServiceGetNodeNetworkWithResponse"
-Cohesion: 0.24
+### Community 272 - "IPAMServiceGetNodeNetworkResponse"
+Cohesion: 0.28
 Nodes (3): IPAMServiceGetNodeNetworkResponse, V1GetNodeNetworkResponse, ParseIPAMServiceGetNodeNetworkResponse()
 
-### Community 273 - "IPAM API client IPAMServiceGetPrefixUtilizationWithResponse"
-Cohesion: 0.24
+### Community 273 - "IPAMServiceGetPrefixUtilizationResponse"
+Cohesion: 0.28
 Nodes (3): IPAMServiceGetPrefixUtilizationResponse, V1GetPrefixUtilizationResponse, ParseIPAMServiceGetPrefixUtilizationResponse()
 
-### Community 274 - "IPAM API client IPAMServiceGetPrefixWithResponse"
-Cohesion: 0.24
+### Community 274 - "IPAMServiceGetPrefixResponse"
+Cohesion: 0.28
 Nodes (3): IPAMServiceGetPrefixResponse, V1GetPrefixResponse, ParseIPAMServiceGetPrefixResponse()
 
-### Community 275 - "IPAM API client IPAMServiceListNetworkNodesWithResponse"
-Cohesion: 0.24
+### Community 275 - "IPAMServiceListNetworkNodesResponse"
+Cohesion: 0.28
 Nodes (3): IPAMServiceListNetworkNodesResponse, V1ListNetworkNodesResponse, ParseIPAMServiceListNetworkNodesResponse()
 
-### Community 276 - "Manual Payout API client ManualPayoutServiceGetManualPayoutWithResponse"
-Cohesion: 0.24
-Nodes (3): ManualPayoutServiceGetManualPayoutResponse, V1GetManualPayoutResponse, ParseManualPayoutServiceGetManualPayoutResponse()
+### Community 276 - "k8s.io/client-go/kubernetes.Interface"
+Cohesion: 0.25
+Nodes (9): TestIsLiqoVirtualNode(), appendCRDCheck(), checkDaemonSetOnPhysicalNodes(), checkDeployment(), countReadyNodesByKind(), isLiqoVirtualNode(), mimirSecretCheck(), nodeReady() (+1 more)
 
-### Community 277 - "Marketplace API client MarketplaceServiceGetProviderWithResponse"
-Cohesion: 0.24
-Nodes (3): MarketplaceServiceGetProviderResponse, V1GetProviderResponse, ParseMarketplaceServiceGetProviderResponse()
-
-### Community 279 - "Metadata API client MetadataServiceGetVersionWithResponse"
-Cohesion: 0.24
+### Community 279 - "MetadataServiceGetVersionResponse"
+Cohesion: 0.28
 Nodes (3): MetadataServiceGetVersionResponse, V1Metadata, ParseMetadataServiceGetVersionResponse()
 
-### Community 280 - "Node Placement API client NodePlacementServiceGetNodePlacementPolicyWithResponse"
-Cohesion: 0.24
+### Community 280 - "NodePlacementServiceGetNodePlacementPolicyResponse"
+Cohesion: 0.28
 Nodes (3): NodePlacementServiceGetNodePlacementPolicyResponse, V1GetNodePlacementPolicyResponse, ParseNodePlacementServiceGetNodePlacementPolicyResponse()
 
-### Community 281 - "Organization API client OrganizationServiceGetOrganizationWithResponse"
-Cohesion: 0.24
+### Community 281 - "OrganizationServiceGetOrganizationResponse"
+Cohesion: 0.28
 Nodes (3): OrganizationServiceGetOrganizationResponse, V1GetOrganizationResponse, ParseOrganizationServiceGetOrganizationResponse()
 
-### Community 282 - "Payment Method API client PaymentMethodServiceRemovePaymentMethodWithResponse"
-Cohesion: 0.24
+### Community 282 - "PaymentMethodServiceRemovePaymentMethodResponse"
+Cohesion: 0.28
 Nodes (3): PaymentMethodServiceRemovePaymentMethodResponse, V1RemovePaymentMethodResponse, ParsePaymentMethodServiceRemovePaymentMethodResponse()
 
-### Community 283 - "Permission API client PermissionServiceRemovePermissionFromRoleWithResponse"
+### Community 283 - "PermissionServiceRemovePermissionFromRoleResponse"
 Cohesion: 0.24
 Nodes (3): PermissionServiceRemovePermissionFromRoleParams, PermissionServiceRemovePermissionFromRoleResponse, ParsePermissionServiceRemovePermissionFromRoleResponse()
 
-### Community 284 - "Provider Customer API client ProviderCustomerServiceGetProviderCustomerStatsWithResponse"
-Cohesion: 0.24
+### Community 284 - "ProviderCustomerServiceGetProviderCustomerStatsResponse"
+Cohesion: 0.28
 Nodes (3): ProviderCustomerServiceGetProviderCustomerStatsResponse, V1GetProviderCustomerStatsResponse, ParseProviderCustomerServiceGetProviderCustomerStatsResponse()
 
-### Community 285 - "Provider Dashboard Plans Tab API client"
-Cohesion: 0.24
+### Community 285 - "ProviderDashboardPlansTabServiceGetDashboardPlansTabStatsResponse"
+Cohesion: 0.28
 Nodes (3): ProviderDashboardPlansTabServiceGetDashboardPlansTabStatsResponse, V1ProviderDashboardPlansTabStats, ParseProviderDashboardPlansTabServiceGetDashboardPlansTabStatsResponse()
 
-### Community 286 - "Provider Review API client ProviderReviewServiceDeleteProviderReviewReplyWithResponse"
-Cohesion: 0.24
+### Community 286 - "ProviderReviewServiceDeleteProviderReviewReplyResponse"
+Cohesion: 0.28
 Nodes (3): ProviderReviewServiceDeleteProviderReviewReplyResponse, V1DeleteProviderReviewReplyResponse, ParseProviderReviewServiceDeleteProviderReviewReplyResponse()
 
-### Community 287 - "Roadmap API client RoadmapServiceDeleteRoadmapFeatureRequestCommentWithResponse"
-Cohesion: 0.24
+### Community 287 - "RoadmapServiceDeleteRoadmapFeatureRequestCommentResponse"
+Cohesion: 0.28
 Nodes (3): RoadmapServiceDeleteRoadmapFeatureRequestCommentResponse, V1DeleteRoadmapFeatureRequestCommentResponse, ParseRoadmapServiceDeleteRoadmapFeatureRequestCommentResponse()
 
-### Community 288 - "Roadmap API client RoadmapServiceGetRoadmapFeatureRequestWithResponse"
-Cohesion: 0.24
+### Community 288 - "RoadmapServiceGetRoadmapFeatureRequestResponse"
+Cohesion: 0.28
 Nodes (3): RoadmapServiceGetRoadmapFeatureRequestResponse, V1GetRoadmapFeatureRequestResponse, ParseRoadmapServiceGetRoadmapFeatureRequestResponse()
 
-### Community 290 - "Secret API client SecretServiceGetSecretWithResponse"
-Cohesion: 0.24
+### Community 290 - "SecretServiceGetSecretResponse"
+Cohesion: 0.28
 Nodes (3): SecretServiceGetSecretResponse, V1GetSecretResponse, ParseSecretServiceGetSecretResponse()
 
-### Community 291 - "Snapshot API client SnapshotServiceGetSnapshotWithResponse"
-Cohesion: 0.24
+### Community 291 - "SnapshotServiceGetSnapshotResponse"
+Cohesion: 0.28
 Nodes (3): SnapshotServiceGetSnapshotResponse, V1GetSnapshotResponse, ParseSnapshotServiceGetSnapshotResponse()
 
-### Community 293 - "SSHKey API client SSHKeyServiceGetSSHKeyWithResponse"
-Cohesion: 0.24
+### Community 293 - "SSHKeyServiceGetSSHKeyResponse"
+Cohesion: 0.28
 Nodes (3): SSHKeyServiceGetSSHKeyResponse, V1GetSSHKeyResponse, ParseSSHKeyServiceGetSSHKeyResponse()
 
-### Community 294 - "Subscription API client SubscriptionServiceGetSubscriptionStatusWithResponse"
-Cohesion: 0.24
+### Community 294 - "SubscriptionServiceGetSubscriptionStatusResponse"
+Cohesion: 0.28
 Nodes (3): SubscriptionServiceGetSubscriptionStatusResponse, V1GetSubscriptionStatusResponse, ParseSubscriptionServiceGetSubscriptionStatusResponse()
 
-### Community 296 - "Ticket API client TicketServiceDownloadTicketAttachmentWithResponse"
-Cohesion: 0.24
+### Community 296 - "TicketServiceDownloadTicketAttachmentResponse"
+Cohesion: 0.28
 Nodes (3): TicketServiceDownloadTicketAttachmentResponse, V1DownloadTicketAttachmentResponse, ParseTicketServiceDownloadTicketAttachmentResponse()
 
-### Community 297 - "Ticket API client TicketServiceListInternalCommentsWithResponse"
-Cohesion: 0.24
+### Community 297 - "TicketServiceListInternalCommentsResponse"
+Cohesion: 0.28
 Nodes (3): TicketServiceListInternalCommentsResponse, V1ListInternalCommentsResponse, ParseTicketServiceListInternalCommentsResponse()
 
-### Community 298 - "Usage Report API client UsageReportServiceGetUsageRecordWithResponse"
-Cohesion: 0.24
+### Community 298 - "UsageReportServiceGetUsageRecordResponse"
+Cohesion: 0.28
 Nodes (3): UsageReportServiceGetUsageRecordResponse, V1GetUsageRecordResponse, ParseUsageReportServiceGetUsageRecordResponse()
 
-### Community 299 - "User API client UserServiceGetMfaStatusWithResponse"
-Cohesion: 0.24
+### Community 299 - "UserServiceGetMfaStatusResponse"
+Cohesion: 0.28
 Nodes (3): UserServiceGetMfaStatusResponse, V1GetMfaStatusResponse, ParseUserServiceGetMfaStatusResponse()
 
-### Community 300 - "User API client UserServiceVerifyEmailWithResponse"
-Cohesion: 0.24
-Nodes (3): UserServiceVerifyEmailParams, UserServiceVerifyEmailResponse, ParseUserServiceVerifyEmailResponse()
+### Community 300 - "UserServiceVerifyEmailResponse"
+Cohesion: 0.23
+Nodes (4): UserServiceVerifyEmailParams, UserServiceVerifyEmailResponse, NewUserServiceVerifyEmailRequest(), ParseUserServiceVerifyEmailResponse()
 
-### Community 301 - "Virtual Machine API client VirtualMachineServiceGetVNCConsoleWithResponse"
-Cohesion: 0.24
+### Community 301 - "VirtualMachineServiceGetVNCConsoleResponse"
+Cohesion: 0.28
 Nodes (3): V1GetVNCConsoleResponse, VirtualMachineServiceGetVNCConsoleResponse, ParseVirtualMachineServiceGetVNCConsoleResponse()
 
-### Community 302 - "Virtual Machine API client VirtualMachineServiceListVMTagsWithResponse"
-Cohesion: 0.24
+### Community 302 - "VirtualMachineServiceListVMTagsResponse"
+Cohesion: 0.28
 Nodes (3): V1ListVMTagsResponse, VirtualMachineServiceListVMTagsResponse, ParseVirtualMachineServiceListVMTagsResponse()
 
-### Community 348 - "OpenAPI service catalog Pending"
+### Community 303 - "V1SuccessResponse"
+Cohesion: 0.06
+Nodes (10): AddonServiceCreateAddonResponse, AddonServiceDeleteAddonResponse, IPAMServiceDeleteNetworkResponse, PlatformServiceDeletePlatformResponse, RegionServiceDeleteRegionResponse, V1SuccessResponse, ParseAddonServiceDeleteAddonResponse(), ParseIPAMServiceDeleteNetworkResponse() (+2 more)
+
+### Community 318 - "CloudInitUserDataServiceGetCloudInitUserDataResponse"
+Cohesion: 0.20
+Nodes (4): CloudInitUserDataServiceGetCloudInitUserDataResponse, V1CloudInitUserData, V1CloudInitValidationWarning, ParseCloudInitUserDataServiceGetCloudInitUserDataResponse()
+
+### Community 324 - "ProviderPlanServiceCalculatePlanPricingResponse"
+Cohesion: 0.21
+Nodes (4): ProviderPlanServiceCalculatePlanPricingResponse, V1CalculatePlanPricingResponse, V1PricingLineItem, ParseProviderPlanServiceCalculatePlanPricingResponse()
+
+### Community 327 - "TicketServiceListTicketTemplatesResponse"
+Cohesion: 0.25
+Nodes (4): TicketServiceListTicketTemplatesParams, TicketServiceListTicketTemplatesResponse, NewTicketServiceListTicketTemplatesRequest(), ParseTicketServiceListTicketTemplatesResponse()
+
+### Community 340 - "AddonServiceGetAddonResponse"
+Cohesion: 0.28
+Nodes (3): AddonServiceGetAddonResponse, V1GetAddonResponse, ParseAddonServiceGetAddonResponse()
+
+### Community 341 - "CloudInitTemplateServiceGetCloudInitTemplateResponse"
+Cohesion: 0.28
+Nodes (3): CloudInitTemplateServiceGetCloudInitTemplateResponse, V1GetCloudInitTemplateResponse, ParseCloudInitTemplateServiceGetCloudInitTemplateResponse()
+
+### Community 342 - "DomainServiceGetDomainResponse"
+Cohesion: 0.28
+Nodes (3): DomainServiceGetDomainResponse, V1GetDomainResponse, ParseDomainServiceGetDomainResponse()
+
+### Community 343 - "EnvironmentVariableServiceGetEnvironmentVariableResponse"
+Cohesion: 0.28
+Nodes (3): EnvironmentVariableServiceGetEnvironmentVariableResponse, V1GetEnvironmentVariableResponse, ParseEnvironmentVariableServiceGetEnvironmentVariableResponse()
+
+### Community 344 - "InvoiceServiceGetInvoiceResponse"
+Cohesion: 0.24
+Nodes (4): InvoiceServiceGetInvoiceResponse, V1GetInvoiceResponse, V1InvoiceLine, ParseInvoiceServiceGetInvoiceResponse()
+
+### Community 345 - "PaymentServiceGetPaymentResponse"
+Cohesion: 0.28
+Nodes (3): PaymentServiceGetPaymentResponse, V1GetPaymentResponse, ParsePaymentServiceGetPaymentResponse()
+
+### Community 346 - "ifaceAddr"
+Cohesion: 0.20
+Nodes (8): ifaceAddr, remapAddressForRemote(), remapMask(), remapWithinCIDRs(), TestRemapWithinCIDRs(), formatLocalAddrHint(), ipFromAddr(), listLocalInterfaceAddrs()
+
+### Community 348 - "Provider organization review"
 Cohesion: 0.29
 Nodes (6): Pending marketplace review, Marketplace service, Preflight service, Provider review service, Provider organization review, Agent VM requirements
 
-### Community 349 - "Generated API client ClientOption"
+### Community 349 - "ClientOption"
 Cohesion: 0.33
 Nodes (6): ClientOption, HttpRequestDoer, RequestEditorFn, WithBaseURL(), WithHTTPClient(), WithRequestEditorFn()
 
@@ -1397,39 +1446,55 @@ Nodes (6): ClientOption, HttpRequestDoer, RequestEditorFn, WithBaseURL(), WithHT
 Cohesion: 0.50
 Nodes (4): 0.1.0 initial public release, Security policy, Supported versions, Private vulnerability reporting
 
+### Community 372 - "PlatformServiceGetPlatformResponse"
+Cohesion: 0.28
+Nodes (3): PlatformServiceGetPlatformResponse, V1GetPlatformResponse, ParsePlatformServiceGetPlatformResponse()
+
+### Community 375 - "ProviderCustomerServiceGetProviderCustomerResponse"
+Cohesion: 0.28
+Nodes (3): ProviderCustomerServiceGetProviderCustomerResponse, V1GetProviderCustomerResponse, ParseProviderCustomerServiceGetProviderCustomerResponse()
+
+### Community 379 - "UserServiceGetUserResponse"
+Cohesion: 0.28
+Nodes (3): UserServiceGetUserResponse, V1GetUserResponse, ParseUserServiceGetUserResponse()
+
+### Community 391 - "format.go"
+Cohesion: 0.36
+Nodes (5): TestWriteJSONTo(), writeJSONTo(), FormatText(), statusMark(), unicodeGlyphs()
+
 ## Ambiguous Edges - Review These
-- `goimports local prefix` → `Unused linter goimports settings`  [AMBIGUOUS]
-  .golangci.yml · relation: conceptually_related_to
+- `Metrics credential service` → `Mimir write tokens via API`  [AMBIGUOUS]
+  CHANGELOG.md · relation: conceptually_related_to
 - `1.0.0 nr CLI` → `0.1.0 initial public release`  [AMBIGUOUS]
   CHANGELOG.md · relation: conceptually_related_to
-- `Mimir write tokens via API` → `Metrics credential service`  [AMBIGUOUS]
-  CHANGELOG.md · relation: conceptually_related_to
-- `Service account token` → `README sign-in anchor`  [AMBIGUOUS]
+- `goimports local prefix` → `Unused linter goimports settings`  [AMBIGUOUS]
+  .golangci.yml · relation: conceptually_related_to
+- `README sign-in anchor` → `Service account token`  [AMBIGUOUS]
   docs/INSTALL.md · relation: references
 
 ## Knowledge Gaps
 - **68 isolated node(s):** `github.com/noderings/cli`, `LiqoManager`, `SystemValidator`, `SystemValidator`, `SystemValidator` (+63 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1812 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **213 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1814 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **223 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AgentServiceGetAgentResponse` connect `Agent API client` to `Generated API client`, `Generated API client Request`?**
+- **Why does `AgentServiceGetAgentResponse` connect `AgentServiceCreateAgentResponse` to `net/http.Response`, `client.gen.go`, `context.Context`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **What connects `github.com/noderings/cli`, `LiqoManager`, `SystemValidator` to the rest of the system?**
   _68 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Generated API client` be split into smaller, more focused modules?**
-  _Cohesion score 0.011880905800258211 - nodes in this community are weakly interconnected._
-- **Why does `ClientWithResponsesInterface` connect `Generated API client CloudInitTemplateServiceUpdateCloudInitTemplateJSONRequestBody` to `Generated API client Request`, `Generated API client GetJSON200`, `Generated API client ProviderDashboardServiceListDashboardTicketStatistics`, `Ticket API client`, `Cloud Init User Data API client`, `Ticket API client TicketServiceListTicketTemplates`, `User API client`, `Generated API client ServiceAccountServiceListServiceAccounts`, `Generated API client IPAMServiceRemoveReservedIPWithResponse`, `Generated API client NodeServiceGetNodeCPUMapWithResponse`, `Generated API client AgentServiceUpdateAgentBody`, `Firewall API client`, `Agent API client`, `Subscription API client`, `Generated API client FirewallServiceListFirewallRulesWithResponse`, `Provider Customer API client`, `Roadmap API client`, `Generated API client NodeServiceListNodesWithResponse`, `Generated API client InviteServiceDeclineInvite`, `User API client UserServiceListUsers`, `Generated API client EnvironmentVariableServiceCreateEnvironmentVariableJSONRequestBody`, `OAuth2 API client`, `Metrics Credential API client`, `Provider Network API client`, `Firewall API client FirewallServiceMoveFirewallRuleJSONRequestBody`, `Payout Configuration API client`, `Provider Network API client ProviderNetworkServiceGetSmtpOutboundProviderPolicyWithResponse`, `Generated API client OAuth2ServiceRevokeTokenWithResponse`, `Roadmap API client RoadmapServiceRemoveRoadmapFeatureRequestVoteWithResponse`, `Marketplace API client`, `Generated API client PayoutInvoiceServiceGetPayoutInvoiceWithResponse`, `Plan API client`, `Provider Customer API client ProviderCustomerServiceStopProviderCustomerVirtualMachineWithResponse`, `Addon API client`, `Addon API client AddonServiceListAddonSubscriptionsParams`, `Group API client`, `Instant App API client`, `Invoice API client`, `Payment API client`, `Payout Invoice API client`, `Platform API client`, `Provider Customer API client ProviderCustomerServiceListProviderCustomers`, `Snapshot API client`, `Virtual Machine API client`, `Marketplace API client MarketplaceServiceListProvidersWithResponse`, `Provider Review API client`, `Live Validation API client`, `Provider Dashboard API client`, `Provider Dashboard API client ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseries`, `Provider Dashboard API client ProviderDashboardServiceListDashboardInfrastructure`, `Region API client`, `Provider Dashboard API client ProviderDashboardServiceListDashboardIpamAssignmentsWithResponse`, `Agent API client AgentServiceGeneratePeeringConfigJSONRequestBody`, `Agent API client AgentServiceUpdateAgentJSONRequestBody`, `Client Provider Review API client`, `Client Provider Review API client ClientProviderReviewServiceUpdateClientReviewJSONRequestBody`, `Firewall API client FirewallServiceUpdateFirewallAddressGroupJSONRequestBody`, `Addon API client AddonServiceRemoveAddonParams`, `Backup API client`, `Client Provider Review API client ClientProviderReviewServiceListClientProviderReviewAssets`, `Cloud Init Template API client`, `Credit API client`, `Environment Variable API client`, `Firewall API client FirewallServiceGetFirewallRule`, `Firewall API client FirewallServiceListFirewallAddressGroups`, `Invite API client`, `Invite API client InviteServiceListMyInvites`, `IPAM API client`, `IPAM API client IPAMServiceListNetworks`, `Live Validation API client LiveValidationServiceGetPlanLiveValidation`, `Live Validation API client LiveValidationServiceListPlanLiveValidations`, `Manual Payout API client`, `Marketplace API client MarketplaceServiceListMarketplaceProviderDirectory`, `Metric API client`, `Payout Invoice API client PayoutInvoiceServiceGetProviderRevenue`, `Permission API client`, `Permission API client PermissionServiceListPermissions`, `Preflight API client`, `Provider Dashboard API client ProviderDashboardServiceListDashboardPlanSubscriptionStats`, `Region API client RegionServiceListCountriesCities`, `Region API client RegionServiceListRegions`, `Roadmap API client RoadmapServiceListRoadmapFeatureRequestComments`, `Role API client`, `Secret API client`, `SSHKey API client`, `Subscription API client SubscriptionServiceListSubscriptions`, `VMTemplate API client`, `Generated API client ClientDashboardServiceGetClientDashboardBillingResponse`, `Group API client GroupServiceUpdateGroupWithBodyWithResponse`, `Live Validation API client LiveValidationServiceStartPlanLiveValidationWithBodyWithResponse`, `Node Placement API client`, `Node API client`, `OAuth2 API client OAuth2ServiceCreateClientWithBodyWithResponse`, `Plan API client PlanServiceSubscribeWithResponse`, `Generated API client ProviderOnboardingServiceGetProviderOnboardingChecklistWithResponse`, `Refund API client`, `Roadmap API client RoadmapServiceUpdateRoadmapFeatureRequestCommentWithBodyWithResponse`, `Ticket API client TicketServiceCreateTicketWithBodyWithResponse`, `Usage Report API client`, `User API client UserServiceVerifyMfaEnrollmentWithBodyWithResponse`, `Virtual Machine API client VirtualMachineServiceEnableAdditionalIPWithResponse`, `VMTemplate API client VMTemplateServiceUpdateVMTemplateWithBodyWithResponse`, `Addon API client AddonServiceAddAddonToSubscriptionJSONRequestBody`, `Agent API client AgentServiceGenerateInstallCommandJSONRequestBody`, `Agent API client AgentServiceUploadInboundPeeringConfigJSONRequestBody`, `Backup API client BackupServiceRestoreBackupJSONRequestBody`, `Credit API client CreditServicePurchaseCreditsJSONRequestBody`, `Environment Variable API client EnvironmentVariableServiceUpdateEnvironmentVariableJSONRequestBody`, `Exchange Rate API client`, `Firewall API client FirewallServiceCreateFirewallRuleJSONRequestBody`, `Firewall API client FirewallServiceCreateFirewallRuleSetJSONRequestBody`, `Firewall API client FirewallServiceDeleteFirewallRuleSet`, `Group API client GroupServiceRemoveUserFromGroup`, `Invite API client InviteServiceAcceptInvite`, `IPAM API client IPAMServiceRemoveReservedPrefix`, `Live Validation API client LiveValidationServiceDeletePlanLiveValidation`, `Client Dashboard API client`, `Group API client GroupServiceAddUserToGroupWithBodyWithResponse`, `Instant App API client InstantAppServiceGetInstantApp2WithResponse`, `Invite API client InviteServiceUpdateInviteWithBodyWithResponse`, `IPAM API client IPAMServiceAssignNetworkToNodeWithBodyWithResponse`, `IPAM API client IPAMServiceCreatePrefixWithBodyWithResponse`, `IPAM API client IPAMServiceReserveAllPrefixIPsWithBodyWithResponse`, `IPAM API client IPAMServiceUpdateNetworkWithResponse`, `IPAM API client IPAMServiceUpdatePrefixWithResponse`, `Metadata API client`, `Metrics Credential API client MetricsCredentialServiceListMetricsWriteCredentialsWithResponse`, `OAuth2 API client OAuth2ServiceListClientsWithResponse`, `Organization API client`, `Organization API client OrganizationServiceUpdateOrganizationWithResponse`, `Payment Method API client`, `Platform API client PlatformServiceUpdatePlatformWithResponse`, `Provider Connect API client`, `Provider Connect API client ProviderConnectServiceCreateConnectTaxSessionWithResponse`, `Provider Plan API client`, `Provider Review API client ProviderReviewServiceUpdateProviderReviewReplyWithResponse`, `Roadmap API client RoadmapServiceSubmitRoadmapFeatureRequestWithResponse`, `Role API client RoleServiceCreateRoleWithBodyWithResponse`, `Role API client RoleServiceUpdateRoleWithResponse`, `Secret API client SecretServiceUpdateSecretWithBodyWithResponse`, `Account API client`, `Account API client ServiceAccountServiceListTokensWithResponse`, `Subscription API client SubscriptionServiceRetryPaymentWithResponse`, `Ticket API client TicketServiceSetTicketPriorityWithBodyWithResponse`, `Ticket API client TicketServiceSetTicketStatusWithBodyWithResponse`, `Usage Report API client UsageReportServiceBatchRecordUsageWithResponse`, `Usage Report API client UsageReportServiceRecordUsageWithResponse`, `User API client UserServiceEnrollMfaTotpWithResponse`, `User API client UserServiceRegenerateMfaBackupCodesWithResponse`, `User API client UserServiceRegisterUserWithBodyWithResponse`, `User API client UserServiceResendVerificationEmailWithBodyWithResponse`, `User API client UserServiceResetPasswordWithBodyWithResponse`, `User API client UserServiceUpdateUserWithResponse`, `Virtual Machine API client VirtualMachineServiceCreateVirtualMachineWithBodyWithResponse`, `Virtual Machine API client VirtualMachineServiceEnableBackupWithBodyWithResponse`, `Virtual Machine API client VirtualMachineServiceRestartVirtualMachineWithBodyWithResponse`, `Virtual Machine API client VirtualMachineServiceStopVirtualMachineWithBodyWithResponse`, `Webhook API client`, `Addon API client AddonServiceCreateAddonJSONRequestBody`, `Addon API client AddonServiceUpdateAddonJSONRequestBody`, `Chat API client`, `Chat API client ChatServiceChatJSONRequestBody`, `Cloud Init Template API client CloudInitTemplateServiceCreateCloudInitTemplateJSONRequestBody`, `Domain API client`, `Firewall API client FirewallServiceCreateFirewallAddressGroupJSONRequestBody`, `Firewall API client FirewallServiceUpdateFirewallRuleJSONRequestBody`, `Chat API client ChatServiceListConversationsResponse`, `Instant App API client InstantAppServiceGetInstantApp`, `IPAM API client IPAMServiceListPrefixes`, `Provider Dashboard API client ProviderDashboardServiceGetDashboardBillingSales`, `Provider Dashboard API client ProviderDashboardServiceListDashboardAddonCatalogStats`, `Provider Dashboard API client ProviderDashboardServiceListDashboardVirtualMachines`, `Provider Plan API client ProviderPlanServiceListAssignableNodesForPlan`, `Firewall API client FirewallServiceGetFirewallAddressGroupWithResponse`, `Group Add API client`, `Group API client GroupServiceCreateGroupWithResponse`, `Group API client GroupServiceGetGroupWithResponse`, `Invite API client InviteServiceCreateInviteWithResponse`, `IPAM API client IPAMServiceAddReservedIPWithResponse`, `IPAM API client IPAMServiceAddReservedPrefixWithResponse`, `IPAM API client IPAMServiceClearAllPrefixReservedIPsWithResponse`, `IPAM API client IPAMServiceCreateNetworkWithResponse`, `IPAM API client IPAMServiceListAvailableIPsWithResponse`, `Live Validation API client LiveValidationServiceListEligibleNodesForPlanWithResponse`, `Marketplace API client MarketplaceServiceListAvailableRegionsWithResponse`, `Metadata API client MetadataServiceGetPlatformVersionsWithResponse`, `Metrics Credential API client MetricsCredentialServiceRevokeMetricsWriteCredentialWithResponse`, `Metric API client MetricServiceGetMetricWithResponse`, `Node API client NodeServiceCreateNodeWithResponse`, `Node API client NodeServiceValidateNodeTopologyWithBodyWithResponse`, `OAuth2 API client OAuth2ServiceAuthorizeWithResponse`, `Payment Method API client PaymentMethodServiceListPaymentMethodsWithResponse`, `Permission API client PermissionServiceAssignPermissionToRoleWithResponse`, `Platform API client PlatformServiceAssignAgentWithResponse`, `Provider Connect API client ProviderConnectServiceGetConnectAccountWithResponse`, `Provider Customer API client ProviderCustomerServiceRestartProviderCustomerVirtualMachineWithResponse`, `Provider Customer API client ProviderCustomerServiceStartProviderCustomerVirtualMachineWithResponse`, `Provider Dashboard API client ProviderDashboardServiceListDashboardIpamWithResponse`, `Provider Plan API client ProviderPlanServiceCreatePlanWithResponse`, `Provider Review API client ProviderReviewServiceCreateProviderReviewReplyWithBodyWithResponse`, `Region API client RegionServiceCreateRegionWithBodyWithResponse`, `Roadmap API client RoadmapServiceGetRoadmapStatsWithResponse`, `Role API client RoleServiceReplaceRoleForGroupWithResponse`, `Role Replace Role For API client`, `Role API client RoleServiceReplaceRoleForUserWithResponse`, `Snapshot API client SnapshotServiceCreateSnapshotWithResponse`, `Snapshot API client SnapshotServiceRestoreSnapshotWithResponse`, `Ticket API client TicketServiceAddReplyToTicketWithResponse`, `Ticket API client TicketServiceSearchTicketsWithBodyWithResponse`, `Usage Report API client UsageReportServiceGetUsageReportWithResponse`, `User API client UserServiceChangePasswordWithResponse`, `User API client UserServiceDisableMfaWithResponse`, `User API client UserServiceForgotPasswordWithResponse`, `User API client UserServiceGetActiveSessionsWithResponse`, `User API client UserServiceListLinkedIdentitiesWithResponse`, `User API client UserServiceLogoutWithResponse`, `User API client UserServiceSetPasswordWithResponse`, `Virtual Machine API client VirtualMachineServiceAttachVMFirewallWithResponse`, `Virtual Machine API client VirtualMachineServiceDetachVMFirewallWithResponse`, `Virtual Machine API client VirtualMachineServiceDisableAdditionalIPWithResponse`, `Virtual Machine API client VirtualMachineServiceDisableBackupWithResponse`, `Virtual Machine API client VirtualMachineServiceReinstallVirtualMachineWithResponse`, `Virtual Machine API client VirtualMachineServiceStartVirtualMachineWithResponse`, `Virtual Machine API client VirtualMachineServiceUpdateVirtualMachineWithResponse`, `VMTemplate API client VMTemplateServiceGetVMTemplateWithResponse`, `Backup API client BackupServiceGetBackupResponse`, `Chat API client ChatServiceGetConversationHistoryResponse`, `Client Provider Review API client ClientProviderReviewServiceGetClientReviewForVirtualMachineResponse`, `Credit API client CreditServiceGetCreditBalanceWithResponse`, `Exchange Rate API client ExchangeRateServiceGetAllExchangeRatesWithResponse`, `Exchange Rate API client ExchangeRateServiceGetExchangeRateWithResponse`, `Exchange Rate API client ExchangeRateServiceListSupportedCurrenciesWithResponse`, `Group Remove API client`, `IPAM API client IPAMServiceGetNetworkWithResponse`, `IPAM API client IPAMServiceGetNodeNetworkWithResponse`, `IPAM API client IPAMServiceGetPrefixUtilizationWithResponse`, `IPAM API client IPAMServiceGetPrefixWithResponse`, `IPAM API client IPAMServiceListNetworkNodesWithResponse`, `Manual Payout API client ManualPayoutServiceGetManualPayoutWithResponse`, `Marketplace API client MarketplaceServiceGetProviderWithResponse`, `Marketplace API client MarketplaceServiceSearchMarketplaceWithResponse`, `Metadata API client MetadataServiceGetVersionWithResponse`, `Node Placement API client NodePlacementServiceGetNodePlacementPolicyWithResponse`, `Organization API client OrganizationServiceGetOrganizationWithResponse`, `Payment Method API client PaymentMethodServiceRemovePaymentMethodWithResponse`, `Permission API client PermissionServiceRemovePermissionFromRoleWithResponse`, `Provider Customer API client ProviderCustomerServiceGetProviderCustomerStatsWithResponse`, `Provider Dashboard Plans Tab API client`, `Provider Review API client ProviderReviewServiceDeleteProviderReviewReplyWithResponse`, `Roadmap API client RoadmapServiceDeleteRoadmapFeatureRequestCommentWithResponse`, `Roadmap API client RoadmapServiceGetRoadmapFeatureRequestWithResponse`, `Secret API client SecretServiceCreateSecretWithResponse`, `Secret API client SecretServiceGetSecretWithResponse`, `Snapshot API client SnapshotServiceGetSnapshotWithResponse`, `SSHKey API client SSHKeyServiceCreateSSHKeyWithResponse`, `SSHKey API client SSHKeyServiceGetSSHKeyWithResponse`, `Subscription API client SubscriptionServiceGetSubscriptionStatusWithResponse`, `Ticket API client TicketServiceAddInternalCommentWithResponse`, `Ticket API client TicketServiceDownloadTicketAttachmentWithResponse`, `Ticket API client TicketServiceListInternalCommentsWithResponse`, `Usage Report API client UsageReportServiceGetUsageRecordWithResponse`, `User API client UserServiceGetMfaStatusWithResponse`, `User API client UserServiceVerifyEmailWithResponse`, `Virtual Machine API client VirtualMachineServiceGetVNCConsoleWithResponse`, `Virtual Machine API client VirtualMachineServiceListVMTagsWithResponse`, `Addon API client AddonServiceDeleteAddonResponse`, `Agent API client AgentServiceDeleteAgentResponse`, `Backup API client BackupServiceDeleteBackupResponse`, `Chat API client ChatServiceDeleteConversationResponse`, `Client Provider Review API client ClientProviderReviewServiceDeleteClientReviewResponse`, `Cloud Init Template API client CloudInitTemplateServiceDeleteCloudInitTemplateWithResponse`, `Cloud Init User Data API client CloudInitUserDataServiceDeleteCloudInitUserDataWithResponse`, `Domain API client DomainServiceDeleteDomainWithResponse`, `Domain API client DomainServiceVerifyDomainWithResponse`, `Environment Variable API client EnvironmentVariableServiceDeleteEnvironmentVariableWithResponse`, `Firewall API client FirewallServiceDeleteFirewallAddressGroupWithResponse`, `Firewall API client FirewallServiceDeleteFirewallRuleWithResponse`, `Group API client GroupServiceDeleteGroupWithResponse`, `Invite API client InviteServiceDeleteInviteWithResponse`, `Invite API client InviteServiceResendInviteWithResponse`, `IPAM API client IPAMServiceDeleteNetworkWithResponse`, `IPAM API client IPAMServiceDeletePrefixWithResponse`, `IPAM API client IPAMServiceUnassignNetworkFromNodeWithResponse`, `Manual Payout API client ManualPayoutServiceDeleteManualPayoutWithResponse`, `Node API client NodeServiceDeleteNodeWithResponse`, `OAuth2 API client OAuth2ServiceDeleteClientWithResponse`, `Platform API client PlatformServiceDeletePlatformWithResponse`, `Provider Connect API client ProviderConnectServiceDisconnectConnectAccountWithResponse`, `Provider Plan API client ProviderPlanServiceDeletePlanWithResponse`, `Region API client RegionServiceDeleteRegionWithResponse`, `Role API client RoleServiceDeleteRoleWithResponse`, `Secret API client SecretServiceDeleteSecretWithResponse`, `Account Delete API client`, `Account API client ServiceAccountServiceRevokeTokenWithResponse`, `Snapshot API client SnapshotServiceDeleteSnapshotWithResponse`, `Ticket API client TicketServiceDeleteTicketAttachmentWithResponse`, `Ticket API client TicketServiceDeleteTicketTemplateWithResponse`, `Ticket API client TicketServiceDeleteTicketWithResponse`, `User API client UserServiceDeleteUserWithResponse`, `Virtual Machine API client VirtualMachineServiceGetVirtualMachineWithResponse`, `VMTemplate API client VMTemplateServiceDeleteVMTemplateWithResponse`, `Addon API client AddonServiceGetAddonResponse`, `Cloud Init Template API client CloudInitTemplateServiceGetCloudInitTemplateWithResponse`, `Domain API client DomainServiceGetDomainWithResponse`, `Environment Variable API client EnvironmentVariableServiceGetEnvironmentVariableWithResponse`, `Invoice API client InvoiceServiceGetInvoiceWithResponse`, `Payment API client PaymentServiceGetPaymentWithResponse`, `Provider Dashboard API client ProviderDashboardServiceGetDashboardSummaryWithResponse`, `Refund API client RefundServiceGetRefundWithResponse`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **Should `Generated API client AddonServiceAddAddonToSubscription` be split into smaller, more focused modules?**
-  _Cohesion score 0.020430259379560327 - nodes in this community are weakly interconnected._
+- **Should `net/http.Response` be split into smaller, more focused modules?**
+  _Cohesion score 0.00809709922657036 - nodes in this community are weakly interconnected._
+- **Why does `ClientWithResponsesInterface` connect `context.Context` to `client.gen.go`, `V1BillingType`, `TicketServiceGetTicketResponse`, `TicketServiceConfirmTicketAttachmentUploadResponse`, `CloudInitUserDataServiceListCloudInitUserDataResponse`, `UserServiceCompleteSSOLinkResponse`, `ServiceAccountServiceCreateServiceAccountResponse`, `OrganizationServiceListOrganizationsResponse`, `FirewallServiceUpdateFirewallRuleSetResponse`, `AgentServiceCreateAgentResponse`, `PlatformServiceUnassignAgentResponse`, `SubscriptionServiceCancelRenewalResponse`, `FirewallServiceListFirewallRulesResponse`, `ProviderCustomerServiceListProviderCustomerAssetsResponse`, `NodeServiceListNodesResponse`, `InviteServiceDeclineInviteResponse`, `UserServiceListUsersResponse`, `EnvironmentVariableServiceCreateEnvironmentVariableResponse`, `OAuth2ServiceRefreshTokenResponse`, `MetricsCredentialServiceCreateMetricsWriteCredentialResponse`, `ProviderNetworkServiceUpdateVirtualMachineSmtpOutboundPolicyResponse`, `FirewallServiceMoveFirewallRuleResponse`, `PayoutConfigurationServiceUpdatePayoutConfigurationResponse`, `ProviderNetworkServiceUpdateSmtpOutboundProviderPolicyResponse`, `OAuth2ServiceRevokeTokenResponse`, `RoadmapServiceVoteRoadmapFeatureRequestResponse`, `ProviderDashboardServiceListDashboardTicketStatisticsResponse`, `MarketplaceServiceListAvailableAddonsResponse`, `PlanServiceListPlansResponse`, `ProviderCustomerServiceStopProviderCustomerVirtualMachineResponse`, `AddonServiceListAddonsResponse`, `AddonServiceListAddonSubscriptionsResponse`, `GroupServiceListGroupsResponse`, `InstantAppServiceListInstantAppsResponse`, `InvoiceServiceListInvoicesResponse`, `PaymentServiceListPaymentsResponse`, `PayoutInvoiceServiceListPayoutInvoicesResponse`, `PlatformServiceListPlatformsResponse`, `ProviderCustomerServiceListProviderCustomersResponse`, `SnapshotServiceListSnapshotsResponse`, `VirtualMachineServiceListVirtualMachinesResponse`, `MarketplaceServiceListProvidersResponse`, `ProviderReviewServiceListProviderReviewsResponse`, `LiveValidationServiceListPlanLiveValidationBenchmarksResponse`, `ProviderDashboardServiceGetDashboardAssetSalesTimeseriesResponse`, `ProviderDashboardServiceGetDashboardCustomerAcquisitionTimeseriesResponse`, `ProviderDashboardServiceListDashboardInfrastructureResponse`, `RegionServiceListDatacentersResponse`, `ProviderDashboardServiceListDashboardIpamAssignmentsResponse`, `AgentServiceGeneratePeeringConfigResponse`, `AgentServiceUpdateAgentResponse`, `ClientProviderReviewServiceCreateClientReviewResponse`, `ClientProviderReviewServiceUpdateClientReviewResponse`, `FirewallServiceUpdateFirewallAddressGroupResponse`, `AddonServiceRemoveAddonResponse`, `BackupServiceListBackupsResponse`, `ClientProviderReviewServiceListClientProviderReviewAssetsResponse`, `CloudInitTemplateServiceListCloudInitTemplatesResponse`, `CreditServiceListCreditLedgerEntriesResponse`, `EnvironmentVariableServiceListEnvironmentVariablesResponse`, `FirewallServiceGetFirewallRuleResponse`, `FirewallServiceListFirewallAddressGroupsResponse`, `InviteServiceListInvitesResponse`, `InviteServiceListMyInvitesResponse`, `IPAMServiceListAllocationsResponse`, `IPAMServiceListNetworksResponse`, `LiveValidationServiceGetPlanLiveValidationResponse`, `LiveValidationServiceListPlanLiveValidationsResponse`, `ManualPayoutServiceCreateManualPayoutResponse`, `MarketplaceServiceListMarketplaceProviderDirectoryResponse`, `MetricServiceListMetricsResponse`, `PayoutInvoiceServiceGetProviderRevenueResponse`, `PermissionServiceListEffectivePermissionsResponse`, `PermissionServiceListPermissionsResponse`, `PreflightServiceListPreflightChecksResponse`, `ProviderDashboardServiceListDashboardPlanSubscriptionStatsResponse`, `RegionServiceListCountriesCitiesResponse`, `RegionServiceListRegionsResponse`, `RoadmapServiceListRoadmapFeatureRequestCommentsResponse`, `RoleServiceListRolesResponse`, `SecretServiceListSecretsResponse`, `SSHKeyServiceListSSHKeysResponse`, `SubscriptionServiceListSubscriptionsResponse`, `VMTemplateServiceListVMTemplatesResponse`, `GroupServiceUpdateGroupResponse`, `LiveValidationServiceStartPlanLiveValidationResponse`, `NodePlacementServiceUpdateNodePlacementPolicyResponse`, `NodeServiceUpdateNodeResponse`, `OAuth2ServiceCreateClientResponse`, `PlanServiceSubscribeResponse`, `RefundServiceListRefundsResponse`, `RoadmapServiceUpdateRoadmapFeatureRequestCommentResponse`, `TicketServiceCreateTicketResponse`, `UsageReportServiceListUsageRecordsResponse`, `UserServiceVerifyMfaEnrollmentResponse`, `VirtualMachineServiceEnableAdditionalIPResponse`, `VMTemplateServiceUpdateVMTemplateResponse`, `AddonServiceAddAddonToSubscriptionResponse`, `AgentServiceGenerateInstallCommandResponse`, `AgentServiceUploadInboundPeeringConfigResponse`, `BackupServiceRestoreBackupResponse`, `CreditServicePurchaseCreditsResponse`, `EnvironmentVariableServiceUpdateEnvironmentVariableResponse`, `ExchangeRateServiceConvertCurrencyResponse`, `FirewallServiceCreateFirewallRuleResponse`, `FirewallServiceCreateFirewallRuleSetResponse`, `FirewallServiceDeleteFirewallRuleSetResponse`, `GroupServiceRemoveUserFromGroupResponse`, `InviteServiceAcceptInviteResponse`, `IPAMServiceRemoveReservedPrefixResponse`, `LiveValidationServiceDeletePlanLiveValidationResponse`, `GroupServiceAddUserToGroupResponse`, `InstantAppServiceGetInstantApp2Response`, `InviteServiceUpdateInviteResponse`, `IPAMServiceAssignNetworkToNodeResponse`, `IPAMServiceCreatePrefixResponse`, `IPAMServiceReserveAllPrefixIPsResponse`, `IPAMServiceUpdateNetworkResponse`, `IPAMServiceUpdatePrefixResponse`, `MetricsCredentialServiceListMetricsWriteCredentialsResponse`, `OAuth2ServiceListClientsResponse`, `OrganizationServiceCreateOrganizationResponse`, `PaymentMethodServiceSetDefaultPaymentMethodResponse`, `PlatformServiceUpdatePlatformResponse`, `ProviderConnectServiceCreateConnectAccountResponse`, `ProviderConnectServiceCreateConnectTaxSessionResponse`, `ProviderPlanServiceUpdatePlanResponse`, `ProviderReviewServiceUpdateProviderReviewReplyResponse`, `RoadmapServiceSubmitRoadmapFeatureRequestResponse`, `RoleServiceCreateRoleResponse`, `RoleServiceUpdateRoleResponse`, `SecretServiceUpdateSecretResponse`, `ServiceAccountServiceGenerateTokenResponse`, `ServiceAccountServiceListTokensResponse`, `SubscriptionServiceRetryPaymentResponse`, `TicketServiceSetTicketPriorityResponse`, `TicketServiceSetTicketStatusResponse`, `UsageReportServiceBatchRecordUsageResponse`, `UsageReportServiceRecordUsageResponse`, `UserServiceEnrollMfaTotpResponse`, `UserServiceRegenerateMfaBackupCodesResponse`, `UserServiceRegisterUserResponse`, `UserServiceResendVerificationEmailResponse`, `UserServiceResetPasswordResponse`, `UserServiceUpdateUserResponse`, `VirtualMachineServiceCreateVirtualMachineResponse`, `VirtualMachineServiceEnableBackupResponse`, `VirtualMachineServiceRestartVirtualMachineResponse`, `VirtualMachineServiceStopVirtualMachineResponse`, `WebhookServiceHandleWebhookResponse`, `AddonServiceUpdateAddonResponse`, `CloudInitTemplateServiceCreateCloudInitTemplateResponse`, `DomainServiceCreateDomainResponse`, `FirewallServiceCreateFirewallAddressGroupResponse`, `FirewallServiceUpdateFirewallRuleResponse`, `InstantAppServiceGetInstantAppResponse`, `IPAMServiceListPrefixesResponse`, `ProviderDashboardServiceGetDashboardBillingSalesResponse`, `ProviderDashboardServiceListDashboardAddonCatalogStatsResponse`, `ProviderDashboardServiceListDashboardVirtualMachinesResponse`, `ProviderPlanServiceListAssignableNodesForPlanResponse`, `GroupServiceAddServiceAccountToGroupResponse`, `GroupServiceCreateGroupResponse`, `InviteServiceCreateInviteResponse`, `IPAMServiceAddReservedIPResponse`, `IPAMServiceAddReservedPrefixResponse`, `IPAMServiceClearAllPrefixReservedIPsResponse`, `IPAMServiceCreateNetworkResponse`, `IPAMServiceListAvailableIPsResponse`, `MetricsCredentialServiceRevokeMetricsWriteCredentialResponse`, `MetricServiceGetMetricResponse`, `NodeServiceCreateNodeResponse`, `NodeServiceValidateNodeTopologyResponse`, `OAuth2ServiceAuthorizeResponse`, `PaymentMethodServiceListPaymentMethodsResponse`, `PermissionServiceAssignPermissionToRoleResponse`, `PlatformServiceAssignAgentResponse`, `ProviderCustomerServiceRestartProviderCustomerVirtualMachineResponse`, `ProviderCustomerServiceStartProviderCustomerVirtualMachineResponse`, `ProviderDashboardServiceListDashboardIpamResponse`, `ProviderPlanServiceCreatePlanResponse`, `RegionServiceCreateRegionResponse`, `ClientWithResponses`, `RoadmapServiceListRoadmapFeatureRequestsResponse`, `RoleServiceReplaceRoleForUserResponse`, `SnapshotServiceCreateSnapshotResponse`, `SnapshotServiceRestoreSnapshotResponse`, `TicketServiceAddReplyToTicketResponse`, `TicketServiceSearchTicketsResponse`, `UsageReportServiceGetUsageReportResponse`, `UserServiceChangePasswordResponse`, `UserServiceDisableMfaResponse`, `UserServiceForgotPasswordResponse`, `UserServiceLogoutResponse`, `UserServiceSetPasswordResponse`, `VirtualMachineServiceAttachVMFirewallResponse`, `VirtualMachineServiceDetachVMFirewallResponse`, `VirtualMachineServiceDisableAdditionalIPResponse`, `VirtualMachineServiceDisableBackupResponse`, `VirtualMachineServiceStartVirtualMachineResponse`, `VirtualMachineServiceUpdateVirtualMachineResponse`, `GroupServiceRemoveServiceAccountFromGroupResponse`, `MarketplaceServiceSearchMarketplaceResponse`, `PermissionServiceRemovePermissionFromRoleResponse`, `SSHKeyServiceCreateSSHKeyResponse`, `TicketServiceAddInternalCommentResponse`, `UserServiceVerifyEmailResponse`, `ProviderPlanServiceCalculatePlanPricingResponse`, `TicketServiceListTicketTemplatesResponse`, `PaymentMethodServiceAttachPaymentMethodResponse`, `PlatformServiceCreatePlatformResponse`, `RoadmapServiceCreateRoadmapFeatureRequestCommentResponse`, `VMTemplateServiceCreateVMTemplateResponse`, `CloudInitTemplateServiceUpdateCloudInitTemplateResponse`, `CloudInitUserDataServiceCreateCloudInitUserDataResponse`, `TicketServiceCreateTicketTemplateResponse`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+- **Should `Client` be split into smaller, more focused modules?**
+  _Cohesion score 0.021225216065073715 - nodes in this community are weakly interconnected._
 
 ### Low-confidence Hints
 _AMBIGUOUS edges — the extractor was unsure. Verify before acting on these._
 
-- **What is the exact relationship between `goimports local prefix` and `Unused linter goimports settings`?**
+- **What is the exact relationship between `Metrics credential service` and `Mimir write tokens via API`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `1.0.0 nr CLI` and `0.1.0 initial public release`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
