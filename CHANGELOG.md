@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.18] - 2026-11-22
+
 ### Changed
 
 - Pin `nr cluster register` / `nr cluster operator upgrade` operator charts to Proxmox, SolusVM, VirtFusion, and Pterodactyl `0.1.12`. Harbor image tags are `v0.1.12`.
