@@ -14,9 +14,6 @@ linters:
     - misspell
     - gosec
   settings:
-    goimports:
-      local-prefixes:
-        - github.com/noderings/cli
     gosec:
       excludes:
         - G204 # subprocess with variable is expected for install tooling
