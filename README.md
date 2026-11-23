@@ -1,0 +1,111 @@
+# NodeRings CLI (`nr`)
+
+The **`nr`** command-line tool is how NodeRings providers connect a dedicated Ubuntu VM as an agent cluster. It authenticates to NodeRings, registers the agent, and installs the local stack used to run customer virtual machines.
+
+## Requirements
+
+- Linux (Ubuntu 22.04+ recommended) for `nr cluster register`
+- `curl`, `tar`, and `sudo`
+- Outbound HTTPS to GitHub Releases and `api.noderings.com`
+- A NodeRings provider organization that is approved for marketplace listing
+
+## Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/noderings/cli/main/scripts/install.sh | bash
+nr version
+```
+
+The script installs the latest linux or macOS release (`amd64` or `arm64`) into `/usr/local/bin`. To install somewhere else:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/noderings/cli/main/scripts/install.sh | NR_INSTALL_DIR="$HOME/.local/bin" bash
+```
+
+See [Installation](docs/INSTALL.md) for checksums, source builds, and `go install`.
+
+## Authenticate (service account)
+
+On the agent VM, use a **service account token**, not `nr auth login`. Create the service account in the console (**Access Control → Service Accounts**), then:
+
+```bash
+export NR_API_TOKEN="..."
+echo $NR_API_TOKEN
+nr auth status
+```
+
+Creating agents and `nr cluster register` stay blocked until the organization is approved; those commands print `Provider organization review is pending.`
+
+`nr auth login` is for a laptop (for example creating the first service account). Do not run OAuth on the agent VM.
+
+## Register an agent
+
+Run this on the Ubuntu VM that will host the agent. Copy `--org-id` from **Create agent** in the console (it is filled in for you):
+
+```bash
+nr cluster register \
+  --name edge-ams-01 \
+  --agent-ip 203.0.113.10 \
+  --gateway-region AMS01 \
+  --org-id <org-uuid>
+```
+
+`--org-id` is required (or set `NR_ORGANIZATION_ID`). It only sends `X-Organization-ID`. A missing or unauthorized token still fails; a token from another organization cannot register into this one.
+
+The CLI uses the organization hypervisor driver (`proxmox`, `virtfusion`, or `solusvm`). Pass `--hypervisor-driver` only to confirm it; a mismatch is rejected. `pterodactyl` is not a hypervisor driver. After the agent is registered, `nr cluster install-pterodactyl` installs the game server operator beside it.
+
+`--agent-ip` must be an address assigned to a local interface on the VM (`ip -4 addr`). k3s uses it as `--node-ip`; a placeholder such as `1.1.1.1` fails preflight.
+
+The CLI prompts for hypervisor credentials unless you pass an instances file:
+
+| Driver | Flag |
+|--------|------|
+| Proxmox | `--proxmox-instances-file` |
+| VirtFusion | `--virtfusion-instances-file` |
+| SolusVM 2 | `--solusvm-instances-file` |
+
+One organization should use one hypervisor driver.
+
+If registration is interrupted:
+
+```bash
+nr cluster register --resume --name edge-ams-01 --org-id <org-uuid>
+```
+
+Upgrade the operator later without re-entering hypervisor tokens:
+
+```bash
+nr cluster operator upgrade
+```
+
+`nr cluster register --resume --reinstall-operator` also reuses existing Secrets unless you pass credentials (that path is for rotating tokens).
+
+## Common commands
+
+```bash
+nr auth status
+nr cluster status --name edge-ams-01
+nr cluster verify --name edge-ams-01
+nr cluster health --name edge-ams-01
+nr cluster operator upgrade
+nr cluster deregister --name edge-ams-01
+```
+
+Diagnostic messages go to **stderr**. Use `--output json` when you need machine-readable **stdout**. Exit codes: `0` success, `1` runtime failure, `2` usage error.
+
+## Configuration
+
+Optional config lives at `~/.nr/config.yaml`. Production API default is `https://api.noderings.com`. See [Configuration](docs/CONFIG.md).
+
+## Docs
+
+- [Install](docs/INSTALL.md)
+- [Configuration](docs/CONFIG.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Security](SECURITY.md)
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).
