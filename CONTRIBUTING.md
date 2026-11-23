@@ -30,6 +30,23 @@ make vuln
 
 Do not edit generated files under `internal/api/generated/` by hand.
 
+## Generated API client
+
+The client in `internal/api/generated/` contains only the backend operations
+the CLI calls. They are listed in `scripts/openapi-allowlist.txt`. To call a
+new operation, add its operationId there and regenerate from the backend
+Swagger file:
+
+```bash
+make generate-api-client SWAGGER_SPEC=/path/to/proto.swagger.json
+```
+
+`scripts/openapi-allowlist.py` drops every other operation, the schemas only
+they use, and all descriptions. `make leak-check` (also run in CI) fails if the
+client contains an operation that is not on the allow-list or not called by
+the CLI, or admin, billing, or internal infrastructure details. Maintainers can
+add private patterns with `OPENAPI_LEAK_EXTRA_PATTERNS_FILE=/path/to/file`.
+
 ## Code style
 
 - Go, with packages under `internal/`

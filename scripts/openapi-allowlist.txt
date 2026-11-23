@@ -1,0 +1,42 @@
+# Backend API operations the CLI calls. scripts/openapi-allowlist.py keeps only
+# these operations and the schemas they reach. Everything else in the backend
+# API spec is dropped before the generated client is committed here.
+#
+# Add an operation here before writing code that calls it, then run
+# `make generate-api-client SWAGGER_SPEC=<path to the backend Swagger file>`.
+#
+# Format: operationId as it appears in the spec (Service_Method), one per line.
+
+# Agents (clusters)
+AgentService_CreateAgent
+AgentService_DeleteAgent
+AgentService_GeneratePeeringConfig
+AgentService_GetAgent
+AgentService_ListAgents
+AgentService_UpdateAgent
+AgentService_UploadInboundPeeringConfig
+
+# Metrics write credentials
+MetricsCredentialService_CreateMetricsWriteCredential
+MetricsCredentialService_ListMetricsWriteCredentials
+MetricsCredentialService_RotateMetricsWriteCredential
+
+# Platform
+MetadataService_GetPlatformVersions
+
+# Organizations
+OrganizationService_GetOrganization
+OrganizationService_ListOrganizations
+
+# Service accounts
+GroupService_AddServiceAccountToGroup
+GroupService_RemoveServiceAccountFromGroup
+RoleService_ReplaceRoleForServiceAccount
+ServiceAccountService_CreateServiceAccount
+ServiceAccountService_DeleteServiceAccount
+ServiceAccountService_GenerateToken
+ServiceAccountService_GetServiceAccount
+ServiceAccountService_ListServiceAccounts
+ServiceAccountService_ListTokens
+ServiceAccountService_RevokeToken
+ServiceAccountService_UpdateServiceAccount

@@ -1,4 +1,4 @@
-.PHONY: build install test clean fmt vet lint vuln help
+.PHONY: build install test clean fmt vet lint vuln help generate-api-client leak-check
 
 # Build variables
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
@@ -78,6 +78,9 @@ lint: ## Run golangci-lint
 	@which golangci-lint > /dev/null || (echo "golangci-lint not installed. Install: https://golangci-lint.run/welcome/install/" && exit 1)
 	golangci-lint run --timeout=5m
 
+leak-check: ## Check the generated API client for internal details and unlisted operations
+	./scripts/openapi-leak-check.sh
+
 vuln: ## Run govulncheck
 	@which govulncheck > /dev/null || go install golang.org/x/vuln/cmd/govulncheck@latest
 	govulncheck ./...
@@ -99,6 +102,8 @@ tidy: ## Tidy go.mod
 # oapi-codegen variables (maintainers: set SWAGGER_SPEC to a Swagger 2.0 JSON file)
 SWAGGER_SPEC ?= proto.swagger.json
 OPENAPI3_SPEC = internal/api/generated/openapi3.yaml
+OPENAPI3_FULL = $(BUILD_DIR)/openapi3.full.yaml
+OPENAPI_ALLOWLIST = scripts/openapi-allowlist.txt
 GENERATED_DIR = internal/api/generated
 OAPI_CODEGEN = oapi-codegen
 
@@ -109,9 +114,12 @@ generate-api-client: ## Generate API client from OpenAPI spec using oapi-codegen
 		exit 1; \
 	fi
 	@which $(OAPI_CODEGEN) > /dev/null || (echo "oapi-codegen not installed. Install via: go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest" && exit 1)
-	@mkdir -p $(GENERATED_DIR)
+	@mkdir -p $(GENERATED_DIR) $(BUILD_DIR)
 	@echo "Converting Swagger 2.0 to OpenAPI 3.0..."
-	@npx -y swagger2openapi $(SWAGGER_SPEC) -o $(OPENAPI3_SPEC) || (echo "Error converting Swagger 2.0 to OpenAPI 3.0. Install swagger2openapi: npm install -g swagger2openapi" && exit 1)
+	@npx -y swagger2openapi $(SWAGGER_SPEC) -o $(OPENAPI3_FULL) || (echo "Error converting Swagger 2.0 to OpenAPI 3.0. Install swagger2openapi: npm install -g swagger2openapi" && exit 1)
+	@echo "Keeping only the operations in $(OPENAPI_ALLOWLIST)..."
+	@python3 scripts/openapi-allowlist.py $(OPENAPI_ALLOWLIST) $(OPENAPI3_FULL) $(OPENAPI3_SPEC)
+	@rm -f $(OPENAPI3_FULL)
 	@echo "Generating types..."
 	@$(OAPI_CODEGEN) \
 		-generate types \
@@ -124,6 +132,7 @@ generate-api-client: ## Generate API client from OpenAPI spec using oapi-codegen
 		-package api \
 		-o $(GENERATED_DIR)/client.gen.go \
 		$(OPENAPI3_SPEC)
+	@./scripts/openapi-leak-check.sh
 	@echo "✓ API client generated successfully in $(GENERATED_DIR)"
 	@echo "Run 'make tidy' to update go.mod with new dependencies"
 
