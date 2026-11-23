@@ -1,0 +1,1029 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  contact:
+    name: NodeRings
+    url: https://noderings.com
+  title: NodeRings API
+servers:
+- url: https://api.noderings.com
+tags:
+- name: OrganizationService
+- name: GroupService
+- name: RoleService
+- name: ServiceAccountService
+- name: MetadataService
+- name: AgentService
+- name: MetricsCredentialService
+paths:
+  /v1/agents:
+    get:
+      operationId: AgentService_ListAgents
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListAgentsResponse'
+          description: ''
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: gatewayRegion
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AGENT_GATEWAY_REGION_UNSPECIFIED
+          - AGENT_GATEWAY_REGION_AMS01
+          default: AGENT_GATEWAY_REGION_UNSPECIFIED
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - AgentService
+    post:
+      operationId: AgentService_CreateAgent
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GetAgentResponse'
+          description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1CreateAgentRequest'
+        required: true
+      tags:
+      - AgentService
+  /v1/agents/{id}:
+    get:
+      operationId: AgentService_GetAgent
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GetAgentResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - AgentService
+    delete:
+      operationId: AgentService_DeleteAgent
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1SuccessResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - AgentService
+    patch:
+      operationId: AgentService_UpdateAgent
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1UpdateAgentResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentServiceUpdateAgentBody'
+        required: true
+      tags:
+      - AgentService
+  /v1/agents/{id}:generatePeeringConfig:
+    post:
+      operationId: AgentService_GeneratePeeringConfig
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GeneratePeeringConfigResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentServiceGeneratePeeringConfigBody'
+        required: true
+      tags:
+      - AgentService
+  /v1/agents/{id}:uploadInboundPeeringConfig:
+    post:
+      operationId: AgentService_UploadInboundPeeringConfig
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1UploadInboundPeeringConfigResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentServiceUploadInboundPeeringConfigBody'
+        required: true
+      tags:
+      - AgentService
+  /v1/groups/add-service-account:
+    post:
+      operationId: GroupService_AddServiceAccountToGroup
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1SuccessResponse'
+          description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1AddServiceAccountToGroupRequest'
+        required: true
+      tags:
+      - GroupService
+  /v1/groups/remove-service-account:
+    delete:
+      operationId: GroupService_RemoveServiceAccountFromGroup
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1SuccessResponse'
+          description: ''
+      parameters:
+      - name: groupId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: serviceAccountIds
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      tags:
+      - GroupService
+  /v1/metrics-write-credentials:
+    get:
+      operationId: MetricsCredentialService_ListMetricsWriteCredentials
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListMetricsWriteCredentialsResponse'
+          description: ''
+      parameters:
+      - name: agentId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: includeRevoked
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - MetricsCredentialService
+    post:
+      operationId: MetricsCredentialService_CreateMetricsWriteCredential
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CreateMetricsWriteCredentialResponse'
+          description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1CreateMetricsWriteCredentialRequest'
+        required: true
+      tags:
+      - MetricsCredentialService
+  /v1/metrics-write-credentials/{id}:rotate:
+    post:
+      operationId: MetricsCredentialService_RotateMetricsWriteCredential
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CreateMetricsWriteCredentialResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsCredentialServiceRotateMetricsWriteCredentialBody'
+        required: true
+      tags:
+      - MetricsCredentialService
+  /v1/organization:
+    get:
+      operationId: OrganizationService_GetOrganization
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GetOrganizationResponse'
+          description: ''
+      tags:
+      - OrganizationService
+  /v1/organizations:
+    get:
+      operationId: OrganizationService_ListOrganizations
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListOrganizationsResponse'
+          description: ''
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - OrganizationService
+  /v1/platform-versions:
+    get:
+      operationId: MetadataService_GetPlatformVersions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1PlatformVersions'
+          description: ''
+      tags:
+      - MetadataService
+  /v1/roles/replace-for-service-account:
+    put:
+      operationId: RoleService_ReplaceRoleForServiceAccount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1SuccessResponse'
+          description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1ReplaceRoleForServiceAccountRequest'
+        required: true
+      tags:
+      - RoleService
+  /v1/service-accounts:
+    get:
+      operationId: ServiceAccountService_ListServiceAccounts
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListServiceAccountsResponse'
+          description: ''
+      parameters:
+      - name: includeInactive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - ServiceAccountService
+    post:
+      operationId: ServiceAccountService_CreateServiceAccount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ServiceAccountResponse'
+          description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1CreateServiceAccountRequest'
+        required: true
+      tags:
+      - ServiceAccountService
+  /v1/service-accounts/tokens/{tokenId}:
+    delete:
+      operationId: ServiceAccountService_RevokeToken
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          description: ''
+      parameters:
+      - name: tokenId
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - ServiceAccountService
+  /v1/service-accounts/{id}:
+    get:
+      operationId: ServiceAccountService_GetServiceAccount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ServiceAccountResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - ServiceAccountService
+    delete:
+      operationId: ServiceAccountService_DeleteServiceAccount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - ServiceAccountService
+    patch:
+      operationId: ServiceAccountService_UpdateServiceAccount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ServiceAccountResponse'
+          description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountServiceUpdateServiceAccountBody'
+        required: true
+      tags:
+      - ServiceAccountService
+  /v1/service-accounts/{serviceAccountId}/tokens:
+    get:
+      operationId: ServiceAccountService_ListTokens
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListServiceAccountTokensResponse'
+          description: ''
+      parameters:
+      - name: serviceAccountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: includeInactive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      tags:
+      - ServiceAccountService
+    post:
+      operationId: ServiceAccountService_GenerateToken
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GenerateServiceAccountTokenResponse'
+          description: ''
+      parameters:
+      - name: serviceAccountId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceAccountServiceGenerateTokenBody'
+        required: true
+      tags:
+      - ServiceAccountService
+security:
+- BearerAuth: []
+  OrgIDHeader: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+    OrgIDHeader:
+      type: apiKey
+      name: X-Organization-ID
+      in: header
+  schemas:
+    AgentServiceGeneratePeeringConfigBody:
+      type: object
+    AgentServiceUpdateAgentBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        hypervisorDriver:
+          $ref: '#/components/schemas/v1PlatformDriver'
+    AgentServiceUploadInboundPeeringConfigBody:
+      type: object
+      properties:
+        kubeconfig:
+          type: string
+    MetricsCredentialServiceRotateMetricsWriteCredentialBody:
+      type: object
+    ServiceAccountServiceGenerateTokenBody:
+      type: object
+      properties:
+        name:
+          type: string
+        expiresInDays:
+          type: integer
+          format: int32
+    ServiceAccountServiceUpdateServiceAccountBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        allowedIps:
+          type: array
+          items:
+            type: string
+    protov1Status:
+      type: string
+      enum:
+      - STATUS_UNSPECIFIED
+      - STATUS_ACTIVE
+      - STATUS_INACTIVE
+      - STATUS_BANNED
+      - STATUS_SOFT_DELETED
+      default: STATUS_UNSPECIFIED
+    v1AddServiceAccountToGroupRequest:
+      type: object
+      properties:
+        groupId:
+          type: string
+        serviceAccountIds:
+          type: array
+          items:
+            type: string
+    v1Agent:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        gatewayRegion:
+          $ref: '#/components/schemas/v1AgentGatewayRegion'
+        agentPublicIp:
+          type: string
+        gwServerServicePort:
+          type: integer
+          format: int32
+        organizationId:
+          type: string
+        metadata:
+          type: object
+        status:
+          $ref: '#/components/schemas/protov1Status'
+        timestamps:
+          $ref: '#/components/schemas/v1Timestamps'
+        provisioned:
+          type: boolean
+        inboundPeeringState:
+          $ref: '#/components/schemas/v1InboundPeeringState'
+        inboundPeeringError:
+          type: string
+        serviceStatus:
+          $ref: '#/components/schemas/v1ServiceStatus'
+        hypervisorDriver:
+          $ref: '#/components/schemas/v1PlatformDriver'
+    v1AgentGatewayRegion:
+      type: string
+      enum:
+      - AGENT_GATEWAY_REGION_UNSPECIFIED
+      - AGENT_GATEWAY_REGION_AMS01
+      default: AGENT_GATEWAY_REGION_UNSPECIFIED
+    v1ComponentVersion:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        minVersion:
+          type: string
+        downloadUrl:
+          type: string
+        checksumSha256:
+          type: string
+    v1CreateAgentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        agentPublicIp:
+          type: string
+        gatewayRegion:
+          $ref: '#/components/schemas/v1AgentGatewayRegion'
+        hypervisorDriver:
+          $ref: '#/components/schemas/v1PlatformDriver'
+    v1CreateMetricsWriteCredentialRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        agentId:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+    v1CreateMetricsWriteCredentialResponse:
+      type: object
+      properties:
+        credential:
+          $ref: '#/components/schemas/v1MetricsWriteCredential'
+        token:
+          type: string
+    v1CreateServiceAccountRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        allowedIps:
+          type: array
+          items:
+            type: string
+    v1GeneratePeeringConfigResponse:
+      type: object
+      properties:
+        config:
+          type: string
+    v1GenerateServiceAccountTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        tokenId:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        warning:
+          type: string
+    v1GetAgentResponse:
+      type: object
+      properties:
+        agent:
+          $ref: '#/components/schemas/v1Agent'
+    v1GetOrganizationResponse:
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/v1Organization'
+    v1InboundPeeringState:
+      type: string
+      enum:
+      - INBOUND_PEERING_STATE_UNSPECIFIED
+      - INBOUND_PEERING_STATE_PENDING
+      - INBOUND_PEERING_STATE_PEERING
+      - INBOUND_PEERING_STATE_READY
+      - INBOUND_PEERING_STATE_FAILED
+      default: INBOUND_PEERING_STATE_UNSPECIFIED
+    v1ListAgentsResponse:
+      type: object
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1GetAgentResponse'
+        totalCount:
+          type: integer
+          format: int32
+    v1ListMetricsWriteCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1MetricsWriteCredential'
+        totalCount:
+          type: integer
+          format: int32
+    v1ListOrganizationsResponse:
+      type: object
+      properties:
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Organization'
+        totalCount:
+          type: integer
+          format: int32
+    v1ListServiceAccountTokensResponse:
+      type: object
+      properties:
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ServiceAccountTokenInfo'
+        totalCount:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    v1ListServiceAccountsResponse:
+      type: object
+      properties:
+        serviceAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ServiceAccountResponse'
+        totalCount:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+    v1MetricsWriteCredential:
+      type: object
+      properties:
+        id:
+          type: string
+        publicId:
+          type: string
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        agentId:
+          type: string
+        organizationId:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+        lastUsedAt:
+          type: string
+          format: date-time
+    v1Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          $ref: '#/components/schemas/v1OrganizationType'
+        enforceMfa:
+          type: boolean
+        enforceVerifiedDomain:
+          type: boolean
+        enforceSso:
+          type: boolean
+        asn:
+          type: string
+          format: int64
+        owner:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+        organizationRoles:
+          type: array
+          items:
+            type: string
+        subscriptions:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+        status:
+          $ref: '#/components/schemas/protov1Status'
+        timestamps:
+          $ref: '#/components/schemas/v1Timestamps'
+        providerLogoUrl:
+          type: string
+        ddosProvider:
+          type: string
+        providerWebsiteUrl:
+          type: string
+        isVerified:
+          type: boolean
+        reviewRequested:
+          type: boolean
+        onboarded:
+          type: boolean
+        hypervisorDriver:
+          $ref: '#/components/schemas/v1PlatformDriver'
+    v1OrganizationType:
+      type: string
+      enum:
+      - ORGANIZATION_TYPE_UNSPECIFIED
+      - ORGANIZATION_TYPE_PROVIDER
+      - ORGANIZATION_TYPE_CLIENT
+      default: ORGANIZATION_TYPE_UNSPECIFIED
+    v1PlatformDriver:
+      type: string
+      enum:
+      - PLATFORM_DRIVER_UNSPECIFIED
+      - PLATFORM_DRIVER_PROXMOX
+      - PLATFORM_DRIVER_VIRTFUSION
+      - PLATFORM_DRIVER_SOLUSVM
+      - PLATFORM_DRIVER_PTERODACTYL
+      default: PLATFORM_DRIVER_UNSPECIFIED
+    v1PlatformVersions:
+      type: object
+      properties:
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ComponentVersion'
+        schemaVersion:
+          type: string
+    v1ReplaceRoleForServiceAccountRequest:
+      type: object
+      properties:
+        roleId:
+          type: string
+        serviceAccountId:
+          type: string
+    v1ServiceAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        allowedIps:
+          type: array
+          items:
+            type: string
+        organizationId:
+          type: string
+        createdByUserId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        lastUsedAt:
+          type: string
+          format: date-time
+        activeTokenCount:
+          type: integer
+          format: int32
+        groupIds:
+          type: array
+          items:
+            type: string
+        roleIds:
+          type: array
+          items:
+            type: string
+    v1ServiceAccountTokenInfo:
+      type: object
+      properties:
+        tokenId:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        lastUsedAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+        createdByUserId:
+          type: string
+        expiresInDays:
+          type: integer
+          format: int32
+    v1ServiceStatus:
+      type: string
+      enum:
+      - SERVICE_STATUS_UNSPECIFIED
+      - SERVICE_STATUS_ONLINE
+      - SERVICE_STATUS_OFFLINE
+      - SERVICE_STATUS_MAINTENANCE
+      default: SERVICE_STATUS_UNSPECIFIED
+    v1SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    v1Timestamps:
+      type: object
+      properties:
+        createTime:
+          type: string
+          format: date-time
+        updateTime:
+          type: string
+          format: date-time
+    v1UpdateAgentResponse:
+      type: object
+      properties:
+        agent:
+          $ref: '#/components/schemas/v1Agent'
+    v1UploadInboundPeeringConfigResponse:
+      type: object
+      properties:
+        inboundPeeringState:
+          $ref: '#/components/schemas/v1InboundPeeringState'

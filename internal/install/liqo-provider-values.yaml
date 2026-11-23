@@ -1,0 +1,175 @@
+# Shared Liqo Helm values overlay for provider-cluster installs.
+# Applied via: liqoctl install … --values <this-file>
+#
+# - gatewayMasqueradeBypass: required with Calico (and helpful on k3s/Flannel nested VMs)
+# - externalCIDR 10.72.0.0/16: must not collide with the control-plane cluster CIDR (default 10.70.0.0/16)
+# - customResources: AllowList for Proxmox and VirtFusion CRDs (annotate instances with liqo.io/allow-reflection: "true")
+# - image.name: public harbor.noderings.com/nrings (anonymous pull)
+
+networking:
+  fabric:
+    config:
+      gatewayMasqueradeBypass: true
+    image:
+      name: harbor.noderings.com/nrings/fabric
+  gatewayTemplates:
+    container:
+      gateway:
+        image:
+          name: harbor.noderings.com/nrings/gateway
+      wireguard:
+        image:
+          name: harbor.noderings.com/nrings/gateway-wireguard
+      geneve:
+        image:
+          name: harbor.noderings.com/nrings/gateway-geneve
+
+controllerManager:
+  image:
+    name: harbor.noderings.com/nrings/liqo-controller-manager
+webhook:
+  image:
+    name: harbor.noderings.com/nrings/webhook
+crdReplicator:
+  image:
+    name: harbor.noderings.com/nrings/crd-replicator
+metricAgent:
+  image:
+    name: harbor.noderings.com/nrings/metric-agent
+  initContainer:
+    image:
+      name: harbor.noderings.com/nrings/cert-creator
+telemetry:
+  image:
+    name: harbor.noderings.com/nrings/telemetry
+virtualKubelet:
+  image:
+    name: harbor.noderings.com/nrings/virtual-kubelet
+uninstaller:
+  image:
+    name: harbor.noderings.com/nrings/uninstaller
+proxy:
+  image:
+    name: harbor.noderings.com/nrings/proxy
+liqo-crds:
+  crdUpgrade:
+    image:
+      name: harbor.noderings.com/nrings/liqo-crd-upgrade
+
+ipam:
+  # Keep ExternalCIDR distinct from the control-plane cluster so in-band proxy remapping works.
+  externalCIDR: "10.72.0.0/16"
+  internal:
+    image:
+      name: harbor.noderings.com/nrings/ipam
+
+offloading:
+  reflection:
+    customResources:
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: proxmoxnodes
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: proxmoxvms
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: firewallrulesets
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: vmbackups
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: vmsnapshots
+        workers: 2
+        type: AllowList
+      - group: vm.proxmox.com
+        version: v1alpha1
+        resource: vncrequests
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusioncontrols
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusionnodes
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusionvms
+        workers: 2
+        type: AllowList
+      - group: vm.virtfusion.com
+        version: v1alpha1
+        resource: virtfusionvncrequests
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmcontrols
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmnodes
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmvms
+        workers: 2
+        type: AllowList
+      - group: vm.solusvm.com
+        version: v1alpha1
+        resource: solusvmvncrequests
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylservers
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylactions
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylgamecatalogs
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylcontrols
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylnodes
+        workers: 2
+        type: AllowList
+      - group: gs.pterodactyl.com
+        version: v1alpha1
+        resource: pterodactylwebsocketrequests
+        workers: 2
+        type: AllowList
+    skip:
+      annotations:
+        - kopf.zalando.org/last-handled-configuration
+        - virtfusion-operator.kopf.dev/last-handled-configuration
+        - solusvm-operator.kopf.dev/last-handled-configuration
+        - proxmox-operator.kopf.dev/last-handled-configuration
+        - pterodactyl-operator.kopf.dev/last-handled-configuration
