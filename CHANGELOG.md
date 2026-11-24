@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.20] - 2026-11-24
+
+### Changed
+
+- Pin `nr cluster register` / `nr cluster operator upgrade` operator charts to Proxmox, SolusVM, VirtFusion, and Pterodactyl `0.1.13`. Harbor image tags are `v0.1.13`. The operators keep their state under the annotation Liqo preserves, so they no longer re-handle every resource each minute; this fixes slow reinstalls and consoles that time out.
+
 ## [1.0.19] - 2026-11-23
 
 ### Changed
