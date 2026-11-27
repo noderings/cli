@@ -709,7 +709,7 @@ func parseOCIChartRef(ref string) (repo, version string) {
 		return "", ""
 	}
 	withoutScheme := strings.TrimPrefix(ref, "oci://")
-	// harbor.noderings.com/nrings/liqo:0.0.0-3f1654f0
+	// harbor.noderings.com/nrings/liqo:0.0.0-50a39cf9
 	if i := strings.LastIndex(withoutScheme, ":"); i > 0 {
 		hostPath := withoutScheme[:i]
 		ver := withoutScheme[i+1:]

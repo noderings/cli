@@ -12,8 +12,8 @@ func TestNewToolValidatorUsesPlatformPins(t *testing.T) {
 		Components: map[string]api.ComponentPin{
 			api.ComponentLiqoctl: {
 				Name:       api.ComponentLiqoctl,
-				Version:    "v0.0.0-3f1654f0",
-				MinVersion: "v0.0.0-3f1654f0",
+				Version:    "v0.0.0-50a39cf9",
+				MinVersion: "v0.0.0-50a39cf9",
 			},
 			api.ComponentHelm: {
 				Name:       api.ComponentHelm,
@@ -24,8 +24,8 @@ func TestNewToolValidatorUsesPlatformPins(t *testing.T) {
 	}
 
 	v := NewToolValidator(pins, nil)
-	if got := v.requirements["liqoctl"].MinVersion; got != "0.0.0-3f1654f0" {
-		t.Fatalf("liqoctl min = %q, want 0.0.0-3f1654f0", got)
+	if got := v.requirements["liqoctl"].MinVersion; got != "0.0.0-50a39cf9" {
+		t.Fatalf("liqoctl min = %q, want 0.0.0-50a39cf9", got)
 	}
 	if got := v.requirements["helm"].MinVersion; got != "3.12.0" {
 		t.Fatalf("helm min = %q, want 3.12.0", got)
@@ -45,7 +45,7 @@ func TestNewToolValidatorFallsBackToConfigLiqoPin(t *testing.T) {
 
 func TestValidateVersionForkPin(t *testing.T) {
 	v := NewValidator()
-	ok, err := v.validateVersion("Client version: v0.0.0-3f1654f0", "0.0.0-3f1654f0")
+	ok, err := v.validateVersion("Client version: v0.0.0-50a39cf9", "0.0.0-50a39cf9")
 	if err != nil {
 		t.Fatalf("validateVersion: %v", err)
 	}
