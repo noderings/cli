@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Pin Liqo and liqoctl to `v0.0.0-50a39cf9` (`oci://harbor.noderings.com/nrings/liqo:0.0.0-50a39cf9`). This is upstream Liqo `50a39cf`. Custom-resource reflection uses server-side apply, so provider Kopf annotations and finalizers stay in place.
+
 ## [1.0.20] - 2026-11-24
 
 ### Changed
